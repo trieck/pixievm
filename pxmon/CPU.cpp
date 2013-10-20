@@ -114,7 +114,7 @@
 		SET_CARRY(w > 0xFF); \
 		SET_NZ8(w); \
 		SET_OVERFLOW(((w ^ R8VAL(hi)) & NEG_FLAG) && \
-		!((R8VAL(hi) ^ R8VAL(lo)) & NEG_FLAG)); \
+			!((R8VAL(hi) ^ R8VAL(lo)) & NEG_FLAG)); \
 		R8VAL(hi) = (byte)w; \
 		REG_IP += 2; \
 	} while (0)
