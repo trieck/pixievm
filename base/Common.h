@@ -69,13 +69,16 @@ struct stringless : std::binary_function <string, string, bool> {
 #define ANON_BEGIN			namespace {
 #define ANON_END				}
 
+extern void AssertMessage(const char *msg, const char *file, uint32_t line);
+
 #undef ASSERT
 #ifdef _DEBUG
-void AssertMessage(const char *msg, const char *file, uint32_t line);
 #define ASSERT(f) { if (!(f)) AssertMessage(#f, __FILE__, __LINE__); }
 #else
 #define ASSERT(f) ((void)0)
 #endif
+
+#define TEST_ASSERT(f) { if (!(f)) AssertMessage(#f, __FILE__, __LINE__); }
 
 /////////////////////////////////////////////////////////////////////////////
 

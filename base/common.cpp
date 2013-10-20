@@ -1,7 +1,5 @@
 #include "common.h"
 
-#ifdef _DEBUG
-
 /////////////////////////////////////////////////////////////////////////////
 void AssertMessage(const char *msg, const char *file, uint32_t line)
 {
@@ -9,6 +7,4 @@ void AssertMessage(const char *msg, const char *file, uint32_t line)
 	        msg, file, line);
 	exit(EXIT_FAILURE);
 }
-
-#endif // _DEBUG
 

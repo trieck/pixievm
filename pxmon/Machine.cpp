@@ -11,7 +11,6 @@
 #include "Exception.h"
 #include "Opcodes.h"
 #include "Monitor.h"
-#include "Options.h"
 
 #define CHARGEN_BASE (0xC000)
 #define CHARGEN_SIZE (0x800)
@@ -51,33 +50,7 @@ void Machine::loadROM(const char *filename, word base, word size)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-int Machine::run(int argc, char** argv)
-{
-	int result;
-
-	Options::options(argc, argv);
-
-	if (Options::isoption("test")) {
-		result = test();
-	} else {
-		result = run();
-	}
-
-	return result;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-int Machine::test()
-{
-	Monitor *mon = Monitor::getInstance();
-
-	bool result = mon->assemble("xor al, al\n");
-
-	return 0;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-int Machine::run()
+void Machine::run()
 {
 	Monitor *mon = Monitor::getInstance();
 
@@ -88,6 +61,4 @@ int Machine::run()
 
 	// run!
 	cpu->run();
-
-	return 0;
 }

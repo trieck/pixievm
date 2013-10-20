@@ -81,7 +81,8 @@ public:
 // Implementation
 private:
 	void run();
-	void runLoop(void *data);
+	void test();
+	void runLoop();
 
 	void dispatch(const string &line);
 	void prompt() const;

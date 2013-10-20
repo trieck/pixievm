@@ -21,6 +21,7 @@
 #include "StepUntilCmd.h"
 #include "Interrupt.h"
 #include "CPU.h"
+#include "Options.h"
 #include <signal.h>
 
 MonitorPtr Monitor::instance(Monitor::getInstance());
@@ -89,11 +90,23 @@ void Monitor::run()
 {
 	notice();
 	signal(SIGBREAK, &Monitor::sighandler);
-	runLoop(NULL);
+	runLoop();
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Monitor::runLoop(void *data)
+void Monitor::test()
+{
+	CPU *cpu = CPU::getInstance();
+
+	TEST_ASSERT(cpu->getFL() == 0);					// assert a sane state
+	TEST_ASSERT(assemble("adc al, al\n"));	// assemble instruction
+	
+	g_interrupt.setPending(IK_TRAP);
+
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void Monitor::runLoop()
 {
 	LineReader reader(cin);
 	string line;
@@ -144,13 +157,21 @@ void Monitor::prompt() const
 ////////////////////////////////////////////////////////////////////////////
 void Monitor::handle()
 {
-	run();
+	if (Options::isoption("test")) {
+		test();
+	} else {
+		run();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////
 void Monitor::trap(void *data)
 {
-	runLoop(data);
+	if (Options::isoption("test")) {
+		// test();
+	} else {
+		runLoop();
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////

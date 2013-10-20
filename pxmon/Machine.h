@@ -20,15 +20,13 @@ public:
 
 // Interface
 	void init();
-	int run(int argc, char** argv);
+	void run();
 
 // Implementation
 private:
-	int test();
-	int run();
 	void loadROM(const char *filename, word base, word size);
 
-	Memory* memory;				// pointer to memory
+	Memory* memory;		// pointer to memory
 	CPU *cpu;					// pointer to CPU
 };
 /////////////////////////////////////////////////////////////////////////////

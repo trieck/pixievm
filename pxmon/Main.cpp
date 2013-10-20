@@ -8,20 +8,22 @@
 #include "Common.h"
 #include "Machine.h"
 #include "Exception.h"
+#include "Options.h"
 
 ////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
-	int result = 0;
+	Options::options(argc, argv);
 
 	Machine machine;
 
 	try {
 		machine.init();
-		result = machine.run(argc, argv);
+		machine.run();
 	} catch (const Exception & e) {
 		cerr << e.getDescription() << endl;
 		return 1;
 	}
-	return result;
+
+	return 0;
 }

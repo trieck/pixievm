@@ -96,14 +96,14 @@ private:
 
 	enum { MEMSIZE = 4096 };	// maximum code size
 
-	word m_origin;				// assembly origin
-	bool m_bOrigin;				// origin has been declared
-	byte m_memory[MEMSIZE];		// memory
-	byte *m_pmem;				// current memory pointer
-	Program program;			// program for runtime machine
-	Code0FncMap	m_code0Map;		// code0 function map
-	Code1FncMap m_code1Map;		// code1 function map
-	Code2FncMap m_code2Map;		// code2 function map
+	word m_origin;					// assembly origin
+	bool m_bOrigin;					// origin has been declared
+	byte m_memory[MEMSIZE];	// memory
+	byte *m_pmem;						// current memory pointer
+	Program program;				// program for runtime machine
+	Code0FncMap	m_code0Map;	// code0 function map
+	Code1FncMap m_code1Map;	// code1 function map
+	Code2FncMap m_code2Map;	// code2 function map
 };
 
 /////////////////////////////////////////////////////////////////////////////
