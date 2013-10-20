@@ -11,6 +11,7 @@
 #include "Trap.h"
 #include "Handler.h"
 #include "RefObj.h"
+#include "TestData.h"
 
 // Forward declarations
 class Monitor;
@@ -68,11 +69,11 @@ public:
 // Interface
 	static Monitor *getInstance();
 
-	virtual void trap(void *data);
-	virtual void handle();
+	virtual void trap(void *data);	// trap handler
+	virtual void handle();					// monitor handler
 
 	void setExit(bool f);
-	bool assemble(const string &str);
+	bool assemble(word address, const string &str);
 	void disassemble(word address);
 	bool isRunning() const {
 		return !m_exit_mon;
@@ -81,8 +82,9 @@ public:
 // Implementation
 private:
 	void run();
-	void test();
+	void nextTest();
 	void runLoop();
+	void verifyRegs() const;
 
 	void dispatch(const string &line);
 	void prompt() const;
@@ -93,7 +95,10 @@ private:
 	CommandMap m_commands;				// map of commands
 	bool m_exit_mon;							// exit flag
 	bool m_show_notice;						// show notice
+	bool m_testMode;							// in test mode?
 	static MonitorPtr instance;		// singleton instance
+	TestData *m_pTestData;				// test data interface
+	const TData *m_pTest;					// last test
 };
 /////////////////////////////////////////////////////////////////////////////
 

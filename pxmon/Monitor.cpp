@@ -27,7 +27,8 @@
 MonitorPtr Monitor::instance(Monitor::getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
-Monitor::Monitor() : m_exit_mon(false), m_show_notice(true)
+Monitor::Monitor() : m_exit_mon(false), m_show_notice(true), 
+	m_pTestData(NULL), m_testMode(false), m_pTest(NULL)
 {
 	m_commands["?"] = new HelpCmd(this);
 	m_commands["help"] = m_commands["?"]->CopyRef();
@@ -50,6 +51,8 @@ Monitor::~Monitor()
 		LPCOMMAND cmd = (*it).second;
 		cmd->DecRef();
 	}
+
+	delete m_pTestData;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -62,13 +65,13 @@ Monitor *Monitor::getInstance()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool Monitor::assemble(const string &str)
+bool Monitor::assemble(word address, const string &str)
 {
 	bool result = false;
 
 	AssemCmd *assembler = static_cast<AssemCmd*>(m_commands["a"]);
 	if (assembler != NULL) {
-		result = assembler->assemble(str);
+		result = assembler->assemble(address, str);
 	}
 
 	return result;
@@ -91,18 +94,6 @@ void Monitor::run()
 	notice();
 	signal(SIGBREAK, &Monitor::sighandler);
 	runLoop();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void Monitor::test()
-{
-	CPU *cpu = CPU::getInstance();
-
-	TEST_ASSERT(cpu->getFL() == 0);					// assert a sane state
-	TEST_ASSERT(assemble("adc al, al\n"));	// assemble instruction
-	
-	g_interrupt.setPending(IK_TRAP);
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -157,8 +148,10 @@ void Monitor::prompt() const
 ////////////////////////////////////////////////////////////////////////////
 void Monitor::handle()
 {
-	if (Options::isoption("test")) {
-		test();
+	m_testMode = Options::isoption("test");
+
+	if (m_testMode) {
+		nextTest();		
 	} else {
 		run();
 	}
@@ -167,11 +160,51 @@ void Monitor::handle()
 ////////////////////////////////////////////////////////////////////////////
 void Monitor::trap(void *data)
 {
-	if (Options::isoption("test")) {
-		// test();
+	if (m_testMode) {
+		nextTest();
 	} else {
 		runLoop();
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////
+void Monitor::verifyRegs() const
+{
+	CPU* cpu = CPU::getInstance();
+
+	TEST_ASSERT(cpu->getA() == m_pTest->registers[0]);
+	TEST_ASSERT(cpu->getB() == m_pTest->registers[1]);
+	TEST_ASSERT(cpu->getC() == m_pTest->registers[2]);
+	TEST_ASSERT(cpu->getD() == m_pTest->registers[3]);
+	TEST_ASSERT(cpu->getX() == m_pTest->registers[4]);
+	TEST_ASSERT(cpu->getSP() == m_pTest->registers[5]);
+	TEST_ASSERT(cpu->getIP() == m_pTest->registers[6]);
+	TEST_ASSERT(cpu->getFL() == m_pTest->registers[7]);
+}
+
+////////////////////////////////////////////////////////////////////////////
+void Monitor::nextTest()
+{
+	CPU* cpu = CPU::getInstance();
+
+	if (m_pTestData == NULL)
+		m_pTestData = TestData::create();
+
+	// verify test results
+	if (m_pTest != NULL) {
+		verifyRegs();
+	}
+
+	if ((m_pTest = m_pTestData->next()) == NULL) {
+		cpu->setShutdown(true);
+		return;	// no more data
+	}
+
+	// assemble test instruction
+	cpu->setIP(0);
+	TEST_ASSERT(assemble(0, m_pTest->instruction));
+
+	g_interrupt.setPending(IK_TRAP);	// setup next test
 }
 
 ////////////////////////////////////////////////////////////////////////////

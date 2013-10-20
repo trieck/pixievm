@@ -17,7 +17,7 @@ public:
 	~AssemCmd();
 
 	virtual void exec(const stringvec &v);
-	bool assemble(const string& str);
+	bool assemble(word address, const string& str);
 
 private:
 	MiniAssembler assembler;

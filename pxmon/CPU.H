@@ -77,9 +77,10 @@ public:
 
 	void setShutdown(bool f);
 
+	enum { NREGS = 8 };			// number of registers
+
 // Implementation
 private:
-	enum { NREGS = 8 };			// number of registers
 	static CPUPtr instance;	// singleton instance
 	word regs[NREGS];				// registers
 	Memory *memory;					// memory

@@ -35,7 +35,7 @@ void AssemCmd::exec(const stringvec &v)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool AssemCmd::assemble(const string& str)
+bool AssemCmd::assemble(word address, const string& str)
 {
-	return assembler.assemble(NULL, str.c_str());
+	return assembler.assemble(&address, str.c_str());
 }
