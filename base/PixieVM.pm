@@ -14,7 +14,7 @@ use Exporter;
 @EXPORT = qw(@modes %instr);
 
 # addressing modes 
-use constant RR8 		=> 0;	
+use constant RR8 		=> 0;
 use constant RR16 	=> RR8 + 1;
 use constant RM8		=> RR16 + 1;
 use constant RM16		=> RM8 + 1;
@@ -25,7 +25,7 @@ use constant RI16		=> RI8 + 1;
 use constant MR8		=> RI16 + 1;
 use constant MR16		=> MR8 + 1;
 use constant M8I8		=> MR16 + 1;
-use constant M16I8		=> M8I8 + 1;
+use constant M16I8	=> M8I8 + 1;
 use constant MI16		=> M16I8 + 1;
 use constant AR8		=> MI16 + 1;
 use constant AR16		=> AR8 + 1;
