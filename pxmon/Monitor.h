@@ -11,7 +11,6 @@
 #include "Trap.h"
 #include "Handler.h"
 #include "RefObj.h"
-#include "TestData.h"
 
 // Forward declarations
 class Monitor;
@@ -82,9 +81,7 @@ public:
 // Implementation
 private:
 	void run();
-	void nextTest();
 	void runLoop();
-	void verifyRegs() const;
 
 	void dispatch(const string &line);
 	void prompt() const;
@@ -95,10 +92,7 @@ private:
 	CommandMap m_commands;				// map of commands
 	bool m_exit_mon;							// exit flag
 	bool m_show_notice;						// show notice
-	bool m_testMode;							// in test mode?
 	static MonitorPtr instance;		// singleton instance
-	TestData *m_pTestData;				// test data interface
-	const TData *m_pTest;					// last test
 };
 /////////////////////////////////////////////////////////////////////////////
 
