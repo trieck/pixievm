@@ -1,6 +1,6 @@
 #!/bin/perl -w 
 
-# automatically generate pixievm CPU source and header files
+# generate pixievm CPU source and header files
 
 use strict qw(vars);
 use warnings;
@@ -24,12 +24,12 @@ write_fetchex_cpp();  # generate fetchex.cpp
 sub write_modes {
 	my ($m, $t);
 	my $last = 0;
-	
-	open FH, ">Modes.h" || die "unable to open file Modes.h";		
+
+	open FH, ">Modes.h" || die "unable to open file Modes.h";
 	print FH $autogen;
 	print FH "#ifndef __MODES_H__\n";
 	print FH "#define __MODES_H__\n\n";
-	
+
 	foreach $m (@PixieVM::modes) {
 		$t = "AM_$m";
 		print FH "#define $t\t";
@@ -37,11 +37,11 @@ sub write_modes {
 		print FH "(";
 		print FH $last ? "$last + 1" : "0";
 		print FH ")\n";
-		$last = $t;	
+		$last = $t;
 	}
 	print FH "\n#define NMODES\t\t($last + 1)	/* number of addressing modes */\n";
 	print FH "\n#endif /* __MODES_H__ */\n";
-	
+
 	close FH;
 }
 
@@ -50,14 +50,14 @@ sub write_modes {
 sub write_opcodes {
 	my $n = 0; my $last = 0;
 	my ($key, $val, $cnt);
-	
-	open FH, ">Opcodes.h" || die "unable to open file Opcodes.h";		
+
+	open FH, ">Opcodes.h" || die "unable to open file Opcodes.h";
 	print FH $autogen;
 	print FH "#ifndef __OPCODES_H__\n";
 	print FH "#define __OPCODES_H__\n\n";
-	
+
 	foreach $key (sort keys %PixieVM::instr) {
-		$cnt = scalar @{$PixieVM::instr{$key}};		
+		$cnt = scalar @{$PixieVM::instr{$key}};
 		foreach $val (@{$PixieVM::instr{$key}}) {
 			my $op = $cnt == 1 ? "$key" : "$key\_$PixieVM::modes[$val]";
 			print FH "#define $op\t";
@@ -69,27 +69,27 @@ sub write_opcodes {
 		}
 		print FH "\n";
 	}
-	
-	print FH "#endif /* __OPCODES_H__ */\n";		
-	close FH;	
+
+	print FH "#endif /* __OPCODES_H__ */\n";
+	close FH;
 }
 
 # generate instructions.h
 #
 sub write_instr_h {
-	
-	open FH, ">Instructions.h" || die "unable to open file Instructions.h";		
+
+	open FH, ">Instructions.h" || die "unable to open file Instructions.h";
 	print FH $autogen;
 	print FH "#ifndef __INSTRUCTIONS_H__\n";
 	print FH "#define __INSTRUCTIONS_H__\n\n";
-		
+
 	print FH "typedef const byte *Instr[NMODES];\n\n";
-	
+
 	my $key;
 	foreach $key (sort keys %PixieVM::instr) {
 		print FH "extern const Instr INS_$key;\n";
 	}
-	
+
 	print FH "\n#endif /* __INSTRUCTIONS_H__ */\n";
 	close FH;
 }
@@ -97,18 +97,18 @@ sub write_instr_h {
 # generate instructions.cpp
 #
 sub write_instr_cpp {
-	
-	open FH, ">Instructions.cpp" || die "unable to open file Instructions.cpp";		
-	
+
+	open FH, ">Instructions.cpp" || die "unable to open file Instructions.cpp";
+
 	my $n = 0;
 	my ($key, $val, $cnt, $m, $i);
-	
+
 	print FH $autogen;
 	print FH "#include \"Common.h\"\n";
 	print FH "#include \"Opcodes.h\"\n";
 	print FH "#include \"Modes.h\"\n";
 	print FH "#include \"Instructions.h\"\n";
-	
+
 	print FH "\nconst byte opcodes[] = {";
 	foreach $key (sort keys %PixieVM::instr) {
 		$cnt = scalar @{$PixieVM::instr{$key}};
@@ -119,7 +119,7 @@ sub write_instr_cpp {
 		}
 	}
 	print FH "\n};\n";
-	
+
 	$n = 0;
 	foreach $key (sort keys %PixieVM::instr) {
 		print FH "\nconst Instr INS_$key = {\n";
@@ -129,24 +129,24 @@ sub write_instr_cpp {
 				if ($vals[$i] == $m) {
 					print FH "\t&opcodes[";
 					print FH sprintf("0x%.2X", $n++);
-					print FH "],\t/* $PixieVM::modes[$m] */\n";							
+					print FH "],\t/* $PixieVM::modes[$m] */\n";			
 					last;
 				}
-			}	
+			}
 			if ($i == scalar @vals) {	# no match
 				print FH "\tNULL,\t\t\t/* $PixieVM::modes[$m] */\n";
-			}	
-		}		
-		print FH "};\n";	
+			}
+		}
+		print FH "};\n";
 	}
-	
+
 	close FH;
 }
 
 # generate opinfo.h
 #
 sub write_opinfo_h {
-	open FH, ">Opinfo.h" || die "unable to open file Opinfo.h";	
+	open FH, ">Opinfo.h" || die "unable to open file Opinfo.h";
 
 	print FH $autogen;
 	print FH "#ifndef __OPINFO_H__\n";
@@ -161,7 +161,7 @@ sub write_opinfo_h {
 	printf FH "extern LPOPINFO opinfo[";
 	print FH 1 << 8;
 	print FH "];\n";
-		
+
 	print FH "\n#endif /* __OPINFO_H__ */\n";
 
 	close FH;
@@ -170,7 +170,7 @@ sub write_opinfo_h {
 # generate opinfo.cpp
 #
 sub write_opinfo_cpp {
-	open FH, ">Opinfo.cpp" || die "unable to open file Opinfo.cpp";	
+	open FH, ">Opinfo.cpp" || die "unable to open file Opinfo.cpp";
 
 	print FH $autogen;
 	print FH "#include \"Common.h\"\n";
@@ -193,7 +193,7 @@ sub write_opinfo_cpp {
 		print FH "#define $key (mnemonics[$n])\n";
 		$n++;
 	}
-	
+
 	print FH "\n";
 
 	foreach $key (sort keys %PixieVM::instr) {
@@ -234,7 +234,7 @@ sub write_opinfo_cpp {
 # generate fetch / execute switch
 #
 sub write_fetchex_cpp {
-	open FH, ">FetchEx.cpp" || die "unable to open file FetchEx.cpp";	
+	open FH, ">FetchEx.cpp" || die "unable to open file FetchEx.cpp";
 	print FH $autogen;
 
 	my ($key, $val, $cnt);
@@ -247,7 +247,7 @@ sub write_fetchex_cpp {
 			print FH "\tbreak;\n";
 		}
 	}
-	
+
 	print FH "default:\n";
 	print FH "\tbreak;\n";
 	close FH;
