@@ -5,8 +5,8 @@
 class Canvas
 {
 public:
-	enum { CX_SIZE = 320 };
-	enum { CY_SIZE = 200 };
+	enum { CX_SIZE = 640 };
+	enum { CY_SIZE = 400 };
 
 	static CSize GetDimensions() {
 		return CSize(CX_SIZE, CY_SIZE);
