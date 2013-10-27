@@ -151,10 +151,8 @@ public:
 
 	void ResizeFrame() 
 	{
-		CRect rc;
-		m_view.GetWindowRect(rc);
-		ScreenToClient(rc);
-
+		CRect rc = Canvas::GetBoundingRect();
+		
 		// make room for the status bar
 		CRect rcStatus;
 		CStatusBarCtrl wndStatus(m_hWndStatusBar);
