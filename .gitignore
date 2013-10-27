@@ -12,5 +12,12 @@ pxasm/Scanner.cpp
 pxmon/Parser.cpp
 pxmon/Parser.hpp
 pxmon/Scanner.cpp
-
-
+*.opensdf
+*.user
+*.sdf
+*.suo
+Debug/
+Release/
+ipch/
+x64/
+bin/
