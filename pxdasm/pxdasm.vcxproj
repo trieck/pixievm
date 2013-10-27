@@ -111,7 +111,7 @@
     <Link>
       <AdditionalDependencies>base.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\bin\$(TargetFileName)</OutputFile>
-      <AdditionalLibraryDirectories>..\base\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -132,7 +132,7 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\bin\$(TargetFileName)</OutputFile>
-      <AdditionalLibraryDirectories>..\base\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
     </Link>
@@ -153,7 +153,7 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\bin\$(TargetFileName)</OutputFile>
-      <AdditionalLibraryDirectories>..\base\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -177,7 +177,7 @@
     <Link>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(SolutionDir)\bin\$(TargetFileName)</OutputFile>
-      <AdditionalLibraryDirectories>..\base\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
