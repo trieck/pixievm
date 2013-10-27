@@ -58,8 +58,8 @@ private:
 
 		m_target->BeginDraw();
 		m_target->SetTransform(D2D1::Matrix3x2F::Identity());
-		m_target->Clear(D2D1::ColorF(D2D1::ColorF::Black));
-
+		m_target->Clear(D2D1::ColorF(D2D1::ColorF::DarkBlue));
+		
 		// TODO: paint 
 
 		if (D2DERR_RECREATE_TARGET == m_target->EndDraw()) {

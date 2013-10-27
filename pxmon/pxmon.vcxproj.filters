@@ -27,9 +27,6 @@
     <ClCompile Include="Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CPU.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DisassemCmd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -37,9 +34,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HelpCmd.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="interrupt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LineReader.cpp">
@@ -52,9 +46,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MiniAssembler.cpp">
@@ -101,16 +92,10 @@
     <ClInclude Include="Code.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CPU.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DisassemCmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DumpCmd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HelpCmd.h">
@@ -126,9 +111,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Machine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MiniAssembler.h">
@@ -162,9 +144,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SymbolTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="trap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -328,18 +328,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">common.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">common.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="CPU.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">common.h</PrecompiledHeaderFile>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BufferSecurityCheck>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">common.h</PrecompiledHeaderFile>
-    </ClCompile>
     <ClCompile Include="DisassemCmd.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -365,18 +353,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">common.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">common.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="interrupt.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">common.h</PrecompiledHeaderFile>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BufferSecurityCheck>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">common.h</PrecompiledHeaderFile>
@@ -425,18 +401,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">common.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">common.h</PrecompiledHeaderFile>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</BufferSecurityCheck>
-      <BufferSecurityCheck Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</BufferSecurityCheck>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">common.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">common.h</PrecompiledHeaderFile>
-    </ClCompile>
-    <ClCompile Include="Memory.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">common.h</PrecompiledHeaderFile>
@@ -667,16 +631,13 @@
   <ItemGroup>
     <ClInclude Include="AssemCmd.h" />
     <ClInclude Include="Code.h" />
-    <ClInclude Include="CPU.H" />
     <ClInclude Include="DisassemCmd.h" />
     <ClInclude Include="DumpCmd.h" />
-    <ClInclude Include="Handler.h" />
     <ClInclude Include="HelpCmd.h" />
     <ClInclude Include="interrupt.h" />
     <ClInclude Include="LineReader.h" />
     <ClInclude Include="LoadCmd.h" />
     <ClInclude Include="Machine.h" />
-    <ClInclude Include="Memory.h" />
     <ClInclude Include="MiniAssembler.h" />
     <ClInclude Include="MiniDisassembler.h" />
     <ClInclude Include="Monitor.h" />
@@ -688,7 +649,6 @@
     <ClInclude Include="StepCmd.h" />
     <ClInclude Include="StepUntilCmd.h" />
     <ClInclude Include="SymbolTable.h" />
-    <ClInclude Include="trap.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\base\base.vcxproj">
