@@ -9,6 +9,7 @@
 #include "PixieVM.h"
 #include "Memory.h"
 #include "Interrupt.h"
+#include "Alarm.h"
 #include "CPU.h"
 #include "Opcodes.h"
 
@@ -2549,7 +2550,7 @@
 CPUPtr CPU::instance(CPU::getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
-CPU::CPU() : m_shutdown(false)
+CPU::CPU() : m_shutdown(false), m_exitCode(0)
 {
 	memory = Memory::getInstance();
 	REG_A = REG_B = REG_C = REG_D = REG_X = REG_SP = REG_IP = REG_FL = 0;
@@ -2761,44 +2762,61 @@ void CPU::setDH(byte b)
 	R8VAL(REG8_DH) = b;
 }
 
-void CPU::setShutdown(bool fShutdown)
+void CPU::setShutdown(bool fShutdown, int exitCode)
 {
 	m_shutdown = fShutdown;
+	m_exitCode = exitCode;
 }
 
-#define DO_INTERRUPT() \
+#define PROCESS_ALARMS() \
+	do { \
+		g_alarms.process(); \
+	} while (0)
+
+#define PROCESS_INTERRUPT(pending) \
 	do { \
 		/* reset */ \
-		if (g_interrupt.getPending() & IK_RESET) { \
+		if (pending & IK_RESET) { \
 			g_interrupt.clearPending(IK_RESET); \
 			REG_IP = FETCH_WORD(RESET_VECTOR); \
 		} \
 		\
 		/* trap */ \
-		if (g_interrupt.getPending() & IK_TRAP) { \
+		if (pending & IK_TRAP) { \
 			g_interrupt.clearPending(IK_TRAP); \
 			g_interrupt.handleTrap(); \
 		} \
 		\
 		/* monitor */ \
-		if (g_interrupt.getPending() & IK_MONITOR) { \
+		if (pending & IK_MONITOR) { \
 			g_interrupt.clearPending(IK_MONITOR); \
 			g_interrupt.handleMonitor(); \
 		} \
 		\
 		/* monitor break */ \
-		if (g_interrupt.getPending() & IK_MONBREAK) { \
+		if (pending & IK_MONBREAK) { \
 			g_interrupt.clearPending(IK_MONBREAK); \
 			g_interrupt.handleTrap(); \
 		} \
 	} while (0)
 
+#define DO_INTERRUPT() \
+	do { \
+		int pending = g_interrupt.getPending(); \
+		if (pending != IK_NONE) { \
+			PROCESS_INTERRUPT(pending); \
+		} \
+		PROCESS_ALARMS(); \
+	} while (0)
+
 /////////////////////////////////////////////////////////////////////////////
-void CPU::run()
+int CPU::run()
 {
 	byte b;
 
 	reset();
+
+	PROCESS_ALARMS();
 
 	while (!m_shutdown) {
 		DO_INTERRUPT();
@@ -2811,6 +2829,8 @@ void CPU::run()
 #include "FetchEx.cpp"
 		};
 	}
+
+	return m_exitCode;
 }
 
 /////////////////////////////////////////////////////////////////////////////

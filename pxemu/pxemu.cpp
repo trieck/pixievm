@@ -1,60 +1,81 @@
-// pxemu.cpp : main source file for pxemu.exe
-//
 
 #include "stdafx.h"
-
 #include <atlframe.h>
 #include <atlctrls.h>
 #include <atldlgs.h>
 #include <atlctrlw.h>
-
+#include "pxemu.h"
+#include "Exception.h"
 #include "resource.h"
-
 #include "pxemuView.h"
 #include "aboutdlg.h"
 #include "MainFrm.h"
+#include "CPU.H"
+#include "Alarm.h"
+#include "UIEventHandler.h"
+
+#define CHARGEN_BASE (0xC000)
+#define CHARGEN_SIZE (0x800)
 
 CAppModule _Module;
 
-int Run(LPTSTR /*lpstrCmdLine*/ = NULL, int nCmdShow = SW_SHOWDEFAULT)
+/////////////////////////////////////////////////////////////////////////////
+PxEmulator::PxEmulator()
+{
+	memory = Memory::getInstance();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+PxEmulator::~PxEmulator()
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void PxEmulator::init()
+{
+	HRESULT hr = _Module.Init(NULL, ModuleHelper::GetModuleInstance());
+	if (FAILED(hr))
+		throw Exception("could not initialize module.");
+
+	loadROM("chargen.rom", CHARGEN_BASE, CHARGEN_SIZE);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void PxEmulator::loadROM(const char *filename, word base, word size)
+{
+	ifstream ifs;
+	ifs.open(filename, ifstream::in | ifstream::binary);
+	if (!ifs.is_open()) {
+		throw Exception("unable to open ROM image \"%s\".", filename);
+	}
+
+	if (!memory->load(ifs, base, size)) {
+		throw Exception("unable to load ROM image \"%s\".", filename);
+	}
+
+	ifs.close();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+int PxEmulator::run()
 {
 	CMessageLoop theLoop;
 	_Module.AddMessageLoop(&theLoop);
-
+	
 	CMainFrame wndMain;
+	if (wndMain.CreateEx() == NULL)
+		throw Exception("Main window creation failed!");
 
-	if(wndMain.CreateEx() == NULL)
-	{
-		ATLTRACE(_T("Main window creation failed!\n"));
-		return 0;
-	}
+	STARTUPINFO info;
+	GetStartupInfo(&info);
+	wndMain.ShowWindow(info.wShowWindow);
 
-	wndMain.ShowWindow(nCmdShow);
+	g_alarms.addHandler(new UIEventHandler());
 
-	int nRet = theLoop.Run();
-
-	_Module.RemoveMessageLoop();
-	return nRet;
-}
-
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int nCmdShow)
-{
-	HRESULT hRes = ::CoInitialize(NULL);
-
-	ATLASSERT(SUCCEEDED(hRes));
-
-	// this resolves ATL window thunking problem when Microsoft Layer for Unicode (MSLU) is used
-	::DefWindowProc(NULL, 0, 0, 0L);
-
-	AtlInitCommonControls(ICC_COOL_CLASSES | ICC_BAR_CLASSES);	// add flags to support other controls
-
-	hRes = _Module.Init(NULL, hInstance);
-	ATLASSERT(SUCCEEDED(hRes));
-
-	int nRet = Run(lpstrCmdLine, nCmdShow);
+	CPU* cpu = CPU::getInstance();
+	int nRet = cpu->run();
 
 	_Module.Term();
-	::CoUninitialize();
 
 	return nRet;
 }

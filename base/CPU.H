@@ -33,7 +33,7 @@ public:
 public:
 	static CPU *getInstance();
 
-	void run();
+	int run();
 	void reset();
 
 	word getA() const;
@@ -75,7 +75,7 @@ public:
 	void push16(word w);
 	word pop16();
 
-	void setShutdown(bool f);
+	void setShutdown(bool f, int exitCode = 0);
 
 	enum { NREGS = 8 };			// number of registers
 
@@ -85,6 +85,7 @@ private:
 	word regs[NREGS];				// registers
 	Memory *memory;					// memory
 	bool m_shutdown;				// shut down flag
+	int m_exitCode;					// exit code
 };
 /////////////////////////////////////////////////////////////////////////////
 

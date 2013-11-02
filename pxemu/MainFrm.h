@@ -90,6 +90,7 @@ public:
 		UISetCheck(ID_VIEW_STATUS_BAR, 1);
 
 		// register object for message filtering and idle updates
+		
 		CMessageLoop* pLoop = _Module.GetMessageLoop();
 		ATLASSERT(pLoop != NULL);
 		pLoop->AddMessageFilter(this);

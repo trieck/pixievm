@@ -11,6 +11,8 @@
 #define _WIN32_IE	0x0501
 #define _RICHEDIT_VER	0x0200
 
+#include "Common.h"
+
 #include <atlbase.h>
 #include <atltypes.h>
 #include <atlapp.h>
@@ -33,3 +35,5 @@ extern CAppModule _Module;
 #include <d2d1.h>
 #include <d2d1helper.h>
 #pragma comment(lib, "d2d1.lib")
+
+
