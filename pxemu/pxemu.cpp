@@ -70,7 +70,7 @@ int PxEmulator::run()
 	GetStartupInfo(&info);
 	wndMain.ShowWindow(info.wShowWindow);
 
-	g_alarms.addHandler(new UIEventHandler());
+	g_alarms.addAlarm<UIEventHandler>();
 
 	CPU* cpu = CPU::getInstance();
 	int nRet = cpu->run();

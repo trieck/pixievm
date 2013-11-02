@@ -19,23 +19,17 @@ Alarms::Alarms()
 /////////////////////////////////////////////////////////////////////////////
 Alarms::~Alarms()
 {
-	HandlerVec::const_iterator it = handlers.begin();
-	for ( ; it != handlers.end(); ++it) {
+	HandlerVec::const_iterator it = alarms.begin();
+	for ( ; it != alarms.end(); ++it) {
 		delete *it;
 	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Alarms::addHandler(Handler* pHandler)
-{
-	handlers.push_back(pHandler);
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void Alarms::process()
 {
-	HandlerVec::const_iterator it = handlers.begin();
-	for ( ; it != handlers.end(); ++it) {
+	HandlerVec::const_iterator it = alarms.begin();
+	for ( ; it != alarms.end(); ++it) {
 		(*it)->handle();
 	}
 }

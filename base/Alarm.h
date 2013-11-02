@@ -19,13 +19,17 @@ public:
 	~Alarms();
 	
 	// Interface
-	void addHandler(Handler* pHandler);
+	template<class T> 
+	void addAlarm() {
+		alarms.push_back(new T());
+	}
+
 	void process();
 
 	// Implementation
 private:
 	typedef vector<Handler*> HandlerVec;
-	HandlerVec handlers;
+	HandlerVec alarms;
 };
 
 // global alarm dispatcher
