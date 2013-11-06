@@ -213,6 +213,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Palette.cpp" />
     <ClCompile Include="PxEmu.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -227,6 +228,7 @@
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="cominit.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Palette.h" />
     <ClInclude Include="PxEmu.h" />
     <ClInclude Include="pxemuView.h" />
     <ClInclude Include="resource.h" />

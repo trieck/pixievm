@@ -11,9 +11,7 @@
 #include "Exception.h"
 #include "Opcodes.h"
 #include "Monitor.h"
-
-#define CHARGEN_BASE (0xC000)
-#define CHARGEN_SIZE (0x800)
+#include "PixieVM.h"
 
 /////////////////////////////////////////////////////////////////////////////
 Machine::Machine()

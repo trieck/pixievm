@@ -46,6 +46,12 @@
 #define LOREG16(n)          (n & ((n&5) | ((~n&4) >> 1)))
 
 // instruction opcode lookup by addressing mode
-#define OPCODE(i, m)		(*(*i)[m])
+#define OPCODE(i, m)				(*(*i)[m])
+
+#define VIDEORAM_BASE				(0x8000)
+#define COLORRAM_BASE				(0xA000)
+
+#define CHARGEN_BASE				(0xC000)
+#define CHARGEN_SIZE				(0x800)
 
 #endif // __PIXIEVM_H__

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "Palette.h"
+
 class CPxemuView : public CWindowImpl<CPxemuView>
 {
 public:
@@ -96,4 +98,5 @@ private:
 
 	CComPtr<ID2D1DCRenderTarget> m_target;
 	CComPtr<ID2D1Factory> m_factory;
+	Palette m_palette;
 };

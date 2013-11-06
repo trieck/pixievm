@@ -13,9 +13,7 @@
 #include "CPU.H"
 #include "Alarm.h"
 #include "UIEventHandler.h"
-
-#define CHARGEN_BASE (0xC000)
-#define CHARGEN_SIZE (0x800)
+#include "PixieVM.h"
 
 CAppModule _Module;
 
