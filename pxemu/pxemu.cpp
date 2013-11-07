@@ -66,7 +66,11 @@ int PxEmulator::run()
 
 	STARTUPINFO info;
 	GetStartupInfo(&info);
-	wndMain.ShowWindow(info.wShowWindow);
+	int nCmdShow = info.dwFlags & STARTF_USESHOWWINDOW
+		? info.wShowWindow
+		: SW_SHOWDEFAULT;
+
+	wndMain.ShowWindow(nCmdShow);
 
 	g_alarms.addAlarm<UIEventHandler>();
 
