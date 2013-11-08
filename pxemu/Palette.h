@@ -5,17 +5,15 @@
 /////////////////////////////////////////////////////////////////////////////
 class Palette
 {
-	// Construction / Destruction
-public:
-	Palette();
-	~Palette();
-
 	// Interface
+public:
+	static RGBQUAD Color(UINT index);
+
+	enum { NUM_COLORS = 256 };
 
 	// Implementation
 private:
-	enum { NUM_COLORS = 256 };
-	static COLORREF palette[NUM_COLORS];
+	static COLORREF m_palette[NUM_COLORS];
 };
 
 #endif // __PALETTE_H__

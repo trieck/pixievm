@@ -2,7 +2,6 @@
 #pragma once
 
 #include "Memory.h"
-#include "cominit.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class PxEmulator
@@ -20,7 +19,6 @@ public:
 private:
 	void loadROM(const char *filename, word base, word size);
 	Memory* memory;		// pointer to memory
-	COMInitializer coinit;
 };
 
 

@@ -2,7 +2,7 @@
 #include "Palette.h"
 
 /////////////////////////////////////////////////////////////////////////////
-COLORREF Palette::palette[NUM_COLORS] = {
+COLORREF Palette::m_palette[NUM_COLORS] = {
 	RGB(0, 0, 0),
 	RGB(128, 0, 0),
 	RGB(0, 128, 0),
@@ -262,13 +262,16 @@ COLORREF Palette::palette[NUM_COLORS] = {
 };
 
 /////////////////////////////////////////////////////////////////////////////
-Palette::Palette()
+RGBQUAD Palette::Color(UINT index)
 {
-	 // IDirectDraw7::CreatePalette()
+	RGBQUAD color;
 
-}
+	index %= Palette::NUM_COLORS;
 
-/////////////////////////////////////////////////////////////////////////////
-Palette::~Palette()
-{
+	color.rgbBlue = GetBValue(m_palette[index]);
+	color.rgbGreen = GetGValue(m_palette[index]);
+	color.rgbRed = GetRValue(m_palette[index]);
+	color.rgbReserved = 0;
+
+	return color;
 }

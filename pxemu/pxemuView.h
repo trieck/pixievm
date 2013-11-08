@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "Palette.h"
+#include "Bitmap.h"
 
 class CPxemuView : public CWindowImpl<CPxemuView>
 {
@@ -29,16 +29,10 @@ public:
 //	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
 
 	LRESULT OnCreate(LPCREATESTRUCT cs) {
-		HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &m_factory);
-		if (FAILED(hr))
-			return -1;
-
 		return 0;
 	}
 
-	void OnDestroy() {
-		DiscardDevResources();
-		m_factory.Release();
+	void OnDestroy() {		
 	}
 
 	void OnPaint(CDCHandle /*hDC*/) {
@@ -49,54 +43,8 @@ public:
 private:
 	void Render(CPaintDC& dc) 
 	{
-		HRESULT hr;
-		if (m_target == NULL) {
-			hr = CreateDevResources();
-			if (FAILED(hr))
-				return;
-		}
-
-		hr = m_target->BindDC(dc, &dc.m_ps.rcPaint);
-
-		m_target->BeginDraw();
-		m_target->SetTransform(D2D1::Matrix3x2F::Identity());
-		m_target->Clear(D2D1::ColorF(D2D1::ColorF::DarkBlue));
-		
-		// TODO: paint 
-
-		if (D2DERR_RECREATE_TARGET == m_target->EndDraw()) {
-			DiscardDevResources();
-		}
+		// dc.SetDIBitsToDevice
 	}
 
-	HRESULT CreateDevResources() 
-	{
-		DiscardDevResources();
-
-		D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
-			D2D1_RENDER_TARGET_TYPE_DEFAULT,
-			D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, 
-				D2D1_ALPHA_MODE_IGNORE), 
-			0,
-			0,
-			D2D1_RENDER_TARGET_USAGE_NONE,
-			D2D1_FEATURE_LEVEL_DEFAULT);
-			
-		HRESULT hr = m_factory->CreateDCRenderTarget(&props, &m_target);
-		if (FAILED(hr))
-			return hr;
-
-		// TODO: setup
-
-		return hr;
-	}
-
-	void DiscardDevResources() 
-	{
-		m_target.Release();
-	}
-
-	CComPtr<ID2D1DCRenderTarget> m_target;
-	CComPtr<ID2D1Factory> m_factory;
-	Palette m_palette;
+	Bitmap m_bitmap;
 };
