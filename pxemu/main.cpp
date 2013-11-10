@@ -12,7 +12,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 		emulator.init();
 		ret = emulator.run();
 	} catch (const Exception& /*e*/) {
-		// TODO: logging
 		return 1;
 	}
 	

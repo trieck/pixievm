@@ -86,6 +86,7 @@ public:
 			WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
 
 		UIAddToolBar(hWndToolBar);
+		
 		UISetCheck(ID_VIEW_TOOLBAR, 1);
 		UISetCheck(ID_VIEW_STATUS_BAR, 1);
 
@@ -165,28 +166,16 @@ public:
 		CRect rcStatus;
 		CStatusBarCtrl wndStatus(m_hWndStatusBar);
 		wndStatus.GetWindowRect(rcStatus);
-		rcStatus.OffsetRect(-rcStatus.left, -rcStatus.top);
-
+		
 		// make room for the toolbar
 		CRect rcToolbar;
 		CReBarCtrl rebar = m_hWndToolBar;
 		rebar.GetWindowRect(rcToolbar);
-		rcToolbar.OffsetRect(-rcToolbar.left, -rcToolbar.top);
-
-		// toolbar is 2nd added band
-		int nBandIndex = rebar.IdToIndex(ATL_IDW_BAND_FIRST + 1);
-
-		REBARBANDINFO rbbi;
-		memset(&rbbi, 0, sizeof(REBARBANDINFO));
-		rbbi.cbSize = sizeof(REBARBANDINFO);
-		rbbi.fMask = RBBIM_STYLE;
-		rebar.GetBandInfo(nBandIndex, &rbbi);
-
-		if (wndStatus.IsWindowVisible())
-			rc.bottom += rcStatus.Height();
-
-		if ((rbbi.fStyle & RBBS_HIDDEN) == 0)
-			rc.bottom += rcToolbar.Height();
+		rc.bottom += rcToolbar.Height();
+		
+		DWORD dwVisible = wndStatus.GetWindowLong(GWL_STYLE) & WS_VISIBLE;
+		if (!dwVisible)
+			rc.bottom -= rcStatus.Height();
 
 		DWORD style = GetStyle();
 		DWORD dwExStyle = GetExStyle() | WS_EX_CLIENTEDGE;

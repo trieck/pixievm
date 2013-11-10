@@ -289,7 +289,7 @@
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="PxEmu.h" />
-    <ClInclude Include="pxemuView.h" />
+    <ClInclude Include="PxEmuView.h" />
     <ClInclude Include="RasterHandler.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
