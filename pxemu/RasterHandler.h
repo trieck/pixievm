@@ -11,7 +11,7 @@
 #include "Handler.h"
 #include "UIEventHandler.h"
 #include "Memory.h"
-#include "Bitmap.h"
+#include "Canvas.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class RasterHandler : public Handler
@@ -30,7 +30,7 @@ private:
 	uint16_t m_scanLine;
 	uint16_t m_offset;
 	Memory* m_memory;
-	Bitmap* m_bitmap;
+	Canvas* m_canvas;
 };
 
 #endif // __RASTER_HANDLER_H__

@@ -7,11 +7,8 @@
 
 #include "stdafx.h"
 #include "RasterHandler.h"
-#include "Canvas.h"
 #include "Memory.h"
 #include "PixieVM.h"
-
-extern HWND hwndClient;
 
 #define BORDER_COLOR			120
 #define BACKGROUND_COLOR	124
@@ -20,7 +17,7 @@ extern HWND hwndClient;
 RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)
 {
 	m_memory = Memory::getInstance();
-	m_bitmap = Bitmap::getInstance();
+	m_canvas = Canvas::getInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -40,7 +37,7 @@ void RasterHandler::handle()
 			m_offset < Canvas::CX_BORDER || 
 			m_offset >= Canvas::CX_SIZE-Canvas::CY_BORDER) {
 			
-			m_bitmap->SetPixel(m_offset, m_scanLine, BORDER_COLOR);
+			m_canvas->SetPixel(m_offset, m_scanLine, BORDER_COLOR);
 		} else {
 			uint16_t scanLine = m_scanLine - Canvas::CY_BORDER;
 			uint16_t offset = m_offset - Canvas::CX_BORDER;
@@ -60,9 +57,9 @@ void RasterHandler::handle()
 
 			uint8_t start = 7 - (offset % 8);
 			if (ch & 1 << start) {
-				m_bitmap->SetPixel(m_offset, m_scanLine, color);
+				m_canvas->SetPixel(m_offset, m_scanLine, color);
 			} else {
-				m_bitmap->SetPixel(m_offset, m_scanLine, BACKGROUND_COLOR);
+				m_canvas->SetPixel(m_offset, m_scanLine, BACKGROUND_COLOR);
 			}
 		}
 
@@ -72,7 +69,7 @@ void RasterHandler::handle()
 	if (m_offset == 0 && (m_scanLine > 0 
 		&& ((m_scanLine % 8) == 0) || m_scanLine == Canvas::CY_SIZE-1)) {
 		CRect rc(0, m_scanLine - 8, Canvas::CX_SIZE, m_scanLine);
-		InvalidateRect(hwndClient, rc, FALSE);
+		m_canvas->Invalidate(rc);
 	}
 
 	if (m_offset == 0) { // beginning of scan line

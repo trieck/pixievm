@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "Bitmap.h"
-
-extern HWND hwndClient;
+#include "Canvas.h"
 
 class CPxemuView : public CWindowImpl<CPxemuView>
 {
+private:
+	Canvas* m_pCanvas;
 public:
 	DECLARE_WND_CLASS(NULL)
 
@@ -31,7 +31,8 @@ public:
 //	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
 
 	LRESULT OnCreate(LPCREATESTRUCT cs) {
-		hwndClient = m_hWnd;
+		m_pCanvas = Canvas::getInstance();
+		m_pCanvas->SetWnd(m_hWnd);
 		return 0;
 	}
 
@@ -40,6 +41,6 @@ public:
 
 	void OnPaint(CDCHandle /*hDC*/) {
 		CPaintDC dc(*this);
-		Bitmap::getInstance()->Render(dc);
+		m_pCanvas->Render(dc);
 	}
 };
