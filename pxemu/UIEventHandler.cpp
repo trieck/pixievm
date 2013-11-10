@@ -24,26 +24,18 @@ void UIEventHandler::handle()
 {
 	CMessageLoop* pLoop = _Module.GetMessageLoop();
 
-	BOOL bDoIdle = TRUE;
-	int nIdleCount = 0;
 	MSG msg;
+	while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
+		if (!GetMessage(&msg, NULL, 0, 0)) {
+			CPU::getInstance()->setShutdown(true, (int)msg.wParam);
+			return;
+		}
 
-	while (bDoIdle && !::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
-		if (!pLoop->OnIdle(nIdleCount++))
-			bDoIdle = FALSE;
-	}
-
-	if (!GetMessage(&msg, NULL, 0, 0)) {
-		CPU::getInstance()->setShutdown(true, (int)msg.wParam);
-		return;
-	}
-
-	if (!pLoop->PreTranslateMessage(&msg)) {
 		::TranslateMessage(&msg);
 		::DispatchMessage(&msg);
-	}
 
-	if (pLoop->IsIdleMessage(&msg)) {
-		pLoop->OnIdle(0);
+		if (pLoop->IsIdleMessage(&msg)) {
+			pLoop->OnIdle(0);
+		}
 	}
 }

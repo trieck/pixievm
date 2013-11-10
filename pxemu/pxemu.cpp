@@ -12,10 +12,11 @@
 #include "MainFrm.h"
 #include "CPU.H"
 #include "Alarm.h"
-#include "UIEventHandler.h"
+#include "RasterHandler.h"
 #include "PixieVM.h"
 
 CAppModule _Module;
+HWND hwndClient;
 
 /////////////////////////////////////////////////////////////////////////////
 PxEmulator::PxEmulator()
@@ -36,6 +37,13 @@ void PxEmulator::init()
 		throw Exception("could not initialize module.");
 
 	loadROM("chargen.rom", CHARGEN_BASE, CHARGEN_SIZE);
+
+	for (int i = 0; i < 50; ++i) {
+		for (int j = 0; j < 80; ++j) {
+			memory->store(VIDEORAM_BASE+(i*80)+j, 65 + (j%26));
+			memory->store(COLORRAM_BASE+(i*80)+j, i*80+j);
+		}
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -72,10 +80,9 @@ int PxEmulator::run()
 
 	wndMain.ShowWindow(nCmdShow);
 
-	g_alarms.addAlarm<UIEventHandler>();
+	g_alarms.addAlarm<RasterHandler>();
 
-	CPU* cpu = CPU::getInstance();
-	int nRet = cpu->run();
+	int nRet = CPU::getInstance()->run();
 
 	_Module.Term();
 

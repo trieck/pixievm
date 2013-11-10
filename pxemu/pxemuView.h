@@ -6,6 +6,8 @@
 
 #include "Bitmap.h"
 
+extern HWND hwndClient;
+
 class CPxemuView : public CWindowImpl<CPxemuView>
 {
 public:
@@ -29,6 +31,7 @@ public:
 //	LRESULT NotifyHandler(int /*idCtrl*/, LPNMHDR /*pnmh*/, BOOL& /*bHandled*/)
 
 	LRESULT OnCreate(LPCREATESTRUCT cs) {
+		hwndClient = m_hWnd;
 		return 0;
 	}
 
@@ -37,14 +40,6 @@ public:
 
 	void OnPaint(CDCHandle /*hDC*/) {
 		CPaintDC dc(*this);
-		Render(dc);
+		Bitmap::getInstance()->Render(dc);
 	}
-
-private:
-	void Render(CPaintDC& dc) 
-	{
-		// dc.SetDIBitsToDevice
-	}
-
-	Bitmap m_bitmap;
 };
