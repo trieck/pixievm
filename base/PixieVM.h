@@ -49,7 +49,10 @@
 #define OPCODE(i, m)				(*(*i)[m])
 
 #define VIDEORAM_BASE				(0x8000)
+#define VIDEORAM_SIZE				(0x1000)
+
 #define COLORRAM_BASE				(0xA000)
+#define COLORRAM_SIZE				(0x1000)
 
 #define CHARGEN_BASE				(0xC000)
 #define CHARGEN_SIZE				(0x800)

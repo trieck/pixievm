@@ -17,7 +17,8 @@ public:
 
 	// Implementation
 private:
-	void loadROM(const char *filename, word base, word size);
+	void loadROM(const char* filename, word base, word size);
+	void loadROM(const char* filename);
 	Memory* memory;		// pointer to memory
 };
 

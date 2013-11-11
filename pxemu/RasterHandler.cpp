@@ -10,8 +10,8 @@
 #include "Memory.h"
 #include "PixieVM.h"
 
-#define BORDER_COLOR			120
-#define BACKGROUND_COLOR	124
+#define BORDER_COLOR			4
+#define BACKGROUND_COLOR	252
 
 /////////////////////////////////////////////////////////////////////////////
 RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)

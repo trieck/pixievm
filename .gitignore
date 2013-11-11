@@ -21,3 +21,4 @@ Release/
 ipch/
 x64/
 bin/
+!bin/*.rom

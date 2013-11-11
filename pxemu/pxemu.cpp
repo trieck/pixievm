@@ -14,6 +14,7 @@
 #include "Alarm.h"
 #include "RasterHandler.h"
 #include "PixieVM.h"
+#include <sys/stat.h>
 
 CAppModule _Module;
 
@@ -36,13 +37,7 @@ void PxEmulator::init()
 		throw Exception("could not initialize module.");
 
 	loadROM("chargen.rom", CHARGEN_BASE, CHARGEN_SIZE);
-
-	for (int i = 0; i < 50; ++i) {
-		for (int j = 0; j < 80; ++j) {
-			memory->store(VIDEORAM_BASE+(i*80)+j, 65 + (j%26));
-			memory->store(COLORRAM_BASE+(i*80)+j, i*80+j);
-		}
-	}
+	loadROM("kernel.rom");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -59,6 +54,34 @@ void PxEmulator::loadROM(const char *filename, word base, word size)
 	}
 
 	ifs.close();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void PxEmulator::loadROM(const char* filename)
+{
+	// load rom with contained load address
+
+	struct _stat buf;
+	int n = stat(filename, (struct stat*)&buf);
+	if (n) {
+		throw Exception("unable to stat ROM image \"%s\".", filename);
+	}
+
+	ifstream ifs;
+	ifs.open(filename, ifstream::in | ifstream::binary);
+	if (!ifs.is_open()) {
+		throw Exception("unable to open ROM image \"%s\".", filename);
+	}
+
+	word start;
+	ifs.read((char*)&start, sizeof(word));
+	if (ifs.bad()) {
+		throw Exception("unable to read from ROM image \"%s\".", filename);
+	}
+
+	if (!memory->load(ifs, start, buf.st_size - sizeof(word))) {
+		throw Exception("unable to load ROM image \"%s\".", filename);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////

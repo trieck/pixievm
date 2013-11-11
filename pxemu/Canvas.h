@@ -38,8 +38,8 @@ public:
 	void Render(CPaintDC& dc);
 	void SetPixel(uint16_t x, uint16_t y, uint8_t color);
 
-	enum { CX_BORDER = 10 };
-	enum { CY_BORDER = 10 };
+	enum { CX_BORDER = 20 };
+	enum { CY_BORDER = 20 };
 	enum { CX_SIZE = 80*8 + (CX_BORDER*2) };
 	enum { CY_SIZE = 50*8 + (CY_BORDER*2) };
 
