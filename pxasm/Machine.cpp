@@ -215,4 +215,3 @@ Datum Machine::memstore()
 
 	return value;
 }
-

@@ -129,6 +129,16 @@ void Code::putSym(LPSYMBOL s, uint32_t ctxt)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void Code::putSyms(LPSYMBOL s1, LPSYMBOL s2, uint32_t ctxt)
+{
+	// s2 is a critical expression and evaluated during first pass
+
+	for (word i = 0; i < s2->val16; ++i) {
+		putSym(s1, ctxt);
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void Code::putOp(LPSYMBOL s, uint32_t ctxt)
 {
 	// push program location, context

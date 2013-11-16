@@ -44,13 +44,13 @@ private:
 	Datum lobyte();
 	Datum fixup();
 	Datum memstore();
-
+	
 	typedef map<uint32_t, Machine::Instruction> InstrMap;
 
 	static MachinePtr instance;	// singleton instance
-	InstrMap m_instr;			// instruction map
-	const Datum *m_pc;			// program counter
-	Code *m_code;				// code pointer
+	InstrMap m_instr;						// instruction map
+	const Datum *m_pc;					// program counter
+	Code *m_code;								// code pointer
 	friend class Code;
 };
 

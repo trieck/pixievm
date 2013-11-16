@@ -11,10 +11,10 @@
 #include "SymbolTable.h"
 
 enum DatumType {
-    DT_UNDEF,
-    DT_CONST,
-    DT_SYM,
-    DT_INSTR,
+	DT_UNDEF,
+	DT_CONST,
+	DT_SYM,
+	DT_INSTR,
 };
 
 class Machine;
@@ -48,7 +48,7 @@ public:
 
 	operator const Datum*() const;
 private:
-	enum { NPROG = 4096 };
+	enum { NPROG = 65536 };
 
 	Datum m_memory[NPROG];
 	Datum *m_pmem;

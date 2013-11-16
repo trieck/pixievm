@@ -12,6 +12,7 @@
 #include "PixieVM.h"
 #include "Parser.hpp"
 #include "Util.h"
+#include "Exception.h"
 
 #define ISLIST(s)	(s->type == ST_LIST)
 
@@ -97,6 +98,7 @@ SymbolTable::SymbolTable()
 	// Identifiers
 	idinsert("BYTE", BYTE_PTR);
 	idinsert("WORD", WORD_PTR);
+	idinsert("DUP", DUP);
 
 	// pseudo operations
 	idinsert(".ORG", DECL_ORG);
@@ -196,22 +198,18 @@ LPSYMBOL SymbolTable::installs(const string &s)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LPSYMBOL SymbolTable::installw(const string &s, SymbolType type,
-                               uint32_t sub, word value)
+LPSYMBOL SymbolTable::installw(SymbolType type, uint32_t sub, word value)
 {
 	// numeric
 
-	LPSYMBOL sym;
-	if ((sym = lookup(s)) == NULL) {
-		sym = new Symbol;
-		sym->name = s;
-		sym->type = type;
-		sym->sub = sub;
-		sym->lineno = yylineno;
-		sym->val16 = value;
-		table[s] = sym;
-	}
-
+	LPSYMBOL sym = new Symbol;
+	sym->name = format("NUMERIC:0x%.8X", counter32());
+	sym->type = type;
+	sym->sub = sub;
+	sym->lineno = yylineno;
+	sym->val16 = value;
+	table[sym->name] = sym;
+	
 	return sym;
 }
 
@@ -231,6 +229,78 @@ LPSYMBOL SymbolTable::installo(uint32_t op, uint32_t sub, Symbol *args)
 	table[sym->name] = sym;
 
 	return sym;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LPSYMBOL SymbolTable::opeval(uint32_t opcode, uint32_t sub, LPSYMBOL args)
+{
+	// critical expression operator evaluation
+	switch (opcode) {
+	case PLUS:
+		return plus(sub, args);
+	case MINUS:
+		return minus(sub, args);
+	case MULT:
+		return mult(sub, args);
+	case DIV:
+		return div(sub, args);
+	default:
+		throw Exception("unrecognized opcode %d.", opcode);
+	};
+
+	return NULL;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LPSYMBOL SymbolTable::plus(uint32_t sub, LPSYMBOL args)
+{
+	ASSERT(args->type == ST_LIST);
+	ASSERT(args->vsyms.size() == 2);
+	ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
+	ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+
+	word value = args->vsyms[0]->val16 + args->vsyms[1]->val16;
+
+	return installw(ST_CONST, sub, value);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LPSYMBOL SymbolTable::minus(uint32_t sub, LPSYMBOL args)
+{
+	ASSERT(args->type == ST_LIST);
+	ASSERT(args->vsyms.size() == 2);
+	ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
+	ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+
+	word value = args->vsyms[0]->val16 - args->vsyms[1]->val16;
+
+	return installw(ST_CONST, sub, value);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LPSYMBOL SymbolTable::mult(uint32_t sub, LPSYMBOL args)
+{
+	ASSERT(args->type == ST_LIST);
+	ASSERT(args->vsyms.size() == 2);
+	ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
+	ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+
+	word value = args->vsyms[0]->val16 * args->vsyms[1]->val16;
+
+	return installw(ST_CONST, sub, value);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LPSYMBOL SymbolTable::div(uint32_t sub, LPSYMBOL args)
+{
+	ASSERT(args->type == ST_LIST);
+	ASSERT(args->vsyms.size() == 2);
+	ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
+	ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+
+	word value = args->vsyms[0]->val16 / args->vsyms[1]->val16;
+
+	return installw(ST_CONST, sub, value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -308,9 +378,7 @@ string SymbolTable::opname(uint32_t opcode)
 		opname = "unknown";
 	}
 
-	name = format("OPERATOR(%s):0x%.8X",
-	              opname.c_str(),
-	              counter);
+	name = format("OPERATOR(%s):0x%.8X", opname.c_str(), counter);
 
 	return name;
 }

@@ -12,6 +12,7 @@
 #include "Opcodes.h"
 #include "Monitor.h"
 #include "PixieVM.h"
+#include <sys/stat.h>
 
 /////////////////////////////////////////////////////////////////////////////
 Machine::Machine()
@@ -29,6 +30,7 @@ Machine::~Machine()
 void Machine::init()
 {
 	loadROM("chargen.rom", CHARGEN_BASE, CHARGEN_SIZE);
+	loadROM("kernel.rom");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -45,6 +47,34 @@ void Machine::loadROM(const char *filename, word base, word size)
 	}
 
 	ifs.close();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void Machine::loadROM(const char* filename)
+{
+	// load rom with contained load address
+
+	struct _stat buf;
+	int n = stat(filename, (struct stat*)&buf);
+	if (n) {
+		throw Exception("unable to stat ROM image \"%s\".", filename);
+	}
+
+	ifstream ifs;
+	ifs.open(filename, ifstream::in | ifstream::binary);
+	if (!ifs.is_open()) {
+		throw Exception("unable to open ROM image \"%s\".", filename);
+	}
+
+	word start;
+	ifs.read((char*)&start, sizeof(word));
+	if (ifs.bad()) {
+		throw Exception("unable to read from ROM image \"%s\".", filename);
+	}
+
+	if (!memory->load(ifs, start, buf.st_size - sizeof(word))) {
+		throw Exception("unable to load ROM image \"%s\".", filename);
+	}
 }
 
 /////////////////////////////////////////////////////////////////////////////

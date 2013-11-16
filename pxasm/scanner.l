@@ -3,6 +3,7 @@
 %{
 #include "Common.h"
 #include "SymbolTable.h"
+#include "Code.h"
 #include "Parser.hpp"
 #include "Exception.h"
 #include "Util.h"
@@ -32,60 +33,64 @@ char backslash(const char **pp)
 	return c;
 }
 
+ANON_BEGIN
+Code *code = Code::getInstance();
 SymbolTable *table = SymbolTable::getInstance();
+ANON_END
 
 %}
 
-comment			;.*
-decnum			[0-9]+
-div				\/
-gt				>
-hexnum			\$[a-fA-F0-9]+
+comment				;.*
+decnum				[0-9]+
+div						\/
+gt						>
+hexnum				\$[a-fA-F0-9]+
 identifier		[a-zA-Z][a-zA-Z0-9_]*
-lt				<
-minus			-
-mult			\*
-newline			[\n]
+lt						<
+minus					-
+mult					\*
+newline				[\n]
 offset-reg		[a-zA-Z]+[\r\t ]*\+[\r\t ]*[xX]
-plus			\+
-pseudo_op		\.[a-zA-Z][a-zA-Z0-9_]*
-quotedstr		\"[^"\n]+\"
+plus					\+
+pseudo_op			\.[a-zA-Z][a-zA-Z0-9_]*
+quotedstr			\"[^"\n]+\"
 whitespace		[\t\r ]+
+here					\$\$
 
 %%
 {whitespace}	;
-{comment}		;
-{decnum}		{
-	word d;		
+{comment}			;
+{decnum}			{
+	word d;
 	if (!sscanf(yytext, "%hu", &d)) {
 		yyerror("invalid decimal number");
 		return 0;
-	}		
+	}
 	
 	if (d < 0x100) {
-		yylval.sym = table->installw(yytext, ST_CONST, IM8, d); 
+		yylval.sym = table->installw(ST_CONST, IM8, d); 
 		return IM8;
 	} else {
-		yylval.sym = table->installw(yytext, ST_CONST, IM16, d); 
+		yylval.sym = table->installw(ST_CONST, IM16, d); 
 		return IM16;
 	}
 }
 {hexnum}		{
-	word d;		
+	word d;
 	if (!sscanf(&yytext[1], "%hx", &d)) {
 		yyerror("invalid hex number");
 		return 0;
-	}		
+	}
 	
 	if (d < 0x100) {
-		yylval.sym = table->installw(yytext, ST_CONST, IM8, d); 
+		yylval.sym = table->installw(ST_CONST, IM8, d); 
 		return IM8;
 	} else {
-		yylval.sym = table->installw(yytext, ST_CONST, IM16, d); 
+		yylval.sym = table->installw(ST_CONST, IM16, d); 
 		return IM16;
 	}
 }
-{offset-reg}						{
+{offset-reg}		{
 	string error;
 	string reg = trim(string(yytext, strchr(yytext, '+') - yytext));
 	LPSYMBOL sym;
@@ -99,14 +104,14 @@ whitespace		[\t\r ]+
 	}
 
 	// encode offset bit in register
-	yylval.sym = table->installw(yytext, sym->type, sym->sub, sym->val8 | 0x08);
+	yylval.sym = table->installw(sym->type, sym->sub, sym->val8 | 0x08);
 	return RX16;
 }
-{newline}.*		{ 
+{newline}.*		{
 		line = trim(yytext + 1);
-		yyless(1); 
+		yyless(1);
 	}
-{identifier}				{
+{identifier}	{
 	LPSYMBOL sym;
 	if ((sym = table->lookup(yytext)) == NULL) {
 		yylval.sym = table->install(yytext);
@@ -128,7 +133,7 @@ whitespace		[\t\r ]+
 	
 	return 0;
 }
-{pseudo_op}					{ 
+{pseudo_op}		{ 
 	LPSYMBOL sym;
 	if ((sym = table->lookup(yytext)) == NULL) {
 		yyerror("unrecognized pseudo-op");
@@ -138,8 +143,8 @@ whitespace		[\t\r ]+
 	return sym->sub;
  }
 
-{quotedstr}					{
-	const char *ptext = yytext+1;	// eat '"' 
+{quotedstr}		{
+	const char *ptext = yytext+1;	// eat '"'
 	string str;
 
 	for ( ; *ptext != '"'; ptext++) {
@@ -154,11 +159,15 @@ whitespace		[\t\r ]+
 	yylval.sym = table->installs(str);
 	return STRING;
 }
-{lt}	{ return LO_BYTE; }
-{gt}	{ return HI_BYTE; }
+{lt}		{ return LO_BYTE; }
+{gt}		{ return HI_BYTE; }
 {plus}	{ return PLUS; }
 {minus}	{ return MINUS; }
 {mult}	{ return MULT; }
-{div}	{ return DIV; }
-.		{ return yytext[0]; }
+{div}		{ return DIV; }
+{here}	{ 
+	yylval.sym = table->installw(ST_CONST, IM16, code->location()); 
+	return IM16; 
+}
+.				{ return yytext[0]; }
 %%

@@ -1,2 +1,1 @@
-Implement '*' assembly-address operator
 Implement EOR, AND, OR operations

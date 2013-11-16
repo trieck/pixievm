@@ -1,8 +1,14 @@
 ; PixieVM kernel
 ;
-.org $FFF9
 
-	jmp $FFF9
-	
+VIDEO_RAM = $8000
+KERNEL_START = $D000
+RESET_VEC = $FFFE
+
+.org KERNEL_START
+
+start:
+	jmp start
+	.byte $00 dup (RESET_VEC-$$)
 reset:
-	.word $FFF9
+	.word KERNEL_START

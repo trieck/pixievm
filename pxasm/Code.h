@@ -35,10 +35,10 @@ public:
 	bool isOriginSet() const;
 
 	void putSym(LPSYMBOL s, uint32_t ctxt);
+	void putSyms(LPSYMBOL s1, LPSYMBOL s2, uint32_t ctxt);
 	void putString(const string &s);
 	void putWord(word w);
 	void putByte(byte b);
-
 	void putWordAt(word location, word w);
 	void putByteAt(word location, byte b);
 
@@ -81,9 +81,8 @@ private:
 	void putOp(LPSYMBOL s, uint32_t ctxt);
 	void putList(LPSYMBOL s, uint32_t ctxt);
 	void putFixup(LPSYMBOL s, uint32_t ctxt);
-
 	void pushsym(LPSYMBOL s);
-
+	
 	typedef void (Code::*Code0Ptr)(const Instr *);
 	typedef void (Code::*Code1Ptr)(const Instr *, LPSYMBOL);
 	typedef void (Code::*Code2Ptr)(const Instr *, LPSYMBOL, LPSYMBOL);
@@ -94,7 +93,7 @@ private:
 
 	static CodePtr instance;	// singleton instance
 
-	enum { MEMSIZE = 4096 };	// maximum code size
+	enum { MEMSIZE = 65536 };	// maximum code size
 
 	word m_origin;					// assembly origin
 	bool m_bOrigin;					// origin has been declared

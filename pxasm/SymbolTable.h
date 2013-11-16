@@ -15,13 +15,13 @@
 // Symbol type
 enum SymbolType {
     ST_UNDEF = 0,		// undefined
-    ST_REG,				// cpu register
-    ST_INSTRUCTION,		// CPU instruction
-    ST_ID, 				// identifier
-    ST_CONST,			// numeric constant
+    ST_REG,					// cpu register
+    ST_INSTRUCTION,	// CPU instruction
+    ST_ID, 					// identifier
+    ST_CONST,				// numeric constant
     ST_STRING,			// string literal
-    ST_OP,				// operator
-    ST_LIST				// list of symbols
+    ST_OP,					// operator
+    ST_LIST					// list of symbols
 };
 
 class Symbol;
@@ -66,25 +66,23 @@ public:
 	static SymbolTable *getInstance();
 	LPSYMBOL install(const string &s);	// undefined
 	LPSYMBOL installs(const string &s);	// string literal
-	LPSYMBOL installw(const string &s, SymbolType type,
-	                  uint32_t sub, word value);	// numeric
-	LPSYMBOL installo(uint32_t op, uint32_t sub,
-	                  Symbol *args);	// operator
-
+	LPSYMBOL installw(SymbolType type, uint32_t sub, word value);	// numeric
+	LPSYMBOL installo(uint32_t op, uint32_t sub, LPSYMBOL args);	// operator
 	LPSYMBOL lookup(const string &s) const;
 	LPSYMBOL mklist(LPSYMBOL s1, LPSYMBOL s2);
-
+	LPSYMBOL opeval(uint32_t opcode, uint32_t sub, LPSYMBOL args);	// critical eval
 // Implementation
 private:
+	LPSYMBOL plus(uint32_t sub, LPSYMBOL args);
+	LPSYMBOL minus(uint32_t sub, LPSYMBOL args);
+	LPSYMBOL mult(uint32_t sub, LPSYMBOL args);
+	LPSYMBOL div(uint32_t sub, LPSYMBOL args);
 	void iinsert(const string &s, uint32_t t, const Instr *i);
 	void rinsert(const string &s, uint32_t t, byte r);
 	void idinsert(const string &s, uint32_t id);
 	void freeSym(LPSYMBOL s);
-
 	static string opname(uint32_t opcode);
-
 	static SymbolTablePtr instance;	// singleton instance
-
 	typedef map<string, LPSYMBOL, stringless> symmap;
 	symmap table;
 };
