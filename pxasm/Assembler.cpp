@@ -36,6 +36,7 @@ void Assembler::open(const char *filename)
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void Assembler::close()
 {
 	if (yyin != NULL && yyin != stdin) {
@@ -50,9 +51,9 @@ void Assembler::close()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-int Assembler::assemble(const char *filename)
+int Assembler::assemble(const char *source, const char *output)
 {
-	open(filename);
+	open(source);
 
 	int nret;
 	if ((nret = yyparse()) != 0)
@@ -62,11 +63,9 @@ int Assembler::assemble(const char *filename)
 	Code *code = Code::getInstance();
 	code->pass2();
 
-	// write code to output file
-	string output = format("%s.o", basename(filename).c_str());
-	if ((m_pOut = fopen(output.c_str(), "wb")) == NULL) {
-		throw Exception("can't open file \"%s\": %s.", output.c_str(),
-		                strerror(errno));
+	// write code to output file	
+	if ((m_pOut = fopen(output, "wb")) == NULL) {
+		throw Exception("can't open file \"%s\": %s.", output, strerror(errno));
 	}
 
 	code->write(m_pOut);
@@ -75,3 +74,11 @@ int Assembler::assemble(const char *filename)
 
 	return 0;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+int Assembler::assemble(const char *source)
+{
+	string output = format("%s.o", basename(source).c_str());
+	return assemble(source, output.c_str());
+}
+	

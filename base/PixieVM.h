@@ -59,4 +59,8 @@
 
 #define TOP_STACK_AREA			(0xCFFF)
 
+// kernel data table
+#define KT_BKGND_COLOR			(0xFF06)
+#define KT_BORDER_COLOR			(0xFF07)
+
 #endif // __PIXIEVM_H__

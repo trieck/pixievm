@@ -12,7 +12,7 @@
 ANON_BEGIN
 void usage()
 {
-	cerr << "usage: pxasm source-file" << endl;
+	cerr << "usage: pxasm source-file [outfile]" << endl;
 	exit(EXIT_FAILURE);
 }
 ANON_END
@@ -28,7 +28,11 @@ int main(int argc, char *argv[])
 	int nret;
 
 	try {
-		nret = assembler.assemble(argv[1]);
+		if (argc == 3) {
+			nret = assembler.assemble(argv[1], argv[2]);
+		} else {
+			nret = assembler.assemble(argv[1]);
+		}
 	} catch (const Exception &e) {
 		cerr << e.getDescription() << endl;
 		exit(EXIT_FAILURE);

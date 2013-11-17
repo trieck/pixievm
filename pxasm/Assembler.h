@@ -14,7 +14,8 @@ public:
 	Assembler();
 	~Assembler();
 
-	int assemble(const char *filename);
+	int assemble(const char *source);
+	int assemble(const char *source, const char *output);
 private:
 	void open(const char *filename);
 	void close();

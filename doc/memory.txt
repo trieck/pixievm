@@ -1,0 +1,20 @@
+important memory locations
+
+: $0000-$9FFF -- user programs
+: $A000-$AFFF -- video ram
+: $B000-$BFFF -- color ram
+: $C000-$C7FF -- character generator rom
+: $C800-$CFFF -- initial stack area, can be changed -- grows downward
+: $D000-$FFFF -- kernel
+	
+	:$FF00-$FFFF -- kernel data table
+	------------------------------------------------
+	:$FF00-$FF03 -- countdown timer, bytes 0-3
+	:$FF04			 -- cursor x-position
+	:$FF05 			 -- cursor y-position
+	:$FF06			 -- background color
+	:$FF07			 -- border color
+ 	
+ 	:$FFFC-$FFFD -- reset vector, main kernel entry point
+ 	:$FFFE-$FFFE -- IRQ vector
+ 		

@@ -10,9 +10,6 @@
 #include "Memory.h"
 #include "PixieVM.h"
 
-#define BORDER_COLOR			4
-#define BACKGROUND_COLOR	252
-
 /////////////////////////////////////////////////////////////////////////////
 RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)
 {
@@ -28,6 +25,9 @@ RasterHandler::~RasterHandler()
 /////////////////////////////////////////////////////////////////////////////
 void RasterHandler::handle()
 {
+	uint8_t bkgnd_color = m_memory->fetch(KT_BKGND_COLOR);
+	uint8_t border_color = m_memory->fetch(KT_BORDER_COLOR);
+	
 	// handle 4-pixels at a time
 	for (int i = 0; i < 4; ++i) {
 
@@ -37,7 +37,7 @@ void RasterHandler::handle()
 			m_offset < Canvas::CX_BORDER || 
 			m_offset >= Canvas::CX_SIZE-Canvas::CY_BORDER) {
 			
-			m_canvas->SetPixel(m_offset, m_scanLine, BORDER_COLOR);
+			m_canvas->SetPixel(m_offset, m_scanLine, border_color);
 		} else {
 			uint16_t scanLine = m_scanLine - Canvas::CY_BORDER;
 			uint16_t offset = m_offset - Canvas::CX_BORDER;
@@ -59,7 +59,7 @@ void RasterHandler::handle()
 			if (ch & 1 << start) {
 				m_canvas->SetPixel(m_offset, m_scanLine, color);
 			} else {
-				m_canvas->SetPixel(m_offset, m_scanLine, BACKGROUND_COLOR);
+				m_canvas->SetPixel(m_offset, m_scanLine, bkgnd_color);
 			}
 		}
 

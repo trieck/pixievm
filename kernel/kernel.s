@@ -1,16 +1,23 @@
 ; PixieVM kernel
 ;
 
-VIDEO_RAM = $A000
-COLOR_RAM = $B000
-KERNEL_START = $D000
-RESET_VEC = $FFFC
-IRQ_VEC = $FFFE
+VIDEO_RAM 		= $A000
+COLOR_RAM 		= $B000
+KERNEL_START 	= $D000
+KERNEL_DATA 	= $FF00
+BKGND_COLOR		= $FF06
+BORDER_COLOR	= $FF07
+RESET_VEC 		= $FFFC
+IRQ_VEC 			= $FFFE
 
 .org KERNEL_START
 
 ; start of kernel 
 start:
+
+	mov BYTE [BKGND_COLOR], 4
+	mov BYTE [BORDER_COLOR], 252
+
 	mov c, VIDEO_RAM
 	mov	d, COLOR_RAM
 	xor a, a
@@ -18,7 +25,7 @@ start:
 loop:
 	cmp x, $1000
 	jz endk
-	mov BYTE [c+x], $41
+	mov [c+x], al
 	mov [d+x], al
 	inx
 	inc al
