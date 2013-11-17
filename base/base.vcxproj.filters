@@ -44,6 +44,9 @@
     <ClCompile Include="Alarm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HiresTimer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common.h">
@@ -92,6 +95,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Alarm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HiresTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

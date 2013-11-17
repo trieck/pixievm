@@ -13,6 +13,7 @@
 #include "CPU.H"
 #include "Alarm.h"
 #include "RasterHandler.h"
+#include "TimerHandler.h"
 #include "PixieVM.h"
 #include <sys/stat.h>
 
@@ -102,6 +103,7 @@ int PxEmulator::run()
 
 	wndMain.ShowWindow(nCmdShow);
 
+	g_alarms.addAlarm<TimerHandler>();
 	g_alarms.addAlarm<RasterHandler>();
 
 	int nRet = CPU::getInstance()->run();

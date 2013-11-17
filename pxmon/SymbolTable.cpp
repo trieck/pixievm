@@ -39,14 +39,12 @@ SymbolTable::SymbolTable()
 	iinsert("CLI", I3, &INS_CLI);
 	iinsert("DEX", I3, &INS_DEX);
 	iinsert("INX", I3, &INS_INX);
-	iinsert("IRET", I3, &INS_IRET);
 	iinsert("NOP", I3, &INS_NOP);
 	iinsert("RET", I3, &INS_RET);
+	iinsert("RETI", I3, &INS_RETI);
 	iinsert("SEC", I3, &INS_SEC);
 	iinsert("SEI", I3, &INS_SEI);
-	iinsert("POPA", I3, &INS_POPA);
 	iinsert("POPF", I3, &INS_POPF);
-	iinsert("PUSHA", I3, &INS_PUSHA);
 	iinsert("PUSHF", I3, &INS_PUSHF);
 
 	/* Group #4 instructions */

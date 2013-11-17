@@ -809,7 +809,7 @@
 
 #define PUSH16(w) \
 	do { \
-		STORE_WORD(REG_SP, w); \
+		STORE_WORD(REG_SP-1, w); \
 		REG_SP -= 2; \
 	} while (0)
 
@@ -1198,12 +1198,6 @@
 		REG_X++; \
 		SET_NZ16(REG_X); \
 		REG_IP++; \
-	} while (0)
-
-#define DO_IRET() \
-	do { \
-		REG_FL = POP16(); \
-		REG_IP = POP16(); \
 	} while (0)
 
 #define BRANCH(cond, val) \
@@ -1717,17 +1711,6 @@
 		REG_IP += 3; \
 	} while (0)
 
-#define DO_POPA() \
-	do { \
-		REG_SP = POP16(); \
-		REG_X = POP16(); \
-		REG_D = POP16(); \
-		REG_C = POP16(); \
-		REG_B = POP16(); \
-		REG_A = POP16(); \
-		REG_IP++; \
-	} while (0)
-
 #define DO_POPF() \
 	do { \
 		REG_FL = POP16(); \
@@ -1792,17 +1775,6 @@
 		REG_IP += 3; \
 	} while (0)
 
-#define DO_PUSHA() \
-	do { \
-		PUSH16(REG_A); \
-		PUSH16(REG_B); \
-		PUSH16(REG_C); \
-		PUSH16(REG_D); \
-		PUSH16(REG_X); \
-		PUSH16(REG_SP); \
-		REG_IP++; \
-	} while (0)
-
 #define DO_PUSHF() \
 	do { \
 		PUSH16(REG_FL); \
@@ -1811,6 +1783,12 @@
 
 #define DO_RET() \
 	do { \
+		REG_IP = POP16(); \
+	} while (0)
+
+#define DO_RETI() \
+	do { \
+		REG_FL = POP16(); \
 		REG_IP = POP16(); \
 	} while (0)
 
@@ -2773,14 +2751,24 @@ void CPU::setShutdown(bool fShutdown, int exitCode)
 		g_alarms.process(); \
 	} while (0)
 
+#define PROCESS_IRQ() \
+	do { \
+		PUSH16(REG_IP); \
+		PUSH16(REG_FL); \
+		SET_INT_DISABLE(1); \
+		REG_IP = FETCH_WORD(IRQ_VECTOR); \
+	} while (0)
+
 #define PROCESS_INTERRUPT(pending) \
 	do { \
 		/* reset */ \
 		if (pending & IK_RESET) { \
 			g_interrupt.clearPending(IK_RESET); \
 			REG_IP = FETCH_WORD(RESET_VECTOR); \
+		} else if ((pending & IK_IRQ) && !GET_INT_DISABLE()) { \
+			g_interrupt.clearPending(IK_IRQ); \
+			PROCESS_IRQ(); \
 		} \
-		\
 		/* trap */ \
 		if (pending & IK_TRAP) { \
 			g_interrupt.clearPending(IK_TRAP); \
@@ -2836,6 +2824,7 @@ int CPU::run()
 /////////////////////////////////////////////////////////////////////////////
 void CPU::reset()
 {
+	REG_SP = TOP_STACK_AREA;
 	g_interrupt.setPending(IK_RESET);
 }
 
