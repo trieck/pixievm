@@ -14,6 +14,10 @@ important memory locations
 	:$FF05 			 -- cursor y-position
 	:$FF06			 -- background color
 	:$FF07			 -- border color
+	:$FF08			 -- jiffy clock#1
+	:$FF09			 -- jiffy clock#2
+	:$FF0A			 -- jiffy clock#3
+	
  	
  	:$FFFC-$FFFD -- reset vector, main kernel entry point
  	:$FFFE-$FFFE -- IRQ vector

@@ -1,1 +1,6 @@
+* need to have video registers mapped in contiguous area
+* implement a countdown timer
+* name handlers after real chips like: PXVIC, PXCIA
+  - make their interfaces memory based
 
+* cursor should blink every 20 jiffies?

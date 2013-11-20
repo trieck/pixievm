@@ -1114,7 +1114,7 @@
 
 #define DO_DEC_A8() \
 	do { \
-		word ad = FETCH_WORD(REG_IP + 2); \
+		word ad = FETCH_WORD(REG_IP + 1); \
 		byte m = FETCH(ad) - 1; \
 		SET_NZ8(m); \
 		STORE(ad, m); \
@@ -1123,7 +1123,7 @@
 
 #define DO_DEC_A16() \
 	do { \
-		word ad = FETCH_WORD(REG_IP + 2); \
+		word ad = FETCH_WORD(REG_IP + 1); \
 		word m = FETCH_WORD(ad) - 1; \
 		SET_NZ16(m); \
 		STORE_WORD(ad, m); \
@@ -1177,7 +1177,7 @@
 
 #define DO_INC_A8() \
 	do { \
-		word ad = FETCH_WORD(REG_IP + 2); \
+		word ad = FETCH_WORD(REG_IP + 1); \
 		byte m = FETCH(ad) + 1; \
 		SET_NZ8(m); \
 		STORE(ad, m); \
@@ -1186,7 +1186,7 @@
 
 #define DO_INC_A16() \
 	do { \
-		word ad = FETCH_WORD(REG_IP + 2); \
+		word ad = FETCH_WORD(REG_IP + 1); \
 		word m = FETCH_WORD(ad) + 1; \
 		SET_NZ16(m); \
 		STORE_WORD(ad, m); \
