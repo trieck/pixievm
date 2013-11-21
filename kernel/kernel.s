@@ -65,7 +65,7 @@ flash_cursor:
 	
 	mov BYTE [COUNTDOWN], $14			; reset countdown
 	
-	xor BYTE [c+x], $db						; flash cursor
+	xor BYTE [c+x], $dc						; flash cursor
 	xor BYTE [d+x], $4
 	
 fcend:
