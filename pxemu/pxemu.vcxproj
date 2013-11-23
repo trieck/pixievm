@@ -292,6 +292,7 @@
     <ClInclude Include="AboutDlg.h" />
     <ClInclude Include="Bitmap.h" />
     <ClInclude Include="Canvas.h" />
+    <ClInclude Include="KeyboardHandler.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="Palette.h" />
     <ClInclude Include="PxEmu.h" />

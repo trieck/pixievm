@@ -5,9 +5,12 @@
 #pragma once
 
 #include "Canvas.h"
+#include "KeyboardHandler.h"
 
-class CPxemuView : public CWindowImpl<CPxemuView>
+class CPxemuView : public CWindowImpl<CPxemuView>, 
+	public KeyboardHandler<CPxemuView>
 {
+	typedef KeyboardHandler<CPxemuView> KeyboardHandlerBase;
 private:
 	Canvas* m_pCanvas;
 public:
@@ -23,6 +26,7 @@ public:
 		MSG_WM_PAINT(OnPaint)
 		MSG_WM_CREATE(OnCreate)
 		MSG_WM_DESTROY(OnDestroy)
+		CHAIN_MSG_MAP(KeyboardHandlerBase)
 	END_MSG_MAP()
 
 // Handler prototypes (uncomment arguments if needed):

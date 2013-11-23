@@ -10,6 +10,9 @@
 #include "Memory.h"
 #include "PixieVM.h"
 
+#define IO_REG_BKGND_COLOR	(0xD000)
+#define IO_REG_BORDER_COLOR	(0xD001)
+
 /////////////////////////////////////////////////////////////////////////////
 RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)
 {
@@ -25,8 +28,8 @@ RasterHandler::~RasterHandler()
 /////////////////////////////////////////////////////////////////////////////
 void RasterHandler::handle()
 {
-	uint8_t bkgnd_color = m_memory->fetch(KT_BKGND_COLOR);
-	uint8_t border_color = m_memory->fetch(KT_BORDER_COLOR);
+	uint8_t bkgnd_color = m_memory->fetch(IO_REG_BKGND_COLOR);
+	uint8_t border_color = m_memory->fetch(IO_REG_BORDER_COLOR);
 	
 	// handle 4-pixels at a time
 	for (int i = 0; i < 4; ++i) {

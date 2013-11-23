@@ -3,17 +3,17 @@
 
 VIDEO_RAM 		= $A000
 COLOR_RAM 		= $B000
-KERNEL_START 	= $D000
-KERNEL_DATA 	= $FF00
-BKGND_COLOR		= $FF06
-BORDER_COLOR	= $FF07
-JIFFY_CLK1		= $FF08
-JIFFY_CLK2		= $FF09
-JIFFY_CLK3		= $FF0A
-COUNTDOWN			= $FF0B
-SCNLINE				= $FF0C						; pointer current screen line in video ram
-CURCOLOR			= $FF0E						; pointer current color ram location
-CURCOL				= $FF10						; cursor column on current line
+KERNEL_START 	= $E000
+
+BKGND_COLOR		= $D000
+BORDER_COLOR	= $D001
+JIFFY_CLK1		= $FF00
+JIFFY_CLK2		= $FF01
+JIFFY_CLK3		= $FF02
+COUNTDOWN			= $FF03
+SCNLINE				= $FF04						; pointer current screen line in video ram
+CURCOLOR			= $FF06						; pointer current color ram location
+CURCOL				= $FF08						; cursor column on current line
 RESET_VEC 		= $FFFC
 IRQ_VEC 			= $FFFE
 

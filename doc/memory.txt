@@ -5,20 +5,24 @@ important memory locations
 : $B000-$BFFF -- color ram
 : $C000-$C7FF -- character generator rom
 : $C800-$CFFF -- initial stack area, can be changed -- grows downward
-: $D000-$FFFF -- kernel
+: $D000-$DFFF -- I/O registers
+	:$D000			-- background color
+	:$D001			-- border color
+	:$D100			-- data port#1; keyboard
+	:$D101			-- data port#2; keyboard
 	
-	:$FF00-$FFFF -- kernel data table
+: $E000-$FFFF -- kernel
+	
+	:$FF00-$FFFF -- kernel data
 	------------------------------------------------
-	:$FF00-$FF03 -- countdown timer, bytes 0-3
-	:$FF04			 -- cursor x-position
-	:$FF05 			 -- cursor y-position
-	:$FF06			 -- background color
-	:$FF07			 -- border color
-	:$FF08			 -- jiffy clock#1
-	:$FF09			 -- jiffy clock#2
-	:$FF0A			 -- jiffy clock#3
-	
- 	
+	:$FF00			 -- jiffy clock#1
+	:$FF01			 -- jiffy clock#2
+	:$FF02			 -- jiffy clock#3
+	:$FF03			 -- cursor flash countdown
+	:$FF04			 -- pointer: current scan line in video ram
+	:$FF06			 -- pointer: current color ram location
+	:$FF08			 -- cursor column on current line
+
  	:$FFFC-$FFFD -- reset vector, main kernel entry point
  	:$FFFE-$FFFE -- IRQ vector
  		
