@@ -7,13 +7,14 @@ KERNEL_START 	= $E000
 
 BKGND_COLOR		= $D000
 BORDER_COLOR	= $D001
-JIFFY_CLK1		= $FF00
-JIFFY_CLK2		= $FF01
-JIFFY_CLK3		= $FF02
-COUNTDOWN			= $FF03
-SCNLINE				= $FF04						; pointer current screen line in video ram
-CURCOLOR			= $FF06						; pointer current color ram location
-CURCOL				= $FF08						; cursor column on current line
+JIFFY_CLK1		= $00
+JIFFY_CLK2		= $01
+JIFFY_CLK3		= $02
+COUNTDOWN			= $03
+SCNLINE				= $04						; pointer current screen line in video ram
+CURCOLOR			= $06						; pointer current color ram location
+CURCOL				= $08						; cursor column on current line
+
 RESET_VEC 		= $FFFC
 IRQ_VEC 			= $FFFE
 

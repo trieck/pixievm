@@ -1,28 +1,26 @@
 important memory locations
 
-: $0000-$9FFF -- user programs
+: $0000-$9FFF -- RAM
+		$00-FF		-- system storage
+		$00			 -- jiffy clock#1
+		$01			 -- jiffy clock#2
+		$02			 -- jiffy clock#3
+		$03			 -- cursor flash countdown
+		$04			 -- pointer: current scan line in video ram
+		$06			 -- pointer: current color ram location
+		$08			 -- cursor column on current line
+
+		$1FF-$100	-- normal stack area grows downward
 : $A000-$AFFF -- video ram
 : $B000-$BFFF -- color ram
-: $C000-$C7FF -- character generator rom
-: $C800-$CFFF -- initial stack area, can be changed -- grows downward
+: $C000-$CFFF -- character generator rom
 : $D000-$DFFF -- I/O registers
 	:$D000			-- background color
 	:$D001			-- border color
 	:$D100			-- data port#1; keyboard
 	:$D101			-- data port#2; keyboard
 	
-: $E000-$FFFF -- kernel
-	
-	:$FF00-$FFFF -- kernel data
-	------------------------------------------------
-	:$FF00			 -- jiffy clock#1
-	:$FF01			 -- jiffy clock#2
-	:$FF02			 -- jiffy clock#3
-	:$FF03			 -- cursor flash countdown
-	:$FF04			 -- pointer: current scan line in video ram
-	:$FF06			 -- pointer: current color ram location
-	:$FF08			 -- cursor column on current line
-
- 	:$FFFC-$FFFD -- reset vector, main kernel entry point
+: $E000-$FFFF -- kernel rom
+	:$FFFC-$FFFD -- reset vector, main kernel entry point
  	:$FFFE-$FFFE -- IRQ vector
  		

@@ -10,8 +10,8 @@
 #include "Memory.h"
 #include "PixieVM.h"
 
-#define IO_REG_BKGND_COLOR	(0xD000)
-#define IO_REG_BORDER_COLOR	(0xD001)
+#define IO_REG_BKGND_COLOR	(IO_REGISTER_BASE+0)
+#define IO_REG_BORDER_COLOR	(IO_REGISTER_BASE+1)
 
 /////////////////////////////////////////////////////////////////////////////
 RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)

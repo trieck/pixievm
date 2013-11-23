@@ -57,9 +57,11 @@
 #define CHARGEN_BASE				(0xC000)
 #define CHARGEN_SIZE				(0x800)
 
-#define TOP_STACK_AREA			(0xCFFF)
+#define TOP_STACK_AREA			(0x01FF)
 
 #define IO_REGISTER_BASE		(0xD000)
 #define IO_REGISTER_SIZE		(0x1000)
+
+#define KERNEL_BASE					(0xE000)
 
 #endif // __PIXIEVM_H__
