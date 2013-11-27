@@ -1,4 +1,3 @@
-* need to have video registers mapped in contiguous area
 * name handlers after real chips like: PXVIC, PXCIA
   - make their interfaces memory based
 

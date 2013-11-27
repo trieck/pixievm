@@ -105,7 +105,7 @@ CAPTION "About Pixie Emulator"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,130,81,50,14
-    CTEXT           "Pixie Emulator v1.0\nCopyright(c) 2013",IDC_STATIC,25,57,78,32
+    CTEXT           "Pixie Emulator v1.0\nCopyright(c) 2006-2013\nThomas A. Rieck",IDC_STATIC,25,57,78,32
     ICON            IDR_MAINFRAME,IDC_STATIC,55,26,20,20
     GROUPBOX        "",IDC_STATIC,7,7,115,88
 END

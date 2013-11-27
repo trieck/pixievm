@@ -17,8 +17,8 @@ important memory locations
 : $D000-$DFFF -- I/O registers
 	:$D000			-- background color
 	:$D001			-- border color
-	:$D100			-- data port#1; keyboard
-	:$D101			-- data port#2; keyboard
+	:$D100			-- data port A; keyboard
+	:$D101			-- data port B; keyboard
 	
 : $E000-$FFFF -- kernel rom
 	:$FFFC-$FFFD -- reset vector, main kernel entry point
