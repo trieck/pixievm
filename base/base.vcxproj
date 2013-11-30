@@ -168,6 +168,10 @@
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Size</FavorSizeOrSpeed>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Size</FavorSizeOrSpeed>
     </ClCompile>
+    <ClCompile Include="IO.cpp">
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Size</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Size</FavorSizeOrSpeed>
+    </ClCompile>
     <ClCompile Include="Memory.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
@@ -218,6 +222,7 @@
     <ClInclude Include="HiresTimer.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="interrupt.h" />
+    <ClInclude Include="IO.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Modes.h" />
     <ClInclude Include="Opcodes.h" />

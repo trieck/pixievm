@@ -42,14 +42,14 @@ uint64_t HiresTimer::jiffies() const
 	LARGE_INTEGER end;
 	QueryPerformanceCounter(&end);
 
-	uint64_t nmillis = 0;
+	uint64_t njiffies = 0;
 
 	if (ticksPerSecond) {
 		uint64_t tstart = LI2INT64((PLARGE_INTEGER)&start);
 		uint64_t tend = LI2INT64(&end);
-		nmillis = (tend - tstart) / (ticksPerSecond / 60);	
+		njiffies = (tend - tstart) / (ticksPerSecond / 60);	
 	}
 
-	return nmillis;
+	return njiffies;
 }
 

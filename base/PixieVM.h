@@ -62,6 +62,9 @@
 #define IO_REGISTER_BASE		(0xD000)
 #define IO_REGISTER_SIZE		(0x1000)
 
+#define IO_REGISTERS_START	(0xD100)
+#define IO_REGISTERS_STOP		(0xD10F)
+
 #define KERNEL_BASE					(0xE000)
 
 #endif // __PIXIEVM_H__

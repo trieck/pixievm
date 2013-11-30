@@ -9,6 +9,7 @@
 #define __KEYBOARD_HANDLER_H__
 
 #include "KeyboadMatrix.h"
+#include "IO.h"
 
 /////////////////////////////////////////////////////////////////////////////
 template <class T>
@@ -29,14 +30,22 @@ public:
 private:
 	LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		uint8_t result = KeyboardMatrix::translate(wParam, lParam);
+		int key_code = KeyboardMatrix::translate(wParam, lParam);
+		if (key_code < 0 || key_code >= 256)
+			return 0;
+				
+		IO::getInstance()->keyOn(key_code);
 
 		return 0;
 	}
 
 	LRESULT OnKeyUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		uint8_t result = KeyboardMatrix::translate(wParam, lParam);
+		int key_code = KeyboardMatrix::translate(wParam, lParam);
+		if (key_code < 0 || key_code >= 256)
+			return 0;
+
+		IO::getInstance()->keyOff(key_code);
 
 		return 0;
 	}

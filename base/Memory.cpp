@@ -8,6 +8,7 @@
 #include "Common.h"
 #include "Memory.h"
 #include "PixieVM.h"
+#include "IO.h"
 
 MemoryPtr Memory::instance(Memory::getInstance());
 
@@ -36,6 +37,10 @@ Memory *Memory::getInstance()
 /////////////////////////////////////////////////////////////////////////////
 byte Memory::fetch(word address)
 {
+	if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
+		return IO::getInstance()->readRegister(address & 0x0F);
+	}
+
 	return memory[address];
 }
 
@@ -46,6 +51,11 @@ void Memory::store(word address, byte b)
 	if ((address >= CHARGEN_BASE && address < CHARGEN_BASE+CHARGEN_SIZE) ||
 		(address >= KERNEL_BASE))
 		return;
+
+	if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
+		IO::getInstance()->writeRegister(address & 0x0F, b);
+		return;
+	}
 
 	memory[address] = b;
 }

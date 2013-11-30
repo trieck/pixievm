@@ -17,7 +17,7 @@ public:
 	~KeyboardMatrix();
 
 	// Interface
-	static uint8_t translate(WPARAM wParam, LPARAM lParam);
+	static int translate(WPARAM wParam, LPARAM lParam);
 
 	// Implementation
 private:
