@@ -32,8 +32,8 @@ reset:
 	mov BYTE [CURCOL], $0					; cursor column on current line
 		
 	mov BYTE [COUNTDOWN], $14			; blink countdown initialization, 20 jiffies
-	mov BYTE [BKGND_COLOR], $fc		; background color
-	mov BYTE [BORDER_COLOR], $4		; border color
+	mov BYTE [BKGND_COLOR], $12		; background color
+	mov BYTE [BORDER_COLOR], $11	; border color
 
 endk:
 	jmp endk
@@ -84,7 +84,7 @@ flash_cursor:
 	mov c, [SCNLINE]							; current screen line in video ram
 	mov d, [CURCOLOR]							; current color ram location
 	xor BYTE [c+x], $dc						; flash cursor
-	xor BYTE [d+x], $4
+	xor BYTE [d+x], $11
 	
 fcend:
 	ret
