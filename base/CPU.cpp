@@ -2748,7 +2748,7 @@ void CPU::setShutdown(bool fShutdown, int exitCode)
 
 #define PROCESS_ALARMS() \
 	do { \
-		g_alarms.process(); \
+		Alarms::getInstance()->process(); \
 	} while (0)
 
 #define PROCESS_IRQ() \

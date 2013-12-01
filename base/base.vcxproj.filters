@@ -44,10 +44,13 @@
     <ClCompile Include="Alarm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HiresTimer.cpp">
+    <ClCompile Include="IOAlarm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="IO.cpp">
+    <ClCompile Include="PixieClock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PixieIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -100,10 +103,13 @@
     <ClInclude Include="Alarm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HiresTimer.h">
+    <ClInclude Include="IOAlarm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="IO.h">
+    <ClInclude Include="PixieClock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PixieIO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,0 +1,12 @@
+Normally, Timer A is set
+for continuous operation, and latched with a value of 149 in the low
+byte and 66 in the high byte, for a total Latch Value of 17045. This
+means that it is set to count to 0 every 17045/1022730 seconds, or
+approximately 1/60 second.
+
+
+1,022,730 cycles per second,
+
+17045/1022730 = 0.0166661777790815
+1/60 					= 0.0166666666666667
+

@@ -7,13 +7,15 @@
 
 #include "Common.h"
 #include "Alarm.h"
+#include "IOAlarm.h"
 
-// global alaram dispatcher
-Alarms g_alarms;
+AlarmsPtr Alarms::instance(Alarms::getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
 Alarms::Alarms()
 {
+	// built-in alarms
+	addAlarm<IOAlarm>();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -23,6 +25,15 @@ Alarms::~Alarms()
 	for ( ; it != alarms.end(); ++it) {
 		delete *it;
 	}
+}
+
+/////////////////////////////////////////////////////////////////////////////
+Alarms* Alarms::getInstance()
+{
+	if (instance.get() == NULL) {
+		instance = AlarmsPtr(new Alarms);
+	}
+	return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////

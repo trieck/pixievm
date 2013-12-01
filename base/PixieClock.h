@@ -1,27 +1,27 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-//	HIRESTIMER.H : High resolution timer
+//	PIXIECLOCK.H : 1,022,730 cycles per second clock
 //
 // Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
 //
 
-#ifndef __HIRESTIMER_H__
-#define __HIRESTIMER_H__
+#ifndef __PIXIE_CLOCK_H__
+#define __PIXIE_CLOCK_H__
 
 /////////////////////////////////////////////////////////////////////////////
-class HiresTimer
+class PixieClock
 {
 public:
-	HiresTimer();
-	~HiresTimer();
+	PixieClock();
+	~PixieClock();
 
 	void reset();
-	uint64_t jiffies() const;
+	uint64_t clock() const;
 private:
-	INT64 LI2INT64(PLARGE_INTEGER li) const;
+	uint64_t LI2INT64(PLARGE_INTEGER li) const;
 
 	LARGE_INTEGER start;
-	INT64 ticksPerSecond;
+	uint64_t ticksPerSecond;
 };
 
-#endif // __HIRESTIMER_H__
+#endif // __PIXIE_CLOCK_H__

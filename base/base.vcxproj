@@ -151,7 +151,7 @@
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Size</FavorSizeOrSpeed>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Size</FavorSizeOrSpeed>
     </ClCompile>
-    <ClCompile Include="HiresTimer.cpp" />
+    <ClCompile Include="PixieClock.cpp" />
     <ClCompile Include="Instructions.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
@@ -168,10 +168,11 @@
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Size</FavorSizeOrSpeed>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Size</FavorSizeOrSpeed>
     </ClCompile>
-    <ClCompile Include="IO.cpp">
+    <ClCompile Include="PixieIO.cpp">
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Size</FavorSizeOrSpeed>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Size</FavorSizeOrSpeed>
     </ClCompile>
+    <ClCompile Include="IOAlarm.cpp" />
     <ClCompile Include="Memory.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MinSpace</Optimization>
@@ -219,10 +220,11 @@
     <ClInclude Include="CPU.H" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Handler.h" />
-    <ClInclude Include="HiresTimer.h" />
+    <ClInclude Include="PixieClock.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="interrupt.h" />
-    <ClInclude Include="IO.h" />
+    <ClInclude Include="PixieIO.h" />
+    <ClInclude Include="IOAlarm.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Modes.h" />
     <ClInclude Include="Opcodes.h" />

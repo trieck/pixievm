@@ -10,15 +10,22 @@
 
 #include "Handler.h"
 
+class Alarms;
+typedef auto_ptr<Alarms> AlarmsPtr;
+
 /////////////////////////////////////////////////////////////////////////////
 class Alarms 
 {
 	// Construction / Destruction
-public:
+// Construction / Destruction
+private:
 	Alarms();
+public:
 	~Alarms();
 	
 	// Interface
+	static Alarms* getInstance();
+
 	template<class T> 
 	void addAlarm() {
 		alarms.push_back(new T());
@@ -28,12 +35,11 @@ public:
 
 	// Implementation
 private:
+	static AlarmsPtr instance;		// singleton instance
+
 	typedef vector<Handler*> HandlerVec;
 	HandlerVec alarms;
 };
-
-// global alarm dispatcher
-extern Alarms g_alarms;
 
 /////////////////////////////////////////////////////////////////////////////
 #endif // __ALARM_H__

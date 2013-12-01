@@ -3,7 +3,8 @@ The keys are connected in a matrix of eight rows by columns to
 data ports A($D100) and B($D101).
 
 In order to read the individual keys in the matrix, you must:
-	
+	* set port A for all outputs ($FF) using DDR
+	* set port B for all inputs ($00) using DDR
 	* write a 0 in the bit of data port A corresponding to the
 	 	column that you wish to read.
 	* write a 1 in the bit of data port A corresponding to the 

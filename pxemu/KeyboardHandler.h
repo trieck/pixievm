@@ -9,7 +9,7 @@
 #define __KEYBOARD_HANDLER_H__
 
 #include "KeyboadMatrix.h"
-#include "IO.h"
+#include "PixieIO.h"
 
 /////////////////////////////////////////////////////////////////////////////
 template <class T>
@@ -34,7 +34,7 @@ private:
 		if (key_code < 0 || key_code >= 256)
 			return 0;
 				
-		IO::getInstance()->keyOn(key_code);
+		PixieIO::getInstance()->keyOn(key_code);
 
 		return 0;
 	}
@@ -45,7 +45,7 @@ private:
 		if (key_code < 0 || key_code >= 256)
 			return 0;
 
-		IO::getInstance()->keyOff(key_code);
+		PixieIO::getInstance()->keyOff(key_code);
 
 		return 0;
 	}

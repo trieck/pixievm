@@ -1,15 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-//	HIRESTIMER.CPP : High resolution timer
+//	PIXIECLOCK.CPP : 1,022,730 cycles per second clock
 //
 // Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
-#include "HiresTimer.h"
+#include "PixieClock.h"
 
 /////////////////////////////////////////////////////////////////////////////
-HiresTimer::HiresTimer() : ticksPerSecond(0)
+PixieClock::PixieClock() : ticksPerSecond(0)
 {
 	LARGE_INTEGER li;
 	if (QueryPerformanceFrequency(&li)) {
@@ -20,36 +20,36 @@ HiresTimer::HiresTimer() : ticksPerSecond(0)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-HiresTimer::~HiresTimer()
+PixieClock::~PixieClock()
 {
 }
 
 /////////////////////////////////////////////////////////////////////////////
-INT64 HiresTimer::LI2INT64(PLARGE_INTEGER li) const
+uint64_t PixieClock::LI2INT64(PLARGE_INTEGER li) const
 {
-	return (((INT64)(*li).HighPart) << 32) + (*li).LowPart;
+	return (((uint64_t)(*li).HighPart) << 32) + (*li).LowPart;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void HiresTimer::reset()
+void PixieClock::reset()
 {
 	QueryPerformanceCounter(&start);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-uint64_t HiresTimer::jiffies() const
+uint64_t PixieClock::clock() const
 {
 	LARGE_INTEGER end;
 	QueryPerformanceCounter(&end);
 
-	uint64_t njiffies = 0;
+	uint64_t ndiff = 0;
 
 	if (ticksPerSecond) {
 		uint64_t tstart = LI2INT64((PLARGE_INTEGER)&start);
 		uint64_t tend = LI2INT64(&end);
-		njiffies = (tend - tstart) / (ticksPerSecond / 60);	
+		ndiff = (tend - tstart) / (ticksPerSecond / 1022730);	
 	}
 
-	return njiffies;
+	return ndiff;
 }
 
