@@ -151,6 +151,7 @@
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Size</FavorSizeOrSpeed>
       <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Size</FavorSizeOrSpeed>
     </ClCompile>
+    <ClCompile Include="Palette.cpp" />
     <ClCompile Include="PixieClock.cpp" />
     <ClCompile Include="Instructions.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MinSpace</Optimization>
@@ -220,6 +221,7 @@
     <ClInclude Include="CPU.H" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Handler.h" />
+    <ClInclude Include="Palette.h" />
     <ClInclude Include="PixieClock.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="interrupt.h" />

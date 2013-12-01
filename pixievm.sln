@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pxdasm", "pxdasm\pxdasm.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pxemu", "pxemu\pxemu.vcxproj", "{93CEBCE8-6AAC-4B3A-9902-3B0063AE0CD9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "palette", "palette\palette.vcxproj", "{3EF08396-BF89-40E6-82BE-711C76FCEB5D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -59,6 +61,14 @@ Global
 		{93CEBCE8-6AAC-4B3A-9902-3B0063AE0CD9}.Release|Win32.Build.0 = Release|Win32
 		{93CEBCE8-6AAC-4B3A-9902-3B0063AE0CD9}.Release|x64.ActiveCfg = Release|x64
 		{93CEBCE8-6AAC-4B3A-9902-3B0063AE0CD9}.Release|x64.Build.0 = Release|x64
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Debug|Win32.Build.0 = Debug|Win32
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Debug|x64.ActiveCfg = Debug|x64
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Debug|x64.Build.0 = Debug|x64
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Release|Win32.ActiveCfg = Release|Win32
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Release|Win32.Build.0 = Release|Win32
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Release|x64.ActiveCfg = Release|x64
+		{3EF08396-BF89-40E6-82BE-711C76FCEB5D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
