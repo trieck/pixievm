@@ -10,6 +10,12 @@ BORDER_COLOR	= $D001
 
 DATA_PORT_A		= $D100
 DATA_PORT_B		= $D101
+DDR_REG_A			= $D102
+DDR_REG_B			= $D103
+
+IRQ_CTRL_REG	= $D10D
+CTRL_REG_A		= $D10E
+CTRL_REG_B		= $D10F
 
 JIFFY_CLK1		= $00
 JIFFY_CLK2		= $01
@@ -18,6 +24,8 @@ COUNTDOWN			= $03
 SCNLINE				= $04						; pointer current screen line in video ram
 CURCOLOR			= $06						; pointer current color ram location
 CURCOL				= $08						; cursor column on current line
+CURKEY				= $0A						; matrix coordinate of current key pressed
+SHFLAG				= $0B						; flag for shift/ctrl keypress
 
 RESET_VEC 		= $FFFC
 IRQ_VEC 			= $FFFE
@@ -26,6 +34,7 @@ IRQ_VEC 			= $FFFE
 
 ; start of kernel 
 reset:
+	call init_io									; initialize i/o
 	
 	mov [SCNLINE], VIDEO_RAM			; initialize current screen line in video ram
 	mov [CURCOLOR], COLOR_RAM			; initialize current color ram location
@@ -38,6 +47,19 @@ reset:
 endk:
 	jmp endk
 
+; initialize i/o
+init_io:
+	mov a, $087F
+	mov [IRQ_CTRL_REG], al
+	mov [DATA_PORT_A], al
+	
+	mov [CTRL_REG_A], ah
+	mov [CTRL_REG_B], ah
+	
+	mov BYTE [DDR_REG_B], $00
+	
+	ret
+
 ; irq/brk interrupt handler
 irq_handler:
 
@@ -46,7 +68,7 @@ irq_handler:
 	push c
 	push d
 	push x
-	
+
 	call update_clk								; update jiffy clock
 	call flash_cursor							; flash the cursor
 	call scn_key									; scan the keyboard
@@ -92,6 +114,11 @@ fcend:
 ; scan the keyboard
 ;
 scn_key:
+	mov al, $00
+	mov [SHFLAG], al							; no shift/ctrl pressed
+	mov BYTE [CURKEY], $40				; no matrix key pressed
+	mov [DATA_PORT_A], al					
+	
 	ret
 	
 	.byte $00 dup (RESET_VEC-$$)	; fill rest of kernel area with zeros

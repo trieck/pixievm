@@ -9,7 +9,8 @@ important memory locations
 		$04			 -- pointer: current scan line in video ram
 		$06			 -- pointer: current color ram location
 		$08			 -- cursor column on current line
-
+		$0A			 -- matrix coordinate of current key pressed; $40 = no key
+		$0B			 -- flag for shift/ctrl keypress; bit 0 : 1 = shift pressed, bit 1 : 1 = ctrl pressed
 		$1FF-$100	-- normal stack area grows downward
 : $A000-$AFFF -- video ram
 : $B000-$BFFF -- color ram
@@ -19,10 +20,10 @@ important memory locations
 	:$D001			-- border color
 	:$D100			-- data port A; keyboard
 	:$D101			-- data port B; keyboard
-	:$D101			-- data direction register A
-	:$D102			-- data direction register B
-	:$D103			-- timer A low-byte
-	:$D104			-- timer A high-byte
+	:$D102			-- data direction register A
+	:$D103			-- data direction register B
+	:$D104			-- timer A low-byte
+	:$D105			-- timer A high-byte
 	:$D106		  -- timer B low-byte
 	:$D107			-- timer B high-byte
 	:$D108			-- TOD clock: 1/10 seconds
