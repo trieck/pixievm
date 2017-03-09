@@ -22,3 +22,6 @@ ipch/
 x64/
 bin/
 !bin/*.rom
+*.db
+*.db-shm
+*.db-wal
