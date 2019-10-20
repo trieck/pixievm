@@ -201,7 +201,6 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;YY_NO_UNISTD_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeaderOutputFile>.\Debug/pxmon.pch</PrecompiledHeaderOutputFile>
@@ -633,40 +632,28 @@
     <CustomBuild Include="grammar.y">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating Parser from %(FullPath)...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Parser from %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">bison -d -y %(FullPath) -o Parser.cpp
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">bison -d -y %(FullPath) -o Parser.cpp
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">win_bison -d -y %(FullPath) -o Parser.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">win_bison -d -y %(FullPath) -o Parser.cpp</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Parser.hpp;Parser.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Parser.hpp;Parser.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating Parser from %(FullPath)...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating Parser from %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">bison -d -y %(FullPath) -o Parser.cpp
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">bison -d -y %(FullPath) -o Parser.cpp
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">win_bison -d -y %(FullPath) -o Parser.cpp</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">win_bison -d -y %(FullPath) -o Parser.cpp</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Parser.hpp;Parser.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Parser.hpp;Parser.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="scanner.l">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating Fast Lexical Analyzer from %(FullPath)...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Fast Lexical Analyzer from %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -oScanner.cpp %(FullPath)
-
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex -oScanner.cpp %(FullPath)
-
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">win_flex -oScanner.cpp %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">win_flex -oScanner.cpp %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Scanner.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Scanner.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating Fast Lexical Analyzer from %(FullPath)...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating Fast Lexical Analyzer from %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -oScanner.cpp %(FullPath)
-
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex -oScanner.cpp %(FullPath)
-
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">win_flex -oScanner.cpp %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">win_flex -oScanner.cpp %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Scanner.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Scanner.cpp;%(Outputs)</Outputs>
     </CustomBuild>

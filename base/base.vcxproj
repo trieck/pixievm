@@ -80,7 +80,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -242,18 +242,14 @@
     <CustomBuild Include="makecpu.pl">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating Instruction Set from %(FullPath)...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Instruction Set from %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">perl -w %(FullPath)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">perl -w %(FullPath)
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">perl -I $(ProjectDir) -w %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">perl -I $(ProjectDir) -w %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Modes.h;Opcodes.h;Instructions.h;Instructions.cpp;FetchEx.cpp;Opinfo.h;Opinfo.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Modes.h;Opcodes.h;Instructions.h;Instructions.cpp;FetchEx.cpp;Opinfo.h;Opinfo.cpp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating Instruction Set from %(FullPath)...</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating Instruction Set from %(FullPath)...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">perl -w %(FullPath)
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">perl -w %(FullPath)
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">perl -I $(ProjectDir) -w %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">perl -I $(ProjectDir) -w %(FullPath)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Modes.h;Opcodes.h;Instructions.h;Instructions.cpp;FetchEx.cpp;Opinfo.h;Opinfo.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Modes.h;Opcodes.h;Instructions.h;Instructions.cpp;FetchEx.cpp;Opinfo.h;Opinfo.cpp;%(Outputs)</Outputs>
     </CustomBuild>
