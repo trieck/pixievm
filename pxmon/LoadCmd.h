@@ -11,13 +11,13 @@
 #include "monitor.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class LoadCmd : public Command {
+class LoadCmd : public Command
+{
 public:
-	LoadCmd(Monitor *mon);
-	~LoadCmd();
+    LoadCmd(Monitor* mon);
+    ~LoadCmd();
 
-	virtual void exec(const stringvec &v);
+    virtual void exec(const stringvec& v);
 };
 
 #endif // __LOADCMD_H__
-

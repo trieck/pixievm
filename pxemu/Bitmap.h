@@ -1,25 +1,23 @@
-
 #pragma once
 
 /////////////////////////////////////////////////////////////////////////////
 class Bitmap
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	Bitmap();
-	~Bitmap();
+    Bitmap();
+    ~Bitmap();
 
-	// Interface
-	static Bitmap* getInstance();
-	void Render(CPaintDC& dc);
-	void SetPixel(uint16_t x, uint16_t y, uint8_t color);
+    // Interface
+    static Bitmap* getInstance();
+    void Render(CPaintDC& dc);
+    void SetPixel(uint16_t x, uint16_t y, uint8_t color);
 
-	// Implementation
+    // Implementation
 private:
-	void CreateBitmap();
-	CBitmap m_bm;
-	CDC m_dc;
-	LPBYTE m_pBits;
-	LPBITMAPINFO m_bmi;
+    void CreateBitmap();
+    CBitmap m_bm;
+    CDC m_dc;
+    LPBYTE m_pBits;
+    LPBITMAPINFO m_bmi;
 };
-

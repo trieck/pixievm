@@ -13,32 +13,33 @@
 /////////////////////////////////////////////////////////////////////////////
 MiniDisassembler::MiniDisassembler() : init(false)
 {
-	mem = Memory::getInstance();
+    mem = Memory::getInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte MiniDisassembler::fetch()
 {
-	return mem->fetch(ip++);
+    return mem->fetch(ip++);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void MiniDisassembler::disassemble(word *start, word *end)
+void MiniDisassembler::disassemble(word* start, word* end)
 {
-	word lastip = 0;
-	if (start) {		/* start address supplied */
-		ip = *start;
-		init = true;
-	} else if (!init) { /* not entered */
-		ip = CPU::getInstance()->getIP();
-		init = true;
-	}
+    word lastip = 0;
+    if (start){
+        /* start address supplied */
+        ip = *start;
+        init = true;
+    } else if (!init){
+        /* not entered */
+        ip = CPU::getInstance()->getIP();
+        init = true;
+    }
 
-	for (int i = 0; ip >= lastip && (end ? ip <= *end : i < NLINES); i++) {
-		printip();
-		lastip = ip;
-		byte b = fetch();
-		PxDisassembler::disassemble(b);
-	}
+    for (int i = 0; ip >= lastip && (end ? ip <= *end : i < NLINES); i++){
+        printip();
+        lastip = ip;
+        byte b = fetch();
+        PxDisassembler::disassemble(b);
+    }
 }
-

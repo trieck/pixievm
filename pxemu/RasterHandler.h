@@ -16,21 +16,21 @@
 /////////////////////////////////////////////////////////////////////////////
 class RasterHandler : public Handler
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	RasterHandler();
-	~RasterHandler();
+    RasterHandler();
+    ~RasterHandler();
 
-	// Interface
-	virtual void handle(); // handler
+    // Interface
+    virtual void handle(); // handler
 
-	// Implementation
+    // Implementation
 private:
-	UIEventHandler ui;
-	uint16_t m_scanLine;
-	uint16_t m_offset;
-	Memory* m_memory;
-	Canvas* m_canvas;
+    UIEventHandler ui;
+    uint16_t m_scanLine;
+    uint16_t m_offset;
+    Memory* m_memory;
+    Canvas* m_canvas;
 };
 
 #endif // __RASTER_HANDLER_H__

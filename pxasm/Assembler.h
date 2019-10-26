@@ -9,18 +9,19 @@
 #define __ASSEMBLER_H__
 
 /////////////////////////////////////////////////////////////////////////////
-class Assembler {
+class Assembler
+{
 public:
-	Assembler();
-	~Assembler();
+    Assembler();
+    ~Assembler();
 
-	int assemble(const char *source);
-	int assemble(const char *source, const char *output);
+    int assemble(const char* source);
+    int assemble(const char* source, const char* output);
 private:
-	void open(const char *filename);
-	void close();
+    void open(const char* filename);
+    void close();
 
-	FILE *m_pOut;	// output file pointer
+    FILE* m_pOut; // output file pointer
 };
 
 #endif // __ASSEMBLER_H__

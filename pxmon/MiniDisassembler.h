@@ -12,24 +12,25 @@
 #include "memory.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class MiniDisassembler : public PxDisassembler {
-
-// Construction / Destruction
+class MiniDisassembler : public PxDisassembler
+{
+    // Construction / Destruction
 public:
-	MiniDisassembler();
+    MiniDisassembler();
 
-// Interface
-	void disassemble(word *start, word *end);
+    // Interface
+    void disassemble(word* start, word* end);
 
-// Implementation
+    // Implementation
 protected:
-	virtual byte fetch();
+    virtual byte fetch();
 private:
-	enum { NLINES = 16 };
+    enum { NLINES = 16 };
 
-	bool init;		// have we been entered ?
-	Memory *mem;	// pointer to memory
+    bool init; // have we been entered ?
+    Memory* mem; // pointer to memory
 };
+
 /////////////////////////////////////////////////////////////////////////////
 
 #endif // __MINIDISASSEMBLER_H__

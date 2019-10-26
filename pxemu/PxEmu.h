@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include "Memory.h"
@@ -6,20 +5,18 @@
 /////////////////////////////////////////////////////////////////////////////
 class PxEmulator
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	PxEmulator();
-	~PxEmulator();
+    PxEmulator();
+    ~PxEmulator();
 
-	// Interface
-	void init();
-	int run();
+    // Interface
+    void init();
+    int run();
 
-	// Implementation
+    // Implementation
 private:
-	void loadROM(const char* filename, word base, word size);
-	void loadROM(const char* filename);
-	Memory* memory;		// pointer to memory
+    void loadROM(const char* filename, word base, word size);
+    void loadROM(const char* filename);
+    Memory* memory; // pointer to memory
 };
-
-

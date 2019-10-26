@@ -12,14 +12,14 @@
 /////////////////////////////////////////////////////////////////////////////
 string LineReader::readLine()
 {
-	string output;
+    string output;
 
-	int c;
-	while ((c = is.get()) != -1) {
-		if (c == '\r' || c == '\n')
-			break;
-		output += c;
-	}
+    int c;
+    while ((c = is.get()) != -1){
+        if (c == '\r' || c == '\n')
+            break;
+        output += c;
+    }
 
-	return trim(output);
+    return trim(output);
 }

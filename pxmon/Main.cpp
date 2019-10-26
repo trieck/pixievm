@@ -11,19 +11,19 @@
 #include "Options.h"
 
 ////////////////////////////////////////////////////////////////////////////
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-	Options::options(argc, argv);
+    Options::options(argc, argv);
 
-	Machine machine;
+    Machine machine;
 
-	try {
-		machine.init();
-		machine.run();
-	} catch (const Exception & e) {
-		cerr << e.getDescription() << endl;
-		return 1;
-	}
+    try{
+        machine.init();
+        machine.run();
+    } catch (const Exception& e){
+        cerr << e.getDescription() << endl;
+        return 1;
+    }
 
-	return 0;
+    return 0;
 }

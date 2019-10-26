@@ -17,61 +17,60 @@ Disassembler::Disassembler() : m_fp(NULL)
 /////////////////////////////////////////////////////////////////////////////
 Disassembler::~Disassembler()
 {
-	close();
+    close();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Disassembler::close()
 {
-	if (m_fp != NULL) {
-		fclose(m_fp);
-		m_fp = NULL;
-	}
+    if (m_fp != NULL){
+        fclose(m_fp);
+        m_fp = NULL;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Disassembler::open(const char *filename)
+void Disassembler::open(const char* filename)
 {
-	close();
+    close();
 
-	if ((m_fp = fopen(filename, "rb")) == NULL) {
-		throw Exception("can't open file \"%s\": %s.", filename,
-		                strerror(errno));
-	}
-
+    if ((m_fp = fopen(filename, "rb")) == NULL){
+        throw Exception("can't open file \"%s\": %s.", filename,
+                        strerror(errno));
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Disassembler::disassemble(const char *filename)
+void Disassembler::disassemble(const char* filename)
 {
-	open(filename);
+    open(filename);
 
-	word start;
-	if ((1 != fread(&start, sizeof(word), 1, m_fp))) {
-		throw Exception("can't read from file \"%s\": %s", filename,
-		                strerror(errno));
-	}
+    word start;
+    if ((1 != fread(&start, sizeof(word), 1, m_fp))){
+        throw Exception("can't read from file \"%s\": %s", filename,
+                        strerror(errno));
+    }
 
-	PxDisassembler::ip = start;
+    PxDisassembler::ip = start;
 
-	int c;
-	while ((c = fgetc(m_fp)) != EOF) {
-		ungetc(c, m_fp);
-		printip();
-		PxDisassembler::disassemble(fetch());
-	}
+    int c;
+    while ((c = fgetc(m_fp)) != EOF){
+        ungetc(c, m_fp);
+        printip();
+        PxDisassembler::disassemble(fetch());
+    }
 
-	close();
+    close();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte Disassembler::fetch()
 {
-	int c;
-	if ((c = fgetc(m_fp)) == EOF)
-		return 0;
+    int c;
+    if ((c = fgetc(m_fp)) == EOF)
+        return 0;
 
-	++ip;
+    ++ip;
 
-	return c;
+    return c;
 }

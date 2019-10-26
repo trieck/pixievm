@@ -11,13 +11,13 @@
 #include "monitor.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class HelpCmd : public Command {
+class HelpCmd : public Command
+{
 public:
-	HelpCmd(Monitor *mon);
-	~HelpCmd();
+    HelpCmd(Monitor* mon);
+    ~HelpCmd();
 
-	virtual void exec(const stringvec &v);
+    virtual void exec(const stringvec& v);
 };
 
 #endif // __HELPCMD_H__
-

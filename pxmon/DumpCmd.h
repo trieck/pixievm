@@ -11,18 +11,19 @@
 #include "monitor.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class DumpCmd : public Command {
+class DumpCmd : public Command
+{
 public:
-	DumpCmd(Monitor *mon);
-	~DumpCmd();
+    DumpCmd(Monitor* mon);
+    ~DumpCmd();
 
-	virtual void exec(const stringvec &v);
+    virtual void exec(const stringvec& v);
 private:
-	enum { LINESIZE = 16 };	// number of bytes per line to dump
-	enum { DEFLINES = 9 };	// default number of lines
+    enum { LINESIZE = 16 }; // number of bytes per line to dump
+    enum { DEFLINES = 9 }; // default number of lines
 
-	bool init;	// have we been initialized
-	word ip;	// instruction pointer used during dump
+    bool init; // have we been initialized
+    word ip; // instruction pointer used during dump
 };
 
 #endif // __DUMPCMD_H__

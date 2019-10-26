@@ -12,25 +12,26 @@
 ANON_BEGIN
 void usage()
 {
-	cerr << "usage: pxdasm object-file" << endl;
-	exit(EXIT_FAILURE);
+    cerr << "usage: pxdasm object-file" << endl;
+    exit(EXIT_FAILURE);
 }
+
 ANON_END
 
 /////////////////////////////////////////////////////////////////////////////
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-	if (argc < 2)
-		usage();
+    if (argc < 2)
+        usage();
 
-	Disassembler disassembler;
+    Disassembler disassembler;
 
-	try {
-		disassembler.disassemble(argv[1]);
-	} catch (const Exception &e) {
-		cerr << e.getDescription() << endl;
-		exit(EXIT_FAILURE);
-	}
+    try{
+        disassembler.disassemble(argv[1]);
+    } catch (const Exception& e){
+        cerr << e.getDescription() << endl;
+        exit(EXIT_FAILURE);
+    }
 
-	return 0;
+    return 0;
 }

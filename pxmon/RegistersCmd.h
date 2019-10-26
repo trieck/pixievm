@@ -11,13 +11,13 @@
 #include "monitor.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class RegistersCmd : public Command {
+class RegistersCmd : public Command
+{
 public:
-	RegistersCmd(Monitor *mon);
-	~RegistersCmd();
+    RegistersCmd(Monitor* mon);
+    ~RegistersCmd();
 
-	void exec(const stringvec &v);
-
+    void exec(const stringvec& v);
 };
 
 #endif // __REGISTERSCMD_H__

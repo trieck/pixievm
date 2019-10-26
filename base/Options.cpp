@@ -2,87 +2,93 @@
 //
 // OPTIONS.CPP : Program options
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck
+// Copyright (c) 2006-2019, Thomas A. Rieck
 // All Rights Reserved
 //
 
-#include "Common.h"
-#include "Options.h"
-#include "Util.h"
+#include "common.h"
+#include "options.h"
+#include "util.h"
 
 namespace Options {
-
-const char __nil[1] = { '\0' };
+const char __nil[1] = {'\0'};
 
 /////////////////////////////////////////////////////////////////////////////
 class Options
 {
-// Construction / Destruction
+    // Construction / Destruction
 public:
-	Options(){}
-	~Options() {}
+    Options()
+    {
+    }
 
-// Interface
-	void put(const char* name, const char* value = __nil) {
-		options[name] = value;
-	}
+    ~Options()
+    {
+    }
 
-	bool isoption(const char* name) const {
-		return options.find(name) != options.end();
-	}
+    // Interface
+    void put(const char* name, const char* value = __nil)
+    {
+        options[name] = value;
+    }
 
-	string value(const char* name) const {
-		OptionMap::const_iterator it = options.begin();
-		if (it == options.end())
-			return __nil;
+    bool isoption(const char* name) const
+    {
+        return options.find(name) != options.end();
+    }
 
-		return (*it).second;
-	}
+    string value(const char* name) const
+    {
+        auto it = options.begin();
+        if (it == options.end())
+            return __nil;
 
-// Implementation
+        return (*it).second;
+    }
+
+    // Implementation
 private:
-	typedef map<string, string, stringless> OptionMap;
-	OptionMap options;
+    typedef map<string, string, stringless> OptionMap;
+    OptionMap options;
 };
 
 Options g_Options;
 
 /////////////////////////////////////////////////////////////////////////////
-void options(int argc, char **argv)
+void options(int argc, char** argv)
 {
-	const char *pval;
-	string name, value;
+    const char* pval;
+    string value;
 
-	for ( ; argc; --argc, ++argv) {
+    for (; argc; --argc, ++argv){
+        if (argv[0][0] != '-' && argv[0][1] != '-')
+            continue;
 
-		if (argv[0][0] != '-' && argv[0][1] != '-')
-			continue;
+        argv[0]++;
+        argv[0]++;
 
-		argv[0]++;
-		argv[0]++;
-
-		if ((pval = strchr(argv[0], '=')) != NULL) {	// option assignment
-			name = string(argv[0], pval - argv[0]);
-			name = trim(name);
-			value = trim(++pval);
-			g_Options.put(name.c_str(), value.c_str());
-		} else {
-			g_Options.put(argv[0]);
-		}
-	}
+        if ((pval = strchr(argv[0], '=')) != NULL){
+            // option assignment
+            string name = string(argv[0], pval - argv[0]);
+            name = trim(name);
+            value = trim(++pval);
+            g_Options.put(name.c_str(), value.c_str());
+        } else{
+            g_Options.put(argv[0]);
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
 bool isoption(const char* option)
 {
-	return g_Options.isoption(option);
+    return g_Options.isoption(option);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 string value(const char* option)
 {
-	return g_Options.value(option);
+    return g_Options.value(option);
 }
 
-
-}	// Options
+} // Options

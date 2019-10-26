@@ -17,12 +17,12 @@
 #include "CPU.h"
 
 extern int yyparse(void);
-extern void yyrestart(FILE *);
-extern FILE *yyin;
+extern void yyrestart(FILE*);
+extern FILE* yyin;
 
 struct yy_buffer_state;
-typedef yy_buffer_state *YY_BUFFER_STATE;
-extern YY_BUFFER_STATE yy_scan_string(const char *str);
+typedef yy_buffer_state* YY_BUFFER_STATE;
+extern YY_BUFFER_STATE yy_scan_string(const char* str);
 extern void yy_switch_to_buffer(YY_BUFFER_STATE buffer);
 extern void yy_delete_buffer(YY_BUFFER_STATE buffer);
 
@@ -32,74 +32,76 @@ word address = 0x0000;
 /////////////////////////////////////////////////////////////////////////////
 MiniAssembler::MiniAssembler() : init(false)
 {
-	table = SymbolTable::getInstance();
+    table = SymbolTable::getInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void MiniAssembler::prompt()
 {
-	fprintf(stdout, "$%.4hx: ", address);
+    fprintf(stdout, "$%.4hx: ", address);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void MiniAssembler::assemble(word *start)
+void MiniAssembler::assemble(word* start)
 {
-	initialize(start);
+    initialize(start);
 
-	for (;;) {
-		prompt();
-		if (!tryParse())
-			break;
-	}
+    for (;;){
+        prompt();
+        if (!tryParse())
+            break;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool MiniAssembler::assemble(word *start, const char *str)
+bool MiniAssembler::assemble(word* start, const char* str)
 {
-	initialize(start);
-	
-	YY_BUFFER_STATE buffer = yy_scan_string(str);
-	yy_switch_to_buffer(buffer);
+    initialize(start);
 
-	bool result = tryParse();
+    YY_BUFFER_STATE buffer = yy_scan_string(str);
+    yy_switch_to_buffer(buffer);
 
-	yy_delete_buffer(buffer);
+    bool result = tryParse();
 
-	yyrestart(yyin);
+    yy_delete_buffer(buffer);
 
-	return result;
+    yyrestart(yyin);
+
+    return result;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void MiniAssembler::initialize(word *start)
+void MiniAssembler::initialize(word* start)
 {
-	if (start) {				// start addres
-		address = *start;
-		init = true;
-	} else if (!init) {	// not entered
-		address = CPU::getInstance()->getIP();
-		init = true;
-	}
+    if (start){
+        // start addres
+        address = *start;
+        init = true;
+    } else if (!init){
+        // not entered
+        address = CPU::getInstance()->getIP();
+        init = true;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool MiniAssembler::tryParse() 
+bool MiniAssembler::tryParse()
 {
-	try {
-		if (parse() == 0)
-			return true;
-	} catch (const Exception &e) {
-		yyrestart(yyin);
-		cerr << e.getDescription() << endl;
-	}
+    try{
+        if (parse() == 0)
+            return true;
+    } catch (const Exception& e){
+        yyrestart(yyin);
+        cerr << e.getDescription() << endl;
+    }
 
-	return false;
+    return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 int MiniAssembler::parse()
 {
-	int nret = yyparse();
-	table->flushtmp();
-	return nret;
+    int nret = yyparse();
+    table->flushtmp();
+    return nret;
 }

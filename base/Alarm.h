@@ -14,31 +14,32 @@ class Alarms;
 typedef auto_ptr<Alarms> AlarmsPtr;
 
 /////////////////////////////////////////////////////////////////////////////
-class Alarms 
+class Alarms
 {
-	// Construction / Destruction
-// Construction / Destruction
+    // Construction / Destruction
+    // Construction / Destruction
 private:
-	Alarms();
+    Alarms();
 public:
-	~Alarms();
-	
-	// Interface
-	static Alarms* getInstance();
+    ~Alarms();
 
-	template<class T> 
-	void addAlarm() {
-		alarms.push_back(new T());
-	}
+    // Interface
+    static Alarms* getInstance();
 
-	void process();
+    template <class T>
+    void addAlarm()
+    {
+        alarms.push_back(new T());
+    }
 
-	// Implementation
+    void process();
+
+    // Implementation
 private:
-	static AlarmsPtr instance;		// singleton instance
+    static AlarmsPtr instance; // singleton instance
 
-	typedef vector<Handler*> HandlerVec;
-	HandlerVec alarms;
+    typedef vector<Handler*> HandlerVec;
+    HandlerVec alarms;
 };
 
 /////////////////////////////////////////////////////////////////////////////

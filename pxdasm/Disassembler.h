@@ -11,19 +11,20 @@
 #include "PxDisassembler.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class Disassembler : public PxDisassembler {
+class Disassembler : public PxDisassembler
+{
 public:
-	Disassembler(void);
-	virtual ~Disassembler(void);
+    Disassembler(void);
+    virtual ~Disassembler(void);
 
-	void disassemble(const char *filename);
+    void disassemble(const char* filename);
 
 protected:
-	byte fetch();
+    byte fetch();
 private:
-	void open(const char *filename);
-	void close();
-	FILE *m_fp;
+    void open(const char* filename);
+    void close();
+    FILE* m_fp;
 };
 
 #endif // __DISASSEMBLER_H__

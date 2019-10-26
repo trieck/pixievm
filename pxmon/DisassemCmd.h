@@ -11,16 +11,17 @@
 #include "monitor.h"
 #include "MiniDisassembler.h"
 
-class DisassemCmd : public Command {
+class DisassemCmd : public Command
+{
 public:
-	DisassemCmd(Monitor *mon);
-	~DisassemCmd();
+    DisassemCmd(Monitor* mon);
+    ~DisassemCmd();
 
-	virtual void exec(const stringvec &v);
-	void disassemble(word address);
+    virtual void exec(const stringvec& v);
+    void disassemble(word address);
 
 private:
-	MiniDisassembler disassembler;
+    MiniDisassembler disassembler;
 };
 
 #endif // __DISASSEMCMD_H__

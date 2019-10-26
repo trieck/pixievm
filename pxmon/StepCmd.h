@@ -10,12 +10,13 @@
 
 #include "monitor.h"
 
-class StepCmd : public Command {
+class StepCmd : public Command
+{
 public:
-	StepCmd(Monitor *mon);
-	~StepCmd();
+    StepCmd(Monitor* mon);
+    ~StepCmd();
 
-	virtual void exec(const stringvec &v);
+    virtual void exec(const stringvec& v);
 
 private:
 };

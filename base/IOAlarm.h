@@ -14,18 +14,18 @@
 /////////////////////////////////////////////////////////////////////////////
 class IOAlarm : public Handler
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	IOAlarm();
-	~IOAlarm();
+    IOAlarm();
+    ~IOAlarm();
 
-	// Interface
-	virtual void handle(); // handler
+    // Interface
+    void handle() override; // handler
 
-	// Implementation
+    // Implementation
 private:
-	PixieClock m_clock;
-	uint64_t m_LastClock;
+    PixieClock m_clock;
+    uint64_t m_LastClock;
 };
 
 #endif // __IO_ALARM_H__

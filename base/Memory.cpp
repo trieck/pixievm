@@ -2,74 +2,74 @@
 //
 // MEMORY.CPP : Pixie Virtual Machine Memory
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Memory.h"
+#include "common.h"
+#include "memory.h"
 #include "PixieVM.h"
 #include "PixieIO.h"
 
-MemoryPtr Memory::instance(Memory::getInstance());
+MemoryPtr Memory::instance(getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
 Memory::Memory()
 {
-	memory = new byte[MEM_SIZE];
-	memset(memory, 0, MEM_SIZE * sizeof(byte));
+    memory = new byte[MEM_SIZE];
+    memset(memory, 0, MEM_SIZE * sizeof(byte));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 Memory::~Memory()
 {
-	delete[] memory;
+    delete[] memory;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-Memory *Memory::getInstance()
+Memory* Memory::getInstance()
 {
-	if (instance.get() == NULL) {
-		instance = MemoryPtr(new Memory);
-	}
-	return instance.get();
+    if (instance.get() == nullptr){
+        instance = MemoryPtr(new Memory);
+    }
+    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte Memory::fetch(word address)
 {
-	if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
-		return PixieIO::getInstance()->readRegister(address & 0x0F);
-	}
+    if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP){
+        return PixieIO::getInstance()->readRegister(address & 0x0F);
+    }
 
-	return memory[address];
+    return memory[address];
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Memory::store(word address, byte b)
 {
-	// writes to ROM have no effect
-	if ((address >= CHARGEN_BASE && address < CHARGEN_BASE+CHARGEN_SIZE) ||
-		(address >= KERNEL_BASE))
-		return;
+    // writes to ROM have no effect
+    if ((address >= CHARGEN_BASE && address < CHARGEN_BASE + CHARGEN_SIZE) ||
+        (address >= KERNEL_BASE))
+        return;
 
-	if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
-		PixieIO::getInstance()->writeRegister(address & 0x0F, b);
-		return;
-	}
+    if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP){
+        PixieIO::getInstance()->writeRegister(address & 0x0F, b);
+        return;
+    }
 
-	memory[address] = b;
+    memory[address] = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool Memory::load(istream & is, word base, int size)
+bool Memory::load(istream& is, word base, int size)
 {
-	is.read((char *) &memory[base], size);
-	return is.good();
+    is.read(reinterpret_cast<char *>(&memory[base]), size);
+    return is.good();
 }
 
 /////////////////////////////////////////////////////////////////////////////
-bool Memory::save(ostream & os, word base, int size)
+bool Memory::save(ostream& os, word base, int size)
 {
-	os.write((const char *)&memory[base], size);
-	return os.good();
+    os.write(reinterpret_cast<const char *>(&memory[base]), size);
+    return os.good();
 }

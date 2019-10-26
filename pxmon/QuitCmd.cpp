@@ -10,7 +10,7 @@
 #include "CPU.h"
 
 /////////////////////////////////////////////////////////////////////////////
-QuitCmd::QuitCmd(Monitor *mon) : Command(mon)
+QuitCmd::QuitCmd(Monitor* mon) : Command(mon)
 {
 }
 
@@ -20,11 +20,11 @@ QuitCmd::~QuitCmd()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void QuitCmd::exec(const stringvec &v)
+void QuitCmd::exec(const stringvec& v)
 {
-	CPU *cpu = CPU::getInstance();
-	cpu->setShutdown(true);
+    CPU* cpu = CPU::getInstance();
+    cpu->setShutdown(true);
 
-	Monitor *mon = getMonitor();
-	mon->setExit(true);
+    Monitor* mon = getMonitor();
+    mon->setExit(true);
 }

@@ -12,26 +12,26 @@
 #include "Memory.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class Machine {
-// Construction / Destruction
+class Machine
+{
+    // Construction / Destruction
 public:
-	Machine();
-	~Machine();
+    Machine();
+    ~Machine();
 
-// Interface
-	void init();
-	void run();
+    // Interface
+    void init();
+    void run();
 
-// Implementation
+    // Implementation
 private:
-	void loadROM(const char *filename, word base, word size);
-	void loadROM(const char *filename);
+    void loadROM(const char* filename, word base, word size);
+    void loadROM(const char* filename);
 
-	Memory* memory;		// pointer to memory
-	CPU *cpu;					// pointer to CPU
+    Memory* memory; // pointer to memory
+    CPU* cpu; // pointer to CPU
 };
+
 /////////////////////////////////////////////////////////////////////////////
 
 #endif // __MACHINE_H__
-
-

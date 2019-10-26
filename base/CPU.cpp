@@ -2,10 +2,10 @@
 //
 // CPU.CPP : Pixie VM CPU
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
+#include "common.h"
 #include "PixieVM.h"
 #include "Memory.h"
 #include "Interrupt.h"
@@ -830,31 +830,27 @@
 		word ad = R16VAL(r); \
 		PUSH16(REG_IP + 2); \
 		REG_IP = ad; \
-	} while (0) \
- 
+	} while (0)
 #define DO_CALL_M16() \
 	do { \
 		byte r = LONYBBLE(FETCH(REG_IP+1)); \
 		word ad = EFFADDRESS(r); \
 		PUSH16(REG_IP + 2); \
 		REG_IP = ad; \
-	} while (0) \
- 
+	} while (0)
 #define DO_CALL_A16() \
 	do { \
 		word ad = FETCH_WORD(REG_IP + 1); \
 		word m = FETCH_WORD(ad); \
 		PUSH16(REG_IP + 3); \
 		REG_IP = m; \
-	} while (0) \
- 
+	} while (0)
 #define DO_CALL_I16() \
 	do { \
 		word I16 = FETCH_WORD(REG_IP+1); \
 		PUSH16(REG_IP + 3); \
 		REG_IP = I16; \
-	} while (0) \
- 
+	} while (0)
 #define DO_CLC() \
 	do { \
 		SET_CARRY(0); \
@@ -2530,8 +2526,8 @@ CPUPtr CPU::instance(CPU::getInstance());
 /////////////////////////////////////////////////////////////////////////////
 CPU::CPU() : m_shutdown(false), m_exitCode(0)
 {
-	memory = Memory::getInstance();
-	REG_A = REG_B = REG_C = REG_D = REG_X = REG_SP = REG_IP = REG_FL = 0;
+    memory = Memory::getInstance();
+    REG_A = REG_B = REG_C = REG_D = REG_X = REG_SP = REG_IP = REG_FL = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2540,210 +2536,210 @@ CPU::~CPU()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-CPU *CPU::getInstance()
+CPU* CPU::getInstance()
 {
-	if (instance.get() == NULL) {
-		instance = CPUPtr(new CPU());
-	}
-	return instance.get();
+    if (instance.get() == NULL){
+        instance = CPUPtr(new CPU());
+    }
+    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getA() const
 {
-	return REG_A;
+    return REG_A;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getB() const
 {
-	return REG_B;
+    return REG_B;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getC() const
 {
-	return REG_C;
+    return REG_C;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getD() const
 {
-	return REG_D;
+    return REG_D;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getX() const
 {
-	return REG_X;
+    return REG_X;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getSP() const
 {
-	return REG_SP;
+    return REG_SP;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getIP() const
 {
-	return REG_IP;
+    return REG_IP;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::getFL() const
 {
-	return REG_FL;
+    return REG_FL;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getAL() const
 {
-	return R8VAL(REG8_AL);
+    return R8VAL(REG8_AL);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getAH() const
 {
-	return R8VAL(REG8_AH);
+    return R8VAL(REG8_AH);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getBL() const
 {
-	return R8VAL(REG8_BL);
+    return R8VAL(REG8_BL);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getBH() const
 {
-	return R8VAL(REG8_BH);
+    return R8VAL(REG8_BH);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getCL() const
 {
-	return R8VAL(REG8_CL);
+    return R8VAL(REG8_CL);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getCH() const
 {
-	return R8VAL(REG8_CH);
+    return R8VAL(REG8_CH);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getDL() const
 {
-	return R8VAL(REG8_DL);
+    return R8VAL(REG8_DL);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte CPU::getDH() const
 {
-	return R8VAL(REG8_DH);
+    return R8VAL(REG8_DH);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setA(word w)
 {
-	REG_A = w;
+    REG_A = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setB(word w)
 {
-	REG_B = w;
+    REG_B = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setC(word w)
 {
-	REG_C = w;
+    REG_C = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setD(word w)
 {
-	REG_D = w;
+    REG_D = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setX(word w)
 {
-	REG_X = w;
+    REG_X = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setSP(word w)
 {
-	REG_SP = w;
+    REG_SP = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setIP(word w)
 {
-	REG_IP = w;
+    REG_IP = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setFL(word w)
 {
-	REG_FL = w;
+    REG_FL = w;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setAL(byte b)
 {
-	R8VAL(REG8_AL) = b;
+    R8VAL(REG8_AL) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setAH(byte b)
 {
-	R8VAL(REG8_AH) = b;;
+    R8VAL(REG8_AH) = b;;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setBL(byte b)
 {
-	R8VAL(REG8_BL) = b;
+    R8VAL(REG8_BL) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setBH(byte b)
 {
-	R8VAL(REG8_BH) = b;
+    R8VAL(REG8_BH) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setCL(byte b)
 {
-	R8VAL(REG8_CL) = b;
+    R8VAL(REG8_CL) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setCH(byte b)
 {
-	R8VAL(REG8_CH) = b;
+    R8VAL(REG8_CH) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setDL(byte b)
 {
-	R8VAL(REG8_DL) = b;
+    R8VAL(REG8_DL) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setDH(byte b)
 {
-	R8VAL(REG8_DH) = b;
+    R8VAL(REG8_DH) = b;
 }
 
 void CPU::setShutdown(bool fShutdown, int exitCode)
 {
-	m_shutdown = fShutdown;
-	m_exitCode = exitCode;
+    m_shutdown = fShutdown;
+    m_exitCode = exitCode;
 }
 
 #define PROCESS_ALARMS() \
@@ -2800,42 +2796,42 @@ void CPU::setShutdown(bool fShutdown, int exitCode)
 /////////////////////////////////////////////////////////////////////////////
 int CPU::run()
 {
-	byte b;
+    byte b;
 
-	reset();
+    reset();
 
-	PROCESS_ALARMS();
+    PROCESS_ALARMS();
 
-	while (!m_shutdown) {
-		DO_INTERRUPT();
+    while (!m_shutdown){
+        DO_INTERRUPT();
 
-		if (m_shutdown)
-			break;
+        if (m_shutdown)
+            break;
 
-		b = FETCH(REG_IP);
-		switch (b) {
+        b = FETCH(REG_IP);
+        switch (b){
 #include "FetchEx.cpp"
-		};
-	}
+        };
+    }
 
-	return m_exitCode;
+    return m_exitCode;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::reset()
 {
-	REG_SP = TOP_STACK_AREA;
-	g_interrupt.setPending(IK_RESET);
+    REG_SP = TOP_STACK_AREA;
+    g_interrupt.setPending(IK_RESET);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void CPU::push16(word w)
 {
-	PUSH16(w);
+    PUSH16(w);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 word CPU::pop16()
 {
-	return POP16();
+    return POP16();
 }

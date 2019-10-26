@@ -2,11 +2,11 @@
 //
 // INTERRUPT.CPP : Implementation of interrupts
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Interrupt.h"
+#include "common.h"
+#include "interrupt.h"
 
 // global interrupt
 Interrupt g_interrupt;
@@ -14,7 +14,7 @@ Interrupt g_interrupt;
 /////////////////////////////////////////////////////////////////////////////
 Interrupt::Interrupt()
 {
-	memset(this, 0, sizeof(Interrupt));
+    memset(this, 0, sizeof(Interrupt));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -25,43 +25,43 @@ Interrupt::~Interrupt()
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::handleTrap()
 {
-	if (m_trapHandler != NULL) {
-		m_trapHandler->trap(m_trapData);
-	}
+    if (m_trapHandler != NULL){
+        m_trapHandler->trap(m_trapData);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Interrupt::setTrap(LPTRAPHANDLER handler, void *data)
+void Interrupt::setTrap(LPTRAPHANDLER handler, void* data)
 {
-	m_pending |= IK_TRAP;
-	m_trapHandler = handler;
-	m_trapData = data;
+    m_pending |= IK_TRAP;
+    m_trapHandler = handler;
+    m_trapData = data;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::setMonitor(LPHANDLER handler)
 {
-	m_pending |= IK_MONITOR;
-	m_monHandler = handler;
+    m_pending |= IK_MONITOR;
+    m_monHandler = handler;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::setMonitorBreak(LPTRAPHANDLER handler)
 {
-	m_pending |= IK_MONBREAK;
-	m_trapHandler = handler;
+    m_pending |= IK_MONBREAK;
+    m_trapHandler = handler;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::handleMonitor()
 {
-	if (m_monHandler != NULL) {
-		m_monHandler->handle();
-	}
+    if (m_monHandler != NULL){
+        m_monHandler->handle();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
 LPTRAPHANDLER Interrupt::getTrapHandler() const
 {
-	return m_trapHandler;
+    return m_trapHandler;
 }

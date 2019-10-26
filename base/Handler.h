@@ -9,21 +9,20 @@
 #define __HANDLER_H__
 
 /////////////////////////////////////////////////////////////////////////////
-class Handler {
-
-// Construction / Destruction
+class Handler
+{
+    // Construction / Destruction
 public:
-	Handler() {}
-	virtual ~Handler() {}
+    Handler() = default;
 
-// Interface
-	virtual void handle() = 0;
+    virtual ~Handler() = default;
 
-// Implementation
-private:
+    // Interface
+    virtual void handle() = 0;
 };
+
 /////////////////////////////////////////////////////////////////////////////
 
-typedef Handler *LPHANDLER;
+using LPHANDLER = Handler*;
 
-#endif // __HANDLER_H__
+#endif  // __HANDLER_H__

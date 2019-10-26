@@ -15,40 +15,45 @@
 template <class T>
 class KeyboardHandler
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	KeyboardHandler() {}
-	~KeyboardHandler() {}
+    KeyboardHandler()
+    {
+    }
 
-	// Interface
-	BEGIN_MSG_MAP(KeyboardHandler)
-		MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDown)
-		MESSAGE_HANDLER(WM_KEYUP, OnKeyUp)
-	END_MSG_MAP()
+    ~KeyboardHandler()
+    {
+    }
 
-	// Implementation
+    // Interface
+BEGIN_MSG_MAP(KeyboardHandler)
+        MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDown)
+        MESSAGE_HANDLER(WM_KEYUP, OnKeyUp)
+    END_MSG_MAP()
+
+    // Implementation
 private:
-	LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		int key_code = KeyboardMatrix::translate(wParam, lParam);
-		if (key_code < 0 || key_code >= 256)
-			return 0;
-				
-		PixieIO::getInstance()->keyOn(key_code);
+    LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        int key_code = KeyboardMatrix::translate(wParam, lParam);
+        if (key_code < 0 || key_code >= 256)
+            return 0;
 
-		return 0;
-	}
+        PixieIO::getInstance()->keyOn(key_code);
 
-	LRESULT OnKeyUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		int key_code = KeyboardMatrix::translate(wParam, lParam);
-		if (key_code < 0 || key_code >= 256)
-			return 0;
+        return 0;
+    }
 
-		PixieIO::getInstance()->keyOff(key_code);
+    LRESULT OnKeyUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        int key_code = KeyboardMatrix::translate(wParam, lParam);
+        if (key_code < 0 || key_code >= 256)
+            return 0;
 
-		return 0;
-	}
+        PixieIO::getInstance()->keyOff(key_code);
+
+        return 0;
+    }
 };
 
 #endif // __KEYBOARD_HANDLER_H__

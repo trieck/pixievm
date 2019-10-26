@@ -2,27 +2,34 @@
 //
 // TRAP.H : Implementation of traps
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __TRAP_H__
 #define __TRAP_H__
 
 /////////////////////////////////////////////////////////////////////////////
-class TrapHandler {
-// Construction / Destruction
+class TrapHandler
+{
+    // Construction / Destruction
 public:
-	TrapHandler() {}
-	virtual ~TrapHandler() {}
+    TrapHandler()
+    {
+    }
 
-// Interface
-	virtual void trap(void *data) = 0;
+    virtual ~TrapHandler()
+    {
+    }
 
-// Implementation
+    // Interface
+    virtual void trap(void* data) = 0;
+
+    // Implementation
 private:
 };
+
 /////////////////////////////////////////////////////////////////////////////
 
-typedef TrapHandler *LPTRAPHANDLER;
+typedef TrapHandler* LPTRAPHANDLER;
 
 #endif // __TRAP_H__

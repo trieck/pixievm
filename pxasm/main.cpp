@@ -12,32 +12,32 @@
 ANON_BEGIN
 void usage()
 {
-	cerr << "usage: pxasm source-file [outfile]" << endl;
-	exit(EXIT_FAILURE);
+    cerr << "usage: pxasm source-file [outfile]" << endl;
+    exit(EXIT_FAILURE);
 }
+
 ANON_END
 
 /////////////////////////////////////////////////////////////////////////////
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-	if (argc < 2)
-		usage();
+    if (argc < 2)
+        usage();
 
-	Assembler assembler;
+    Assembler assembler;
 
-	int nret;
+    int nret;
 
-	try {
-		if (argc == 3) {
-			nret = assembler.assemble(argv[1], argv[2]);
-		} else {
-			nret = assembler.assemble(argv[1]);
-		}
-	} catch (const Exception &e) {
-		cerr << e.getDescription() << endl;
-		exit(EXIT_FAILURE);
-	}
+    try{
+        if (argc == 3){
+            nret = assembler.assemble(argv[1], argv[2]);
+        } else{
+            nret = assembler.assemble(argv[1]);
+        }
+    } catch (const Exception& e){
+        cerr << e.getDescription() << endl;
+        exit(EXIT_FAILURE);
+    }
 
-	return nret;
+    return nret;
 }
-

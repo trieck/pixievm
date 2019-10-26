@@ -2,10 +2,10 @@
 //
 // PIXIEIO.CPP : Pixie VM I/O handling
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
+#include "common.h"
 #include "PixieIO.h"
 #include "interrupt.h"
 
@@ -34,7 +34,7 @@ PixieIOPtr PixieIO::instance(PixieIO::getInstance());
 /////////////////////////////////////////////////////////////////////////////
 PixieIO::PixieIO()
 {
-	reset();
+    reset();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -43,63 +43,65 @@ PixieIO::~PixieIO()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-PixieIO *PixieIO::getInstance()
+PixieIO* PixieIO::getInstance()
 {
-	if (instance.get() == NULL) {
-		instance = PixieIOPtr(new PixieIO);
-	}
-	return instance.get();
+    if (instance.get() == NULL){
+        instance = PixieIOPtr(new PixieIO);
+    }
+    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::reset()
 {
-	memset(regs, 0, sizeof(byte) * NREGS);
-	memset(key_matrix, 0xFF, sizeof(byte) * 8);
+    memset(regs, 0, sizeof(byte) * NREGS);
+    memset(key_matrix, 0xFF, sizeof(byte) * 8);
 
-	// total latch value of 17045
-	TIMER_A_LO = LATCH_A_LO;
-	TIMER_A_HI = LATCH_A_HI;
+    // total latch value of 17045
+    TIMER_A_LO = LATCH_A_LO;
+    TIMER_A_HI = LATCH_A_HI;
 
-	TIMER_B_LO = TIMER_B_HI = 0xFF;
+    TIMER_B_LO = TIMER_B_HI = 0xFF;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 uint8_t PixieIO::readRegister(uint16_t address)
 {
-	return regs[address & 0x0F];
+    return regs[address & 0x0F];
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::writeRegister(uint16_t address, uint8_t b)
 {
-	regs[address & 0x0F] = b;
+    regs[address & 0x0F] = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::keyOn(uint8_t key_code)
 {
-	int byte = key_code >> 3;
-	int bit = key_code & 7;
-	key_matrix[byte] &= ~(1 << bit);
+    int byte = key_code >> 3;
+    int bit = key_code & 7;
+    key_matrix[byte] &= ~(1 << bit);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::keyOff(uint8_t key_code)
 {
-	int byte = key_code >> 3;
-	int bit = key_code & 7;
-	key_matrix[byte] |= (1 << bit);
+    int byte = key_code >> 3;
+    int bit = key_code & 7;
+    key_matrix[byte] |= (1 << bit);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::clockTrigger()
 {
-	if (--TIMER_A_LO == 0xFF) {		// underflow
-		if (--TIMER_A_HI == 0xFF) {	// underflow
-			TIMER_A_LO = LATCH_A_LO;
-			TIMER_A_HI = LATCH_A_HI;
-			g_interrupt.setPending(IK_IRQ);
-		}
-	}
+    if (--TIMER_A_LO == 0xFF){
+        // underflow
+        if (--TIMER_A_HI == 0xFF){
+            // underflow
+            TIMER_A_LO = LATCH_A_LO;
+            TIMER_A_HI = LATCH_A_HI;
+            g_interrupt.setPending(IK_IRQ);
+        }
+    }
 }

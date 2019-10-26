@@ -21,46 +21,50 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol struct
-typedef struct Symbol {
-	int type;				/* symbol type */
-	int sub;				/* sub-type */
-	string name;			/* symbol name */
-	union {
-		const Instr *instr;	/* instruction */
-		word val16;			/* word value */
-		byte val8;			/* byte value */
-	};
+typedef struct Symbol
+{
+    int type; /* symbol type */
+    int sub; /* sub-type */
+    string name; /* symbol name */
+    union
+    {
+        const Instr* instr; /* instruction */
+        word val16; /* word value */
+        byte val8; /* byte value */
+    };
 } Symbol, *LPSYMBOL;
 
 class SymbolTable;
 typedef auto_ptr<SymbolTable> SymbolTablePtr;
 
 /////////////////////////////////////////////////////////////////////////////
-class SymbolTable {
-// Construction / Destruction
+class SymbolTable
+{
+    // Construction / Destruction
 private:
-	SymbolTable();
+    SymbolTable();
 public:
-	~SymbolTable();
+    ~SymbolTable();
 
-// Interface
-	static SymbolTable *getInstance();
-	LPSYMBOL installw(const string &s, int type, int sub, word w);
-	LPSYMBOL installb(const string &s, int type, int sub, byte b);
-	LPSYMBOL lookup(const string &s) const;
-	void flushtmp();
+    // Interface
+    static SymbolTable* getInstance();
+    LPSYMBOL installw(const string& s, int type, int sub, word w);
+    LPSYMBOL installb(const string& s, int type, int sub, byte b);
+    LPSYMBOL lookup(const string& s) const;
+    void flushtmp();
 
-// Implementation
+    // Implementation
 private:
-	void iinsert(const string &s, int t, const Instr *i);
-	void rinsert(const string &s, int t, byte r);
-	void idinsert(const string &s, int id);
+    void iinsert(const string& s, int t, const Instr* i);
+    void rinsert(const string& s, int t, byte r);
+    void idinsert(const string& s, int id);
 
-	static SymbolTablePtr instance;	// singleton instance
+    static SymbolTablePtr instance; // singleton instance
 
-	typedef map<string, LPSYMBOL, stringless> symmap;
-	symmap table;
+    typedef map<string, LPSYMBOL, stringless> symmap;
+    symmap table;
 };
+
 /////////////////////////////////////////////////////////////////////////////
 
 #endif // __SYMBOLTABLE_H__

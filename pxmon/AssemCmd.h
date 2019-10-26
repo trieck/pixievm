@@ -11,16 +11,17 @@
 #include "monitor.h"
 #include "MiniAssembler.h"
 
-class AssemCmd : public Command {
+class AssemCmd : public Command
+{
 public:
-	AssemCmd(Monitor *mon);
-	~AssemCmd();
+    AssemCmd(Monitor* mon);
+    ~AssemCmd();
 
-	virtual void exec(const stringvec &v);
-	bool assemble(word address, const string& str);
+    virtual void exec(const stringvec& v);
+    bool assemble(word address, const string& str);
 
 private:
-	MiniAssembler assembler;
+    MiniAssembler assembler;
 };
 
 #endif // __ASSEMCMD_H__

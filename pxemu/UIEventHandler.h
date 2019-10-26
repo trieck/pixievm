@@ -11,17 +11,17 @@
 #include "Handler.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class UIEventHandler : public Handler 
+class UIEventHandler : public Handler
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	UIEventHandler();
-	~UIEventHandler();
+    UIEventHandler();
+    ~UIEventHandler();
 
-	// Interface
-	virtual void handle(); // handler
+    // Interface
+    virtual void handle(); // handler
 
-	// Implementation
+    // Implementation
 private:
 };
 

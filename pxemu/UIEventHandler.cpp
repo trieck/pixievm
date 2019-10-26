@@ -22,20 +22,20 @@ UIEventHandler::~UIEventHandler()
 /////////////////////////////////////////////////////////////////////////////
 void UIEventHandler::handle()
 {
-	CMessageLoop* pLoop = _Module.GetMessageLoop();
+    CMessageLoop* pLoop = _Module.GetMessageLoop();
 
-	MSG msg;
-	while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
-		if (!GetMessage(&msg, NULL, 0, 0)) {
-			CPU::getInstance()->setShutdown(true, (int)msg.wParam);
-			return;
-		}
+    MSG msg;
+    while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)){
+        if (!GetMessage(&msg, NULL, 0, 0)){
+            CPU::getInstance()->setShutdown(true, (int)msg.wParam);
+            return;
+        }
 
-		::TranslateMessage(&msg);
-		::DispatchMessage(&msg);
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
 
-		if (pLoop->IsIdleMessage(&msg)) {
-			pLoop->OnIdle(0);
-		}
-	}
+        if (pLoop->IsIdleMessage(&msg)){
+            pLoop->OnIdle(0);
+        }
+    }
 }

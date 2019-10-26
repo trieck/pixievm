@@ -9,20 +9,25 @@
 #define __LINEREADER_H__
 
 /////////////////////////////////////////////////////////////////////////////
-class LineReader {
-
-// Construction / Destruction
+class LineReader
+{
+    // Construction / Destruction
 public:
-	LineReader(istream &s) : is(s) {}
-	~LineReader() {}
+    LineReader(istream& s) : is(s)
+    {
+    }
 
-// Interface
+    ~LineReader()
+    {
+    }
+
+    // Interface
 public:
-	string readLine();
+    string readLine();
 
-// Implementation
+    // Implementation
 private:
-	istream &is;
+    istream& is;
 };
 
 #endif // __LINEREADER_H__

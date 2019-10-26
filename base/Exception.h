@@ -9,40 +9,53 @@
 #ifndef __EXCEPTION_H__
 #define __EXCEPTION_H__
 
+#include <utility>
+
 /////////////////////////////////////////////////////////////////////////////
-class Exception {
-// Construction / Destruction
+class Exception
+{
+    // Construction / Destruction
 public:
-	Exception(const char *fmt, ...) {
-		char buffer[BUFF_SIZE];
-		va_list arglist;
-		va_start(arglist, fmt);
-		vsprintf(buffer, fmt, arglist);
-		va_end(arglist);
-		desc = buffer;
-	}
+    Exception(const char* fmt, ...)
+    {
+        char buffer[BUFF_SIZE];
+        va_list arglist;
+        va_start(arglist, fmt);
+        vsprintf_s(buffer, fmt, arglist);
+        va_end(arglist);
+        m_desc = buffer;
+    }
 
-	Exception(const string &sdesc) : desc(sdesc) {}
-	Exception::Exception(const Exception &rhs) {
-		*this = rhs;
-	}
-	virtual ~Exception() {}
+    Exception(string desc) : m_desc(std::move(desc))
+    {
+    }
 
-// Interface
-	Exception &operator =(const Exception &rhs) {
-		if (this != &rhs) {
-			desc = rhs.desc;
-		}
-		return *this;
-	}
-	string getDescription() const {
-		return desc;
-	}
+    Exception(const Exception& rhs)
+    {
+        *this = rhs;
+    }
 
-// Implementation
+    virtual ~Exception() = default;
+
+    // Interface
+    Exception& operator=(const Exception& rhs)
+    {
+        if (this != &rhs){
+            m_desc = rhs.m_desc;
+        }
+        return *this;
+    }
+
+    string getDescription() const noexcept
+    {
+        return m_desc;
+    }
+
+    // Implementation
 private:
-	string desc;
-	enum { BUFF_SIZE = 1024 };
+    string m_desc;
+
+    enum { BUFF_SIZE = 1024 };
 };
 
-#endif // __EXCEPTION_H__
+#endif  // __EXCEPTION_H__

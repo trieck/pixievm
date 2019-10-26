@@ -11,13 +11,14 @@
 #include "Monitor.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class StepUntilCmd : public Command, public TrapHandler {
+class StepUntilCmd : public Command, public TrapHandler
+{
 public:
-	StepUntilCmd(Monitor *mon);
-	~StepUntilCmd();
+    StepUntilCmd(Monitor* mon);
+    ~StepUntilCmd();
 
-	virtual void exec(const stringvec &v);
-	virtual void trap(void *data);
+    virtual void exec(const stringvec& v);
+    virtual void trap(void* data);
 };
 
 #endif // __STEPUNTILCMD_H__

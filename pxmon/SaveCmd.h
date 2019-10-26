@@ -11,13 +11,13 @@
 #include "monitor.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class SaveCmd : public Command {
+class SaveCmd : public Command
+{
 public:
-	SaveCmd(Monitor *mon);
-	~SaveCmd();
+    SaveCmd(Monitor* mon);
+    ~SaveCmd();
 
-	virtual void exec(const stringvec &v);
+    virtual void exec(const stringvec& v);
 };
 
 #endif // __SAVECMD_H__
-

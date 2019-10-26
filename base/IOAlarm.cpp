@@ -2,7 +2,7 @@
 //
 // IOALARM.CPP : I/O alarm
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
@@ -12,7 +12,7 @@
 /////////////////////////////////////////////////////////////////////////////
 IOAlarm::IOAlarm()
 {
-	m_LastClock = m_clock.clock();
+    m_LastClock = m_clock.clock();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -23,12 +23,12 @@ IOAlarm::~IOAlarm()
 /////////////////////////////////////////////////////////////////////////////
 void IOAlarm::handle()
 {
-	uint64_t clock = m_clock.clock();
+    uint64_t clock = m_clock.clock();
 
-	uint64_t diff = clock - m_LastClock;
-	if (diff != 0)  {	
-		PixieIO::getInstance()->clockTrigger();
-	}
+    const uint64_t diff = clock - m_LastClock;
+    if (diff != 0){
+        PixieIO::getInstance()->clockTrigger();
+    }
 
-	m_LastClock = clock;
+    m_LastClock = clock;
 }

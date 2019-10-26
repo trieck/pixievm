@@ -9,7 +9,7 @@
 #include "AssemCmd.h"
 
 /////////////////////////////////////////////////////////////////////////////
-AssemCmd::AssemCmd(Monitor *mon) : Command(mon)
+AssemCmd::AssemCmd(Monitor* mon) : Command(mon)
 {
 }
 
@@ -19,23 +19,23 @@ AssemCmd::~AssemCmd()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void AssemCmd::exec(const stringvec &v)
+void AssemCmd::exec(const stringvec& v)
 {
-	word address;
-	if (v.size()) {
-		int n = sscanf(v[0].c_str(), "%hx", &address);
-		if (n != 1) {
-			cerr << "? a [address]" << endl;
-			return;
-		}
-		assembler.assemble(&address);
-	} else {
-		assembler.assemble(NULL);
-	}
+    word address;
+    if (v.size()){
+        int n = sscanf(v[0].c_str(), "%hx", &address);
+        if (n != 1){
+            cerr << "? a [address]" << endl;
+            return;
+        }
+        assembler.assemble(&address);
+    } else{
+        assembler.assemble(NULL);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
 bool AssemCmd::assemble(word address, const string& str)
 {
-	return assembler.assemble(&address, str.c_str());
+    return assembler.assemble(&address, str.c_str());
 }

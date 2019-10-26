@@ -11,15 +11,15 @@
 /////////////////////////////////////////////////////////////////////////////
 class KeyboardMatrix
 {
-	// Construction / Destruction
+    // Construction / Destruction
 public:
-	KeyboardMatrix();
-	~KeyboardMatrix();
+    KeyboardMatrix();
+    ~KeyboardMatrix();
 
-	// Interface
-	static int translate(WPARAM wParam, LPARAM lParam);
+    // Interface
+    static int translate(WPARAM wParam, LPARAM lParam);
 
-	// Implementation
+    // Implementation
 private:
 };
 

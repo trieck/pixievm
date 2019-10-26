@@ -17,26 +17,26 @@ Canvas::~Canvas()
 /////////////////////////////////////////////////////////////////////////////
 Canvas* Canvas::getInstance()
 {
-	if (instance.get() == NULL) {
-		instance = CanvasPtr(new Canvas());
-	}
-	return instance.get();
+    if (instance.get() == NULL){
+        instance = CanvasPtr(new Canvas());
+    }
+    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Canvas::Invalidate(CRect& rc)
 {
-	InvalidateRect(m_hWnd, rc, FALSE);
+    InvalidateRect(m_hWnd, rc, FALSE);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Canvas::SetPixel(uint16_t x, uint16_t y, uint8_t color)
 {
-	m_bitmap.SetPixel(x, y, color);
+    m_bitmap.SetPixel(x, y, color);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void Canvas::Render(CPaintDC& dc)
 {
-	m_bitmap.Render(dc);
+    m_bitmap.Render(dc);
 }

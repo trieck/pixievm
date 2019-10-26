@@ -11,25 +11,27 @@
 #include "SymbolTable.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class MiniAssembler {
-// Construction / Destruction
+class MiniAssembler
+{
+    // Construction / Destruction
 public:
-	MiniAssembler();
+    MiniAssembler();
 
-// Interface
-	void assemble(word *start);
-	bool assemble(word *start, const char *str);
+    // Interface
+    void assemble(word* start);
+    bool assemble(word* start, const char* str);
 
-// Implementation
+    // Implementation
 private:
-	void initialize(word *start);
-	bool tryParse();
-	int parse();
-	void prompt();
+    void initialize(word* start);
+    bool tryParse();
+    int parse();
+    void prompt();
 
-	bool init;			// have we been entered ?
-	SymbolTable *table;
+    bool init; // have we been entered ?
+    SymbolTable* table;
 };
+
 /////////////////////////////////////////////////////////////////////////////
 
 #endif // __MINIASSEMBLER_H__

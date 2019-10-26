@@ -12,16 +12,16 @@
 class PixieClock
 {
 public:
-	PixieClock();
-	~PixieClock();
+    PixieClock();
+    ~PixieClock();
 
-	void reset();
-	uint64_t clock() const;
+    void reset();
+    uint64_t clock() const;
 private:
-	uint64_t LI2INT64(PLARGE_INTEGER li) const;
+    uint64_t LI2INT64(PLARGE_INTEGER li) const;
 
-	LARGE_INTEGER start;
-	uint64_t ticksPerSecond;
+    LARGE_INTEGER start{};
+    uint64_t ticksPerSecond;
 };
 
 #endif // __PIXIE_CLOCK_H__
