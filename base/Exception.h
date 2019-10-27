@@ -16,7 +16,7 @@ class Exception
 {
     // Construction / Destruction
 public:
-    Exception(const char* fmt, ...)
+    Exception(const char* fmt, ...) 
     {
         char buffer[BUFF_SIZE];
         va_list arglist;

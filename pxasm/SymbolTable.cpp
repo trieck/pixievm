@@ -5,16 +5,16 @@
 // Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
+#include "common.h"
 #include "Modes.h"
 #include "Instructions.h"
 #include "SymbolTable.h"
 #include "PixieVM.h"
 #include "Parser.hpp"
-#include "Util.h"
-#include "Exception.h"
+#include "util.h"
+#include <exception.h>
 
-#define ISLIST(s)	(s->type == ST_LIST)
+#define ISLIST(s) (s->type == SymbolType::ST_LIST)
 
 extern int yylineno;
 
@@ -109,7 +109,7 @@ SymbolTable::SymbolTable()
 SymbolTable::~SymbolTable()
 {
     symmap::const_iterator it = table.begin();
-    for (; it != table.end(); it++){
+    for (; it != table.end(); ++it){
         delete (*it).second;
     }
 }
@@ -117,7 +117,7 @@ SymbolTable::~SymbolTable()
 /////////////////////////////////////////////////////////////////////////////
 SymbolTable* SymbolTable::getInstance()
 {
-    if (instance.get() == NULL){
+    if (instance.get() == nullptr){
         instance = SymbolTablePtr(new SymbolTable);
     }
     return instance.get();
@@ -128,9 +128,9 @@ void SymbolTable::iinsert(const string& s, uint32_t t, const Instr* i)
 {
     // instruction
 
-    LPSYMBOL sym = new Symbol;
+    auto sym = new Symbol;
     sym->name = s;
-    sym->type = ST_INSTRUCTION;
+    sym->type = SymbolType::ST_INSTRUCTION;
     sym->sub = t;
     sym->instr = i;
     table[s] = sym;
@@ -141,9 +141,9 @@ void SymbolTable::rinsert(const string& s, uint32_t t, byte r)
 {
     // register
 
-    LPSYMBOL sym = new Symbol;
+    auto sym = new Symbol;
     sym->name = s;
-    sym->type = ST_REG;
+    sym->type = SymbolType::ST_REG;
     sym->sub = t;
     sym->val8 = r;
     table[s] = sym;
@@ -154,9 +154,9 @@ void SymbolTable::idinsert(const string& s, uint32_t id)
 {
     // identifier
 
-    LPSYMBOL sym = new Symbol;
+    auto sym = new Symbol;
     sym->name = s;
-    sym->type = ST_ID;
+    sym->type = SymbolType::ST_ID;
     sym->sub = id;
     table[s] = sym;
 }
@@ -170,7 +170,7 @@ LPSYMBOL SymbolTable::install(const string& s)
     if ((sym = lookup(s)) == NULL){
         sym = new Symbol;
         sym->name = s;
-        sym->type = ST_UNDEF;
+        sym->type = SymbolType::ST_UNDEF;
         sym->sub = 0;
         sym->lineno = yylineno;
         table[s] = sym;
@@ -184,10 +184,10 @@ LPSYMBOL SymbolTable::installs(const string& s)
 {
     // string literal
 
-    LPSYMBOL sym = new Symbol;
+    auto sym = new Symbol;
     sym->name = format("STRING:0x%.8X", counter32());
     sym->sval = s;
-    sym->type = ST_STRING;
+    sym->type = SymbolType::ST_STRING;
     sym->sub = 0;
     sym->lineno = yylineno;
     table[sym->name] = sym;
@@ -200,7 +200,7 @@ LPSYMBOL SymbolTable::installw(SymbolType type, uint32_t sub, word value)
 {
     // numeric
 
-    LPSYMBOL sym = new Symbol;
+    auto sym = new Symbol;
     sym->name = format("NUMERIC:0x%.8X", counter32());
     sym->type = type;
     sym->sub = sub;
@@ -216,10 +216,10 @@ LPSYMBOL SymbolTable::installo(uint32_t op, uint32_t sub, Symbol* args)
 {
     // operator
 
-    LPSYMBOL sym = new Symbol;
+    auto sym = new Symbol;
 
     sym->name = opname(op);
-    sym->type = ST_OP;
+    sym->type = SymbolType::ST_OP;
     sym->sub = sub;
     sym->lineno = yylineno;
     sym->args = args; // argument list
@@ -246,67 +246,67 @@ LPSYMBOL SymbolTable::opeval(uint32_t opcode, uint32_t sub, LPSYMBOL args)
         throw Exception("unrecognized opcode %d.", opcode);
     };
 
-    return NULL;
+    return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 LPSYMBOL SymbolTable::plus(uint32_t sub, LPSYMBOL args)
 {
-    ASSERT(args->type == ST_LIST);
+    ASSERT(args->type == SymbolType::ST_LIST);
     ASSERT(args->vsyms.size() == 2);
-    ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
-    ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+    ASSERT(args->vsyms[0]->type == SymbolType::ST_CONST || args->vsyms[0]->type == SymbolType::ST_ID);
+    ASSERT(args->vsyms[1]->type == SymbolType::ST_CONST || args->vsyms[1]->type == SymbolType::ST_ID);
 
     word value = args->vsyms[0]->val16 + args->vsyms[1]->val16;
 
-    return installw(ST_CONST, sub, value);
+    return installw(SymbolType::ST_CONST, sub, value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 LPSYMBOL SymbolTable::minus(uint32_t sub, LPSYMBOL args)
 {
-    ASSERT(args->type == ST_LIST);
+    ASSERT(args->type == SymbolType::ST_LIST);
     ASSERT(args->vsyms.size() == 2);
-    ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
-    ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+    ASSERT(args->vsyms[0]->type == SymbolType::ST_CONST || args->vsyms[0]->type == SymbolType::ST_ID);
+    ASSERT(args->vsyms[1]->type == SymbolType::ST_CONST || args->vsyms[1]->type == SymbolType::ST_ID);
 
     word value = args->vsyms[0]->val16 - args->vsyms[1]->val16;
 
-    return installw(ST_CONST, sub, value);
+    return installw(SymbolType::ST_CONST, sub, value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 LPSYMBOL SymbolTable::mult(uint32_t sub, LPSYMBOL args)
 {
-    ASSERT(args->type == ST_LIST);
+    ASSERT(args->type == SymbolType::ST_LIST);
     ASSERT(args->vsyms.size() == 2);
-    ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
-    ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+    ASSERT(args->vsyms[0]->type == SymbolType::ST_CONST || args->vsyms[0]->type == SymbolType::ST_ID);
+    ASSERT(args->vsyms[1]->type == SymbolType::ST_CONST || args->vsyms[1]->type == SymbolType::ST_ID);
 
-    word value = args->vsyms[0]->val16 * args->vsyms[1]->val16;
+    const word value = args->vsyms[0]->val16 * args->vsyms[1]->val16;
 
-    return installw(ST_CONST, sub, value);
+    return installw(SymbolType::ST_CONST, sub, value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 LPSYMBOL SymbolTable::div(uint32_t sub, LPSYMBOL args)
 {
-    ASSERT(args->type == ST_LIST);
+    ASSERT(args->type == SymbolType::ST_LIST);
     ASSERT(args->vsyms.size() == 2);
-    ASSERT(args->vsyms[0]->type == ST_CONST || args->vsyms[0]->type == ST_ID);
-    ASSERT(args->vsyms[1]->type == ST_CONST || args->vsyms[1]->type == ST_ID);
+    ASSERT(args->vsyms[0]->type == SymbolType::ST_CONST || args->vsyms[0]->type == SymbolType::ST_ID);
+    ASSERT(args->vsyms[1]->type == SymbolType::ST_CONST || args->vsyms[1]->type == SymbolType::ST_ID);
 
-    word value = args->vsyms[0]->val16 / args->vsyms[1]->val16;
+    const word value = args->vsyms[0]->val16 / args->vsyms[1]->val16;
 
-    return installw(ST_CONST, sub, value);
+    return installw(SymbolType::ST_CONST, sub, value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 LPSYMBOL SymbolTable::lookup(const string& s) const
 {
-    symmap::const_iterator it = table.find(s);
+    const auto it = table.find(s);
     if (it == table.end())
-        return NULL;
+        return nullptr;
 
     return (*it).second;
 }
@@ -314,13 +314,13 @@ LPSYMBOL SymbolTable::lookup(const string& s) const
 /////////////////////////////////////////////////////////////////////////////
 LPSYMBOL SymbolTable::mklist(LPSYMBOL s1, LPSYMBOL s2)
 {
-    LPSYMBOL list = NULL;
+    LPSYMBOL list = nullptr;
 
     if (!ISLIST(s1) && !ISLIST(s2)){
         // make a new list
         list = new Symbol;
         list->name = format("LIST:0x%.8X", counter32());
-        list->type = ST_LIST;
+        list->type = SymbolType::ST_LIST;
         list->lineno = yylineno;
         list->vsyms.push_back(s1);
         list->vsyms.push_back(s2);
@@ -352,10 +352,9 @@ LPSYMBOL SymbolTable::mklist(LPSYMBOL s1, LPSYMBOL s2)
 /////////////////////////////////////////////////////////////////////////////
 string SymbolTable::opname(uint32_t opcode)
 {
-    string name;
     string opname;
 
-    uint32_t counter = counter32();
+    const auto counter = counter32();
 
     switch (opcode){
     case PLUS:
@@ -380,7 +379,7 @@ string SymbolTable::opname(uint32_t opcode)
         opname = "unknown";
     }
 
-    name = format("OPERATOR(%s):0x%.8X", opname.c_str(), counter);
+    auto name = format("OPERATOR(%s):0x%.8X", opname.c_str(), counter);
 
     return name;
 }

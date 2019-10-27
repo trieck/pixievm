@@ -2,20 +2,20 @@
 //
 // ASSEMBLER.CPP : Assembler interface
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "Assembler.h"
-#include "Exception.h"
-#include "Code.h"
-#include "Util.h"
+#include "exception.h"
+#include "code.h"
+#include "util.h"
 
 extern int yyparse(void); // bison parser routine
 extern FILE* yyin; // input file pointer
 
 /////////////////////////////////////////////////////////////////////////////
-Assembler::Assembler() : m_pOut(NULL)
+Assembler::Assembler() : m_pOut(nullptr)
 {
 }
 
@@ -39,14 +39,14 @@ void Assembler::open(const char* filename)
 /////////////////////////////////////////////////////////////////////////////
 void Assembler::close()
 {
-    if (yyin != NULL && yyin != stdin){
+    if (yyin != nullptr && yyin != stdin){
         fclose(yyin);
-        yyin = NULL;
+        yyin = nullptr;
     }
 
-    if (m_pOut != NULL){
+    if (m_pOut != nullptr){
         fclose(m_pOut);
-        m_pOut = NULL;
+        m_pOut = nullptr;
     }
 }
 
@@ -64,7 +64,7 @@ int Assembler::assemble(const char* source, const char* output)
     code->pass2();
 
     // write code to output file	
-    if ((m_pOut = fopen(output, "wb")) == NULL){
+    if ((m_pOut = fopen(output, "wb")) == nullptr){
         throw Exception("can't open file \"%s\": %s.", output, strerror(errno));
     }
 
@@ -78,6 +78,6 @@ int Assembler::assemble(const char* source, const char* output)
 /////////////////////////////////////////////////////////////////////////////
 int Assembler::assemble(const char* source)
 {
-    string output = format("%s.o", basename(source).c_str());
+    auto output = format("%s.o", basename(source).c_str());
     return assemble(source, output.c_str());
 }

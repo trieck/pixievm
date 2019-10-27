@@ -2,21 +2,21 @@
 //
 // MACHINE.CPP : simple runtime machine
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
-#include "Machine.h"
+#include "machine.h"
 #include "SymbolTable.h"
 #include "Parser.hpp"
-#include "Program.h"
-#include "Code.h"
-#include "Exception.h"
+#include "program.h"
+#include "code.h"
+#include "exception.h"
 
 MachinePtr Machine::instance(Machine::getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
-Machine::Machine() : m_pc(NULL)
+Machine::Machine() : m_pc(nullptr)
 {
     m_code = Code::getInstance();
 
@@ -36,7 +36,7 @@ Machine::~Machine()
 /////////////////////////////////////////////////////////////////////////////
 Machine* Machine::getInstance()
 {
-    if (instance.get() == NULL){
+    if (instance.get() == nullptr){
         instance = MachinePtr(new Machine);
     }
     return instance.get();
@@ -49,7 +49,7 @@ Instruction Machine::lookup(uint32_t opcode)
 
     InstrMap::const_iterator it = machine->m_instr.find(opcode);
     if (it == machine->m_instr.end())
-        return NULL;
+        return nullptr;
 
     return (*it).second;
 }
@@ -59,8 +59,9 @@ void Machine::exec(const Program& program)
 {
     m_pc = program;
 
-    while (m_pc->type != DT_UNDEF)
+    while (m_pc->type != DT_UNDEF) {
         eval();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -86,10 +87,10 @@ Datum Machine::evalsym(LPSYMBOL s)
     Instruction i;
 
     switch (s->type){
-    case ST_UNDEF:
+    case SymbolType::ST_UNDEF:
         throw Exception("identifier \"%s\" was undefined near line %d.",
                         s->name.c_str(), s->lineno);
-    case ST_OP:
+    case SymbolType::ST_OP:
         if ((i = lookup(s->opcode)) == NULL){
             throw Exception("unrecognized opcode %d.", s->opcode);
         }
@@ -104,8 +105,8 @@ Datum Machine::evalsym(LPSYMBOL s)
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::plus()
 {
-    Datum d1 = eval();
-    Datum d2 = eval();
+    const auto d1 = eval();
+    const auto d2 = eval();
 
     Datum result;
     result.type = DT_CONST;
@@ -117,8 +118,8 @@ Datum Machine::plus()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::minus()
 {
-    Datum d1 = eval();
-    Datum d2 = eval();
+    const auto d1 = eval();
+    const auto d2 = eval();
 
     Datum result;
     result.type = DT_CONST;
@@ -130,8 +131,8 @@ Datum Machine::minus()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::mult()
 {
-    Datum d1 = eval();
-    Datum d2 = eval();
+    const auto d1 = eval();
+    const auto d2 = eval();
 
     Datum result;
     result.type = DT_CONST;
@@ -143,8 +144,8 @@ Datum Machine::mult()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::div()
 {
-    Datum d1 = eval();
-    Datum d2 = eval();
+    const auto d1 = eval();
+    const auto d2 = eval();
 
     Datum result;
     result.type = DT_CONST;
@@ -156,7 +157,7 @@ Datum Machine::div()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::hibyte()
 {
-    Datum arg = eval();
+    const auto arg = eval();
 
     Datum result;
     result.type = DT_CONST;
@@ -168,7 +169,7 @@ Datum Machine::hibyte()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::lobyte()
 {
-    Datum arg = eval();
+    const auto arg = eval();
 
     Datum result;
     result.type = DT_CONST;
@@ -180,22 +181,22 @@ Datum Machine::lobyte()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::fixup()
 {
-    Datum ctxt = eval();
-    Datum loc = eval();
-    Datum target = eval();
+    const auto ctxt = eval();
+    const auto loc = eval();
+    const auto target = eval();
 
     if (ctxt.value == IM8){
         // relative branch fix-up
-        int16_t diff = target.value - (loc.value + 1);
+        const int16_t diff = target.value - (loc.value + 1);
 
-        if (diff < (int8_t)0x80){
+        if (diff < int8_t(0x80)){
             // backward branch
             throw Exception("backward branch out of range.");
         } else if (diff > 0x7F){
             // forward branch
             throw Exception("forward branch out of range.");
         }
-        m_code->putByteAt(loc.value, (byte)diff);
+        m_code->putByteAt(loc.value, byte(diff));
     } else{
         // forward reference
         m_code->putWordAt(loc.value, target.value);
@@ -207,14 +208,14 @@ Datum Machine::fixup()
 /////////////////////////////////////////////////////////////////////////////
 Datum Machine::memstore()
 {
-    Datum ctxt = eval();
-    Datum loc = eval();
-    Datum value = eval();
+    const auto ctxt = eval();
+    const auto loc = eval();
+    const auto value = eval();
 
     if (ctxt.value == IM16){
         m_code->putWordAt(loc.value, value.value);
     } else{
-        m_code->putByteAt(loc.value, (byte)value.value);
+        m_code->putByteAt(loc.value, byte(value.value));
     }
 
     return value;

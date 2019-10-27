@@ -1,9 +1,9 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "Palette.h"
-#include "Exception.h"
+#include "exception.h"
 
-#define HEIGHT	(16 * 16)
-#define WIDTH		(16 * 16)
+constexpr auto HEIGHT = (16 * 16);
+constexpr auto WIDTH = (16 * 16);
 
 void SavePalette()
 {
@@ -26,7 +26,7 @@ void SavePalette()
     bmih.biClrUsed = 256;
 
     FILE* fp;
-    if ((fp = fopen("palette.bmp", "wb")) == NULL){
+    if ((fp = fopen("palette.bmp", "wb")) == nullptr){
         throw Exception("Cannot write file \"palette.bmp\".");
     }
 
@@ -42,12 +42,12 @@ void SavePalette()
 
     // write pixel data
     uint8_t color = 0, rowColor = 0;
-    for (int i = 0; i < HEIGHT; ++i){
+    for (auto i = 0; i < HEIGHT; ++i){
         if (i > 0 && i % 16 == 0)
             rowColor = color + 1;
 
         color = rowColor;
-        for (int j = 0; j < WIDTH; ++j){
+        for (auto j = 0; j < WIDTH; ++j){
             if (j > 0 && j % 16 == 0)
                 color++;
 

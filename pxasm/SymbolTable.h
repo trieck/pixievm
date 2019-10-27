@@ -13,7 +13,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol type
-enum SymbolType
+enum class SymbolType
 {
     ST_UNDEF = 0,
     // undefined
@@ -36,14 +36,14 @@ class Symbol;
 typedef vector<Symbol*> SymbolVec;
 
 class SymbolTable;
-typedef auto_ptr<SymbolTable> SymbolTablePtr;
+typedef unique_ptr<SymbolTable> SymbolTablePtr;
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol class
 class Symbol
 {
 private:
-    Symbol() : type(ST_UNDEF), sub(0), lineno(0), instr(0), args(0)
+    Symbol() : type(SymbolType::ST_UNDEF), sub(0), lineno(0), instr(nullptr), args(0)
     {
     }
 
@@ -55,7 +55,7 @@ public:
     union
     {
         const Instr* instr; // instruction
-        uint32_t opcode; // operator code
+        uint32_t opcode{}; // operator code
         word val16; // word value
         byte val8; // byte value
     };
@@ -95,7 +95,7 @@ private:
     void iinsert(const string& s, uint32_t t, const Instr* i);
     void rinsert(const string& s, uint32_t t, byte r);
     void idinsert(const string& s, uint32_t id);
-    void freeSym(LPSYMBOL s);
+
     static string opname(uint32_t opcode);
     static SymbolTablePtr instance; // singleton instance
     typedef map<string, LPSYMBOL, stringless> symmap;

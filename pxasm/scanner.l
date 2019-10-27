@@ -68,10 +68,10 @@ here					\$\$
 	}
 	
 	if (d < 0x100) {
-		yylval.sym = table->installw(ST_CONST, IM8, d); 
+		yylval.sym = table->installw(SymbolType::ST_CONST, IM8, d); 
 		return IM8;
 	} else {
-		yylval.sym = table->installw(ST_CONST, IM16, d); 
+		yylval.sym = table->installw(SymbolType::ST_CONST, IM16, d); 
 		return IM16;
 	}
 }
@@ -83,10 +83,10 @@ here					\$\$
 	}
 	
 	if (d < 0x100) {
-		yylval.sym = table->installw(ST_CONST, IM8, d); 
+		yylval.sym = table->installw(SymbolType::ST_CONST, IM8, d); 
 		return IM8;
 	} else {
-		yylval.sym = table->installw(ST_CONST, IM16, d); 
+		yylval.sym = table->installw(SymbolType::ST_CONST, IM16, d); 
 		return IM16;
 	}
 }
@@ -94,11 +94,11 @@ here					\$\$
 	string error;
 	string reg = trim(string(yytext, strchr(yytext, '+') - yytext));
 	LPSYMBOL sym;
-	if ((sym = table->lookup(reg)) == NULL) {
+	if ((sym = table->lookup(reg)) == nullptr) {
 		yyerror("unexpected token");
 		return 0;
 	}
-	if (sym->type != ST_REG) {
+	if (sym->type != SymbolType::ST_REG) {
 		yyerror("unsupported symbol");
 		return 0;
 	}
@@ -119,12 +119,12 @@ here					\$\$
 	}
 	
 	switch (sym->type) {
-	case ST_REG:
-	case ST_INSTRUCTION:
-	case ST_ID:
+	case SymbolType::ST_REG:
+	case SymbolType::ST_INSTRUCTION:
+	case SymbolType::ST_ID:
 		yylval.sym = sym;
 		return sym->sub;
-	case ST_UNDEF:
+	case SymbolType::ST_UNDEF:
 		yylval.sym = sym;
 		return UNDEF;
 	default:
@@ -166,7 +166,7 @@ here					\$\$
 {mult}	{ return MULT; }
 {div}		{ return DIV; }
 {here}	{ 
-	yylval.sym = table->installw(ST_CONST, IM16, code->location()); 
+	yylval.sym = table->installw(SymbolType::ST_CONST, IM16, code->location()); 
 	return IM16; 
 }
 .				{ return yytext[0]; }

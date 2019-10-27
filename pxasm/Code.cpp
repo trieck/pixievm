@@ -2,12 +2,12 @@
 //
 // CODE.CPP : Code generation
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
-#include "Code.h"
-#include "Program.h"
+#include "code.h"
+#include "program.h"
 #include "Parser.hpp"
 #include "Exception.h"
 
@@ -80,8 +80,8 @@ void Code::initialize()
 /////////////////////////////////////////////////////////////////////////////
 void Code::putString(const string& str)
 {
-    for (uint32_t i = 0; i < str.length(); i++){
-        putByte(str[i]);
+    for (auto c : str){
+        putByte(c);
     }
 }
 
@@ -97,7 +97,7 @@ void Code::putList(LPSYMBOL s, uint32_t ctxt)
 {
     SymbolVec::const_iterator it = s->vsyms.begin();
 
-    for (; it != s->vsyms.end(); it++){
+    for (; it != s->vsyms.end(); ++it){
         putSym(*it, ctxt);
     }
 }
@@ -106,17 +106,17 @@ void Code::putList(LPSYMBOL s, uint32_t ctxt)
 void Code::putSym(LPSYMBOL s, uint32_t ctxt)
 {
     switch (s->type){
-    case ST_OP: // operator
+    case SymbolType::ST_OP: // operator
         putOp(s, ctxt);
         break;
-    case ST_LIST: // list
+    case SymbolType::ST_LIST: // list
         putList(s, ctxt);
         break;
-    case ST_UNDEF: // forward reference
+    case SymbolType::ST_UNDEF: // forward reference
         putFixup(s, ctxt);
         break;
-    case ST_ID:
-    case ST_CONST:
+    case SymbolType::ST_ID:
+    case SymbolType::ST_CONST:
         if (ctxt == IM8){
             putByte(s->val8);
         } else{
@@ -194,7 +194,7 @@ void Code::putWordAt(word location, word w)
 /////////////////////////////////////////////////////////////////////////////
 void Code::putByteAt(word location, byte b)
 {
-    word offset = location - m_origin;
+    const word offset = location - m_origin;
 
     ASSERT(m_memory[offset] == 0);
 
@@ -209,7 +209,7 @@ void Code::code0(uint32_t mode, LPSYMBOL s1)
         throw Exception("unexpected addressing mode %d.", mode);
     }
 
-    Code0Ptr pfnc = (*it).second;
+    const Code0Ptr pfnc = (*it).second;
 
     (this->*(pfnc))(s1->instr);
 }
@@ -235,7 +235,7 @@ void Code::code2(uint32_t mode, LPSYMBOL s1, LPSYMBOL s2, LPSYMBOL s3)
         throw Exception("unexpected addressing mode %d.", mode);
     }
 
-    Code2Ptr pfnc = (*it).second;
+    const Code2Ptr pfnc = (*it).second;
 
     (this->*(pfnc))(s1->instr, s2, s3);
 }
@@ -482,12 +482,12 @@ void Code::pushsym(LPSYMBOL s)
     SymbolVec::const_iterator it;
 
     switch (s->type){
-    case ST_LIST: // list of arguments
+    case SymbolType::ST_LIST: // list of arguments
         for (it = s->vsyms.begin(); it != s->vsyms.end(); it++){
             pushsym(*it);
         }
         break;
-    case ST_OP: // operator
+    case SymbolType::ST_OP: // operator
         program.pushop(s->opcode);
         pushsym(s->args);
         break;

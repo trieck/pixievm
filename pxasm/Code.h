@@ -12,7 +12,7 @@
 #include "Machine.h"
 
 class Code;
-typedef auto_ptr<Code> CodePtr;
+typedef unique_ptr<Code> CodePtr;
 
 /////////////////////////////////////////////////////////////////////////////
 class Code
@@ -37,7 +37,7 @@ public:
 
     void putSym(LPSYMBOL s, uint32_t ctxt);
     void putSyms(LPSYMBOL s1, LPSYMBOL s2, uint32_t ctxt);
-    void putString(const string& s);
+    void putString(const string& str);
     void putWord(word w);
     void putByte(byte b);
     void putWordAt(word location, word w);
@@ -134,7 +134,7 @@ inline bool Code::isGenerating() const // has code generation begun?
 /////////////////////////////////////////////////////////////////////////////
 inline word Code::location() const
 {
-    return m_origin + (word)(m_pmem - m_memory);
+    return m_origin + word(m_pmem - m_memory);
 }
 
 #endif // __CODE_H__

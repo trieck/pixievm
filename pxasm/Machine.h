@@ -2,19 +2,19 @@
 //
 // MACHINE.H : simple runtime machine
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __MACHINE_H__
 #define __MACHINE_H__
 
-#include "Program.h"
+#include "program.h"
 
 // forward references
 class Code;
 class Machine;
 
-typedef auto_ptr<Machine> MachinePtr;
+typedef unique_ptr<Machine> MachinePtr;
 
 /////////////////////////////////////////////////////////////////////////////
 class Machine

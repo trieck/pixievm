@@ -62,21 +62,21 @@ stmt:	def8
 		;
 	
 def8:	UNDEF '=' IM8 {
-			$1->type = ST_ID;
+			$1->type = SymbolType::ST_ID;
 			$1->sub = IM8;
 			$1->val8 = $3->val8;
 		}
 		;
 	
 def16:	UNDEF '=' IM16 {
-			$1->type = ST_ID;
+			$1->type = SymbolType::ST_ID;
 			$1->sub = IM16;
 			$1->val16 = $3->val16;
 		}
 		;
 	
 deflabel:	UNDEF ':'	{ 
-			$1->type = ST_ID;
+			$1->type = SymbolType::ST_ID;
 			$1->sub = IM16;
 			$1->val16 = code->location();
 		}
