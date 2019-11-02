@@ -46,7 +46,7 @@ private:
     Datum fixup();
     Datum memstore();
 
-    typedef map<uint32_t, Machine::Instruction> InstrMap;
+    typedef map<uint32_t, Instruction> InstrMap;
 
     static MachinePtr instance; // singleton instance
     InstrMap m_instr; // instruction map

@@ -42,7 +42,7 @@ public:
     }
 
     void Render(CPaintDC& dc);
-    void SetPixel(uint16_t x, uint16_t y, uint8_t color);
+    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
 
     enum { CX_BORDER = 20 };
 

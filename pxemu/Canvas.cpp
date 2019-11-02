@@ -2,7 +2,7 @@
 #include "Canvas.h"
 
 /////////////////////////////////////////////////////////////////////////////
-CanvasPtr Canvas::instance(Canvas::getInstance());
+CanvasPtr Canvas::instance(getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
 Canvas::Canvas() : m_hWnd(NULL)
@@ -17,7 +17,7 @@ Canvas::~Canvas()
 /////////////////////////////////////////////////////////////////////////////
 Canvas* Canvas::getInstance()
 {
-    if (instance.get() == NULL){
+    if (instance.get() == nullptr){
         instance = CanvasPtr(new Canvas());
     }
     return instance.get();
@@ -30,7 +30,7 @@ void Canvas::Invalidate(CRect& rc)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Canvas::SetPixel(uint16_t x, uint16_t y, uint8_t color)
+void Canvas::SetPixel(uint16_t x, uint16_t y, uint8_t color) const
 {
     m_bitmap.SetPixel(x, y, color);
 }

@@ -2,7 +2,7 @@
 //
 // RASTERHANDLER.H : raster handling
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __RASTER_HANDLER_H__
@@ -22,7 +22,7 @@ public:
     ~RasterHandler();
 
     // Interface
-    virtual void handle(); // handler
+    void handle() override; // handler
 
     // Implementation
 private:

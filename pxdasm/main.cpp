@@ -2,12 +2,12 @@
 //
 // MAIN.CPP : Application entry point
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "Disassembler.h"
-#include "Exception.h"
+#include "exception.h"
 
 ANON_BEGIN
 void usage()
@@ -19,7 +19,7 @@ void usage()
 ANON_END
 
 /////////////////////////////////////////////////////////////////////////////
-int main(int argc, char* argv[])
+int main(int argc, const char** argv)
 {
     if (argc < 2)
         usage();

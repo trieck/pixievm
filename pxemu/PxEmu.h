@@ -8,7 +8,7 @@ class PxEmulator
     // Construction / Destruction
 public:
     PxEmulator();
-    ~PxEmulator();
+    ~PxEmulator() = default;
 
     // Interface
     void init();
@@ -16,7 +16,7 @@ public:
 
     // Implementation
 private:
-    void loadROM(const char* filename, word base, word size);
-    void loadROM(const char* filename);
+    void loadROM(const char* filename, word base, word size) const;
+    void loadROM(const char* filename) const;
     Memory* memory; // pointer to memory
 };

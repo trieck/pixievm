@@ -32,7 +32,7 @@ int KeyboardMatrix::translate(WPARAM virtkey, LPARAM keydata)
 {
     int sc = (keydata & 0x00FF0000) >> 16;
 
-    int result = -1;
+    auto result = -1;
     switch (virtkey){
     case VK_F1: return MATRIX(0, 7);
     case VK_F2: return MATRIX(0, 7) | 0x80;
@@ -127,6 +127,8 @@ int KeyboardMatrix::translate(WPARAM virtkey, LPARAM keydata)
     case 'N': result = MATRIX(6, 3);
         break;
     case 'M': result = MATRIX(6, 2);
+        break;
+    default:
         break;
     };
 

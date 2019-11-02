@@ -1,13 +1,6 @@
-#include "stdafx.h"
-#include <atlframe.h>
-#include <atlctrls.h>
-#include <atldlgs.h>
-#include <atlctrlw.h>
-#include "pxemu.h"
-#include "Exception.h"
-#include "resource.h"
-#include "pxemuView.h"
-#include "aboutdlg.h"
+#include "StdAfx.h"
+#include "PxEmu.h"
+#include "exception.h"
 #include "MainFrm.h"
 #include "CPU.H"
 #include "Alarm.h"
@@ -24,14 +17,9 @@ PxEmulator::PxEmulator()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-PxEmulator::~PxEmulator()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void PxEmulator::init()
 {
-    HRESULT hr = _Module.Init(NULL, ModuleHelper::GetModuleInstance());
+    auto hr = _Module.Init(nullptr, ModuleHelper::GetModuleInstance());
     if (FAILED(hr))
         throw Exception("could not initialize module.");
 
@@ -40,7 +28,7 @@ void PxEmulator::init()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void PxEmulator::loadROM(const char* filename, word base, word size)
+void PxEmulator::loadROM(const char* filename, word base, word size) const
 {
     ifstream ifs;
     ifs.open(filename, ifstream::in | ifstream::binary);
@@ -56,12 +44,12 @@ void PxEmulator::loadROM(const char* filename, word base, word size)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void PxEmulator::loadROM(const char* filename)
+void PxEmulator::loadROM(const char* filename) const
 {
     // load rom with contained load address
 
-    struct _stat buf;
-    int n = stat(filename, (struct stat*)&buf);
+    struct _stat buf{};
+    const auto n = stat(filename, reinterpret_cast<struct stat*>(&buf));
     if (n){
         throw Exception("unable to stat ROM image \"%s\".", filename);
     }
@@ -73,7 +61,7 @@ void PxEmulator::loadROM(const char* filename)
     }
 
     word start;
-    ifs.read((char*)&start, sizeof(word));
+    ifs.read(reinterpret_cast<char*>(&start), sizeof(word));
     if (ifs.bad()){
         throw Exception("unable to read from ROM image \"%s\".", filename);
     }
@@ -90,7 +78,7 @@ int PxEmulator::run()
     _Module.AddMessageLoop(&theLoop);
 
     CMainFrame wndMain;
-    if (wndMain.CreateEx() == NULL)
+    if (wndMain.CreateEx() == nullptr)
         throw Exception("Main window creation failed!");
 
     STARTUPINFO info;

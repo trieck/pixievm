@@ -4,7 +4,15 @@
 
 #pragma once
 
+#include <atlframe.h>
+#include <atlctrls.h>
+#include <atlctrlw.h>
+
+#include "resource.h"
+
 #include "Canvas.h"
+#include "PxEmuView.h"
+#include "AboutDlg.h"
 
 typedef CWinTraits<WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
                    WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX, WS_EX_APPWINDOW |
@@ -134,7 +142,7 @@ BEGIN_MSG_MAP(CMainFrame)
         static BOOL bVisible = TRUE; // initially visible
         bVisible = !bVisible;
         CReBarCtrl rebar = m_hWndToolBar;
-        int nBandIndex = rebar.IdToIndex(ATL_IDW_BAND_FIRST + 1); // toolbar is 2nd added band
+        const auto nBandIndex = rebar.IdToIndex(ATL_IDW_BAND_FIRST + 1); // toolbar is 2nd added band
         rebar.ShowBand(nBandIndex, bVisible);
         UISetCheck(ID_VIEW_TOOLBAR, bVisible);
         UpdateLayout();
@@ -144,7 +152,7 @@ BEGIN_MSG_MAP(CMainFrame)
 
     LRESULT OnViewStatusBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
     {
-        BOOL bVisible = !::IsWindowVisible(m_hWndStatusBar);
+        const BOOL bVisible = !::IsWindowVisible(m_hWndStatusBar);
         ::ShowWindow(m_hWndStatusBar, bVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
         UISetCheck(ID_VIEW_STATUS_BAR, bVisible);
         UpdateLayout();
@@ -182,7 +190,7 @@ BEGIN_MSG_MAP(CMainFrame)
         DWORD dwExStyle = GetExStyle() | WS_EX_CLIENTEDGE;
         AdjustWindowRectEx(&rc, style, TRUE, dwExStyle);
 
-        SetWindowPos(NULL, 0, 0, rc.Width(), rc.Height(),
+        SetWindowPos(nullptr, 0, 0, rc.Width(), rc.Height(),
                      SWP_NOMOVE | SWP_FRAMECHANGED | SWP_NOZORDER);
     }
 };

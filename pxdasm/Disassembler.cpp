@@ -2,15 +2,15 @@
 //
 // DISASSEMBLER.CPP : PixieVM Disassembler
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "Disassembler.h"
-#include "Exception.h"
+#include "exception.h"
 
 /////////////////////////////////////////////////////////////////////////////
-Disassembler::Disassembler() : m_fp(NULL)
+Disassembler::Disassembler() : m_fp(nullptr)
 {
 }
 
@@ -21,11 +21,11 @@ Disassembler::~Disassembler()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Disassembler::close()
+void Disassembler::close() noexcept
 {
-    if (m_fp != NULL){
+    if (m_fp != nullptr){
         fclose(m_fp);
-        m_fp = NULL;
+        m_fp = nullptr;
     }
 }
 
@@ -34,7 +34,7 @@ void Disassembler::open(const char* filename)
 {
     close();
 
-    if ((m_fp = fopen(filename, "rb")) == NULL){
+    if ((m_fp = fopen(filename, "rb")) == nullptr){
         throw Exception("can't open file \"%s\": %s.", filename,
                         strerror(errno));
     }

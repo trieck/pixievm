@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <atlwinx.h>
+
 #include "Canvas.h"
 #include "KeyboardHandler.h"
 

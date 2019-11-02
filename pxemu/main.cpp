@@ -6,7 +6,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 {
     PxEmulator emulator;
 
-    int ret = 0;
+    auto ret = 0;
 
     try{
         emulator.init();

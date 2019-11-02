@@ -2,7 +2,7 @@
 //
 // ASSEMBLER.H : Assembler interface
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __ASSEMBLER_H__

@@ -9,9 +9,8 @@ public:
     ~Bitmap();
 
     // Interface
-    static Bitmap* getInstance();
     void Render(CPaintDC& dc);
-    void SetPixel(uint16_t x, uint16_t y, uint8_t color);
+    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
 
     // Implementation
 private:

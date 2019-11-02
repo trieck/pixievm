@@ -257,7 +257,7 @@ LPSYMBOL SymbolTable::plus(uint32_t sub, LPSYMBOL args)
     ASSERT(args->vsyms[0]->type == SymbolType::ST_CONST || args->vsyms[0]->type == SymbolType::ST_ID);
     ASSERT(args->vsyms[1]->type == SymbolType::ST_CONST || args->vsyms[1]->type == SymbolType::ST_ID);
 
-    word value = args->vsyms[0]->val16 + args->vsyms[1]->val16;
+    const word value = args->vsyms[0]->val16 + args->vsyms[1]->val16;
 
     return installw(SymbolType::ST_CONST, sub, value);
 }
@@ -270,7 +270,7 @@ LPSYMBOL SymbolTable::minus(uint32_t sub, LPSYMBOL args)
     ASSERT(args->vsyms[0]->type == SymbolType::ST_CONST || args->vsyms[0]->type == SymbolType::ST_ID);
     ASSERT(args->vsyms[1]->type == SymbolType::ST_CONST || args->vsyms[1]->type == SymbolType::ST_ID);
 
-    word value = args->vsyms[0]->val16 - args->vsyms[1]->val16;
+    const word value = args->vsyms[0]->val16 - args->vsyms[1]->val16;
 
     return installw(SymbolType::ST_CONST, sub, value);
 }

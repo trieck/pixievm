@@ -2,7 +2,7 @@
 //
 // UIEVENTHANDLER.CPP : UI event handling
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "stdafx.h"
@@ -22,19 +22,19 @@ UIEventHandler::~UIEventHandler()
 /////////////////////////////////////////////////////////////////////////////
 void UIEventHandler::handle()
 {
-    CMessageLoop* pLoop = _Module.GetMessageLoop();
+    auto pLoop = _Module.GetMessageLoop();
 
     MSG msg;
-    while (PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)){
-        if (!GetMessage(&msg, NULL, 0, 0)){
-            CPU::getInstance()->setShutdown(true, (int)msg.wParam);
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE)){
+        if (!GetMessage(&msg, nullptr, 0, 0)){
+            CPU::getInstance()->setShutdown(true, static_cast<int>(msg.wParam));
             return;
         }
 
         ::TranslateMessage(&msg);
         ::DispatchMessage(&msg);
 
-        if (pLoop->IsIdleMessage(&msg)){
+        if (WTL::CMessageLoop::IsIdleMessage(&msg)){
             pLoop->OnIdle(0);
         }
     }

@@ -2,7 +2,7 @@
 //
 // DISASSEMBLER.H : PixieVM Disassembler
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __DISASSEMBLER_H__
@@ -14,16 +14,16 @@
 class Disassembler : public PxDisassembler
 {
 public:
-    Disassembler(void);
-    virtual ~Disassembler(void);
+    Disassembler();
+    virtual ~Disassembler();
 
     void disassemble(const char* filename);
 
 protected:
-    byte fetch();
+    byte fetch() override;
 private:
     void open(const char* filename);
-    void close();
+    void close() noexcept;
     FILE* m_fp;
 };
 
