@@ -674,7 +674,6 @@
     <ClInclude Include="Monitor.h" />
     <ClInclude Include="Parser.hpp" />
     <ClInclude Include="QuitCmd.h" />
-    <ClInclude Include="refobj.h" />
     <ClInclude Include="RegistersCmd.h" />
     <ClInclude Include="SaveCmd.h" />
     <ClInclude Include="StepCmd.h" />

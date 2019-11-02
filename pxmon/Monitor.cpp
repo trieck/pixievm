@@ -2,13 +2,13 @@
 //
 // MONITOR.CPP : Pixie Virtual Machine Monitor
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Monitor.h"
+#include "common.h"
+#include "monitor.h"
 #include "LineReader.h"
-#include "Util.h"
+#include "util.h"
 #include "HelpCmd.h"
 #include "AssemCmd.h"
 #include "DisassemCmd.h"
@@ -19,43 +19,34 @@
 #include "DumpCmd.h"
 #include "StepCmd.h"
 #include "StepUntilCmd.h"
-#include "Interrupt.h"
-#include "CPU.h"
-#include "Options.h"
-#include <signal.h>
+#include "CPU.H"
+#include <csignal>
 
 MonitorPtr Monitor::instance(Monitor::getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
 Monitor::Monitor() : m_exit_mon(false), m_show_notice(true)
 {
-    m_commands["?"] = new HelpCmd(this);
-    m_commands["help"] = m_commands["?"]->CopyRef();
-    m_commands["a"] = new AssemCmd(this);
-    m_commands["d"] = new DisassemCmd(this);
-    m_commands["l"] = new LoadCmd(this);
-    m_commands["m"] = new DumpCmd(this);
-    m_commands["q"] = new QuitCmd(this);
-    m_commands["r"] = new RegistersCmd(this);
-    m_commands["s"] = new SaveCmd(this);
-    m_commands["t"] = new StepCmd(this);
-    m_commands["u"] = new StepUntilCmd(this);
+    m_commands["?"] = std::make_shared<HelpCmd>(this);
+    m_commands["help"] = m_commands["?"];
+    m_commands["a"] = std::make_shared<AssemCmd>(this);
+    m_commands["d"] = std::make_shared<DisassemCmd>(this);
+    m_commands["l"] = std::make_shared<LoadCmd>(this);
+    m_commands["m"] = std::make_shared<DumpCmd>(this);
+    m_commands["q"] = std::make_shared<QuitCmd>(this);
+    m_commands["r"] = std::make_shared<RegistersCmd>(this);
+    m_commands["s"] = std::make_shared<SaveCmd>(this);
+    m_commands["t"] = std::make_shared<StepCmd>(this);
+    m_commands["u"] = std::make_shared<StepUntilCmd>(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-Monitor::~Monitor()
-{
-    CommandMap::const_iterator it = m_commands.begin();
-    for (; it != m_commands.end(); it++){
-        LPCOMMAND cmd = (*it).second;
-        cmd->DecRef();
-    }
-}
+Monitor::~Monitor() = default;
 
 /////////////////////////////////////////////////////////////////////////////
 Monitor* Monitor::getInstance()
 {
-    if (instance.get() == NULL){
+    if (instance.get() == nullptr){
         instance = MonitorPtr(new Monitor);
     }
     return instance.get();
@@ -64,10 +55,11 @@ Monitor* Monitor::getInstance()
 /////////////////////////////////////////////////////////////////////////////
 bool Monitor::assemble(word address, const string& str)
 {
-    bool result = false;
+    auto result = false;
 
-    AssemCmd* assembler = static_cast<AssemCmd*>(m_commands["a"]);
-    if (assembler != NULL){
+    const auto command = m_commands.at("a");
+    if (command != nullptr){
+        auto* assembler = dynamic_cast<AssemCmd *>(command.get());
         result = assembler->assemble(address, str);
     }
 
@@ -75,13 +67,13 @@ bool Monitor::assemble(word address, const string& str)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Monitor::disassemble(word address)
+void Monitor::disassemble(const word address)
 {
     // this is a single line convenience method used by the stepper
-
-    DisassemCmd* disassemble = static_cast<DisassemCmd*>(m_commands["d"]);
-    if (disassemble != NULL){
-        disassemble->disassemble(address);
+    const auto command = m_commands.at("d");
+    if (command != nullptr) {
+      auto *disassembler = dynamic_cast<DisassemCmd *>(command.get());
+      disassembler->disassemble(address);
     }
 }
 
@@ -122,7 +114,7 @@ void Monitor::notice() const
 void Monitor::dispatch(const string& line)
 {
     stringvec v = tokenize(line);
-    if (v.size() == 0){
+    if (v.empty()){
         cerr << '?' << endl;
     } else{
         CommandMap::const_iterator it = m_commands.find(v[0]);
@@ -130,7 +122,7 @@ void Monitor::dispatch(const string& line)
             cerr << '?' << endl;
         } else{
             v.erase(v.begin());
-            LPCOMMAND command = (*it).second;
+            auto command = (*it).second;
             command->exec(v);
         }
     }
@@ -157,8 +149,8 @@ void Monitor::trap(void* data)
 ////////////////////////////////////////////////////////////////////////////
 void Monitor::sighandler(int signum)
 {
-    Monitor* This = Monitor::getInstance();
-    CPU* cpu = CPU::getInstance();
+    auto* This = Monitor::getInstance();
+    auto* cpu = CPU::getInstance();
 
     switch (signum){
     case SIGBREAK:

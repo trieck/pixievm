@@ -53,11 +53,11 @@ void LoadCmd::exec(const stringvec& v)
     }
 
     Memory* mem = Memory::getInstance();
-    if (!mem->load(ifs, start, buf.st_size - sizeof(word))){
+    if (!mem->load(ifs, start, static_cast<word>(buf.st_size - sizeof(word)))){
         fprintf(stderr, "unable to load file \"%s\".\n",
                 filename.c_str());
     }
 
     printf("file \"%s\" loaded @ $%.4x-$%.4x.\n", filename.c_str(),
-           start, start + (buf.st_size - sizeof(word)) - 1);
+           start, static_cast<word>(start + (buf.st_size - sizeof(word)) - 1));
 }

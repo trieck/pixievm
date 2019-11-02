@@ -128,9 +128,6 @@
     <ClInclude Include="QuitCmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="refobj.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RegistersCmd.h">
       <Filter>Header Files</Filter>
     </ClInclude>

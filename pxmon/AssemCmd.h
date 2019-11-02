@@ -17,7 +17,7 @@ public:
     AssemCmd(Monitor* mon);
     ~AssemCmd();
 
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
     bool assemble(word address, const string& str);
 
 private:
