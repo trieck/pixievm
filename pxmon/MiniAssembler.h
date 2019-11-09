@@ -8,8 +8,6 @@
 #ifndef __MINIASSEMBLER_H__
 #define __MINIASSEMBLER_H__
 
-#include "SymbolTable.h"
-
 /////////////////////////////////////////////////////////////////////////////
 class MiniAssembler
 {
@@ -29,7 +27,6 @@ private:
     void prompt();
 
     bool init; // have we been entered ?
-    SymbolTable* table;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -235,6 +235,8 @@
     <ClInclude Include="options.h" />
     <ClInclude Include="PixieVM.h" />
     <ClInclude Include="PxDisassembler.h" />
+    <ClInclude Include="PxSignal.h" />
+    <ClInclude Include="Singleton.h" />
     <ClInclude Include="trap.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>

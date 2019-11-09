@@ -7,13 +7,13 @@
 #include "RasterHandler.h"
 #include "PixieVM.h"
 #include <sys/stat.h>
+#include "memory.h"
 
 CAppModule _Module;
 
 /////////////////////////////////////////////////////////////////////////////
 PxEmulator::PxEmulator()
 {
-    memory = Memory::getInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,7 @@ void PxEmulator::loadROM(const char* filename, word base, word size) const
         throw Exception("unable to open ROM image \"%s\".", filename);
     }
 
-    if (!memory->load(ifs, base, size)){
+    if (!Memory::instance().load(ifs, base, size)){
         throw Exception("unable to load ROM image \"%s\".", filename);
     }
 
@@ -66,7 +66,7 @@ void PxEmulator::loadROM(const char* filename) const
         throw Exception("unable to read from ROM image \"%s\".", filename);
     }
 
-    if (!memory->load(ifs, start, buf.st_size - sizeof(word))){
+    if (!Memory::instance().load(ifs, start, buf.st_size - sizeof(word))){
         throw Exception("unable to load ROM image \"%s\".", filename);
     }
 }
@@ -89,9 +89,10 @@ int PxEmulator::run()
 
     wndMain.ShowWindow(nCmdShow);
 
-    Alarms::getInstance()->addAlarm<RasterHandler>();
+    Alarms::instance().addAlarm<RasterHandler>();
+    //auto nRet = theLoop.Run();
 
-    int nRet = CPU::getInstance()->run();
+    auto nRet = CPU::instance().run();
 
     _Module.Term();
 

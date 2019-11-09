@@ -8,9 +8,6 @@
 #ifndef __MACHINE_H__
 #define __MACHINE_H__
 
-#include "CPU.h"
-#include "Memory.h"
-
 /////////////////////////////////////////////////////////////////////////////
 class Machine
 {
@@ -27,9 +24,6 @@ public:
 private:
     void loadROM(const char* filename, word base, word size);
     void loadROM(const char* filename);
-
-    Memory* memory; // pointer to memory
-    CPU* cpu; // pointer to CPU
 };
 
 /////////////////////////////////////////////////////////////////////////////

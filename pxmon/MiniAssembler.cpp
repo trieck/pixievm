@@ -8,7 +8,6 @@
 #include "Common.h"
 #include "Memory.h"
 #include "Opcodes.h"
-#include "Modes.h"
 #include "Instructions.h"
 #include "SymbolTable.h"
 #include "MiniAssembler.h"
@@ -32,7 +31,6 @@ word address = 0x0000;
 /////////////////////////////////////////////////////////////////////////////
 MiniAssembler::MiniAssembler() : init(false)
 {
-    table = SymbolTable::getInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,7 +77,7 @@ void MiniAssembler::initialize(word* start)
         init = true;
     } else if (!init){
         // not entered
-        address = CPU::getInstance()->getIP();
+        address = CPU::instance().getIP();
         init = true;
     }
 }
@@ -102,6 +100,6 @@ bool MiniAssembler::tryParse()
 int MiniAssembler::parse()
 {
     int nret = yyparse();
-    table->flushtmp();
+    SymbolTable::instance().flushtmp();
     return nret;
 }

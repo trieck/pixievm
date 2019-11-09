@@ -5,20 +5,21 @@
 // Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Interrupt.h"
-#include "Machine.h"
-#include "Exception.h"
-#include "Opcodes.h"
-#include "Monitor.h"
+#include "common.h"
+#include "interrupt.h"
+#include "machine.h"
+#include "exception.h"
+#include "monitor.h"
 #include "PixieVM.h"
+#include "CPU.H"
+#include "memory.h"
+
 #include <sys/stat.h>
 
 /////////////////////////////////////////////////////////////////////////////
 Machine::Machine()
 {
-    memory = Memory::getInstance();
-    cpu = CPU::getInstance();
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -42,7 +43,7 @@ void Machine::loadROM(const char* filename, word base, word size)
         throw Exception("unable to open ROM image \"%s\".", filename);
     }
 
-    if (!memory->load(ifs, base, size)){
+    if (!Memory::instance().load(ifs, base, size)){
         throw Exception("unable to load ROM image \"%s\".", filename);
     }
 
@@ -72,7 +73,7 @@ void Machine::loadROM(const char* filename)
         throw Exception("unable to read from ROM image \"%s\".", filename);
     }
 
-    if (!memory->load(ifs, start, buf.st_size - sizeof(word))){
+    if (!Memory::instance().load(ifs, start, buf.st_size - sizeof(word))){
         throw Exception("unable to load ROM image \"%s\".", filename);
     }
 }
@@ -88,5 +89,5 @@ void Machine::run()
     g_interrupt.clearPending(IK_TRAP);
 
     // run!
-    cpu->run();
+    CPU::instance().run();
 }

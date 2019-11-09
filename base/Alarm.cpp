@@ -9,32 +9,11 @@
 #include "Alarm.h"
 #include "IOAlarm.h"
 
-AlarmsPtr Alarms::instance(getInstance());
-
 /////////////////////////////////////////////////////////////////////////////
 Alarms::Alarms()
 {
     // built-in alarms
     addAlarm<IOAlarm>();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Alarms::~Alarms()
-{
-    HandlerVec::const_iterator it = alarms.begin();
-    for (; it != alarms.end(); ++it){
-        delete *it;
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Alarms* Alarms::getInstance()
-{
-    if (instance.get() == nullptr){
-        instance = AlarmsPtr(new Alarms);
-    }
-
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////

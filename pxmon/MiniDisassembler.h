@@ -9,7 +9,6 @@
 #define __MINIDISASSEMBLER_H__
 
 #include "PxDisassembler.h"
-#include "memory.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class MiniDisassembler : public PxDisassembler
@@ -28,7 +27,6 @@ private:
     enum { NLINES = 16 };
 
     bool init; // have we been entered ?
-    Memory* mem; // pointer to memory
 };
 
 /////////////////////////////////////////////////////////////////////////////

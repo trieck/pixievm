@@ -11,9 +11,11 @@
 
 /////////////////////////////////////////////////////////////////////////////
 namespace Options {
+
 void options(int argc, char** argv);
 bool isoption(const char* option);
 string value(const char* option);
+
 }
 
 #endif // __OPTIONS_H__

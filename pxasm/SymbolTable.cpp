@@ -2,23 +2,19 @@
 //
 // SYMBOLTABLE.CPP : Symbol table
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
-#include "Modes.h"
-#include "Instructions.h"
 #include "SymbolTable.h"
 #include "PixieVM.h"
 #include "Parser.hpp"
 #include "util.h"
-#include <exception.h>
+#include "exception.h"
 
 #define ISLIST(s) (s->type == SymbolType::ST_LIST)
 
 extern int yylineno;
-
-SymbolTablePtr SymbolTable::instance(SymbolTable::getInstance());
 
 /////////////////////////////////////////////////////////////////////////////
 SymbolTable::SymbolTable()
@@ -112,15 +108,6 @@ SymbolTable::~SymbolTable()
     for (; it != table.end(); ++it){
         delete (*it).second;
     }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-SymbolTable* SymbolTable::getInstance()
-{
-    if (instance.get() == nullptr){
-        instance = SymbolTablePtr(new SymbolTable);
-    }
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////

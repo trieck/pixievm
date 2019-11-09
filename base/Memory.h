@@ -8,29 +8,25 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
-class Memory;
-typedef unique_ptr<Memory> MemoryPtr;
+#include "Singleton.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class Memory
+class Memory : public Singleton<Memory>
 {
     // Construction / Destruction
 private:
     Memory();
+    friend class Singleton<Memory>;
 public:
     ~Memory();
 
     // Interface
-    static Memory* getInstance();
-
     byte fetch(word address);
     void store(word address, byte b);
     bool load(istream& is, word base, int size);
     bool save(ostream& os, word base, int size);
 private:
     enum { MEM_SIZE = 0x10000 };
-
-    static MemoryPtr instance; // singleton instance
     byte* memory;
 };
 

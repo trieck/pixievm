@@ -5,10 +5,10 @@
 // Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Machine.h"
-#include "Exception.h"
-#include "Options.h"
+#include "common.h"
+#include "machine.h"
+#include "exception.h"
+#include "options.h"
 
 ////////////////////////////////////////////////////////////////////////////
 int main(int argc, char* argv[])

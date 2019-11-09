@@ -9,20 +9,14 @@
 #define __CODE_H__
 
 #include "SymbolTable.h"
-#include "Machine.h"
-
-class Code;
-typedef unique_ptr<Code> CodePtr;
+#include "program.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class Code
 {
-private:
-    Code();
 public:
-    ~Code();
-
-    static Code* getInstance();
+    Code();
+    ~Code() = default;
 
     void code0(uint32_t mode, LPSYMBOL s1);
     void code1(uint32_t mode, LPSYMBOL s1, LPSYMBOL s2);
@@ -31,7 +25,7 @@ public:
 
     bool isGenerating() const;
 
-    word getOrigin() const;
+    word origin() const;
     void setOrigin(word origin);
     bool isOriginSet() const;
 
@@ -84,30 +78,29 @@ private:
     void putFixup(LPSYMBOL s, uint32_t ctxt);
     void pushsym(LPSYMBOL s);
 
-    typedef void (Code::*Code0Ptr)(const Instr*);
-    typedef void (Code::*Code1Ptr)(const Instr*, LPSYMBOL);
-    typedef void (Code::*Code2Ptr)(const Instr*, LPSYMBOL, LPSYMBOL);
+    typedef void (Code::* Code0Ptr)(const Instr*);
+    typedef void (Code::* Code1Ptr)(const Instr*, LPSYMBOL);
+    typedef void (Code::* Code2Ptr)(const Instr*, LPSYMBOL, LPSYMBOL);
 
-    typedef map<uint32_t, Code0Ptr> Code0FncMap;
-    typedef map<uint32_t, Code1Ptr> Code1FncMap;
-    typedef map<uint32_t, Code2Ptr> Code2FncMap;
+    typedef unordered_map<uint32_t, Code0Ptr> Code0FncMap;
+    typedef unordered_map<uint32_t, Code1Ptr> Code1FncMap;
+    typedef unordered_map<uint32_t, Code2Ptr> Code2FncMap;
 
-    static CodePtr instance; // singleton instance
+    enum { MEMSIZE = 65536 };       // maximum code size
 
-    enum { MEMSIZE = 65536 }; // maximum code size
-
-    word m_origin; // assembly origin
-    bool m_bOrigin; // origin has been declared
-    byte m_memory[MEMSIZE]; // memory
-    byte* m_pmem; // current memory pointer
-    Program program; // program for runtime machine
-    Code0FncMap m_code0Map; // code0 function map
-    Code1FncMap m_code1Map; // code1 function map
-    Code2FncMap m_code2Map; // code2 function map
+    word m_origin;                  // assembly origin
+    bool m_bOrigin;                 // origin has been declared
+    byte m_memory[MEMSIZE]{};       // memory
+    byte* m_pmem = &m_memory[0];    // current memory pointer
+    Program program;                // program for runtime machine
+    Code0FncMap m_code0Map;         // code0 function map
+    Code1FncMap m_code1Map;         // code1 function map
+    Code2FncMap m_code2Map;         // code2 function map
 };
 
+
 /////////////////////////////////////////////////////////////////////////////
-inline word Code::getOrigin() const
+inline word Code::origin() const
 {
     return m_origin;
 }
@@ -128,13 +121,13 @@ inline bool Code::isOriginSet() const
 /////////////////////////////////////////////////////////////////////////////
 inline bool Code::isGenerating() const // has code generation begun?
 {
-    return ((m_pmem - m_memory) > 0);
+    return ((m_pmem - &m_memory[0]) > 0);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 inline word Code::location() const
 {
-    return m_origin + word(m_pmem - m_memory);
+    return m_origin + word(m_pmem - &m_memory[0]);
 }
 
 #endif // __CODE_H__

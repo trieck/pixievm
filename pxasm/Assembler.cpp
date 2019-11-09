@@ -11,9 +11,10 @@
 #include "code.h"
 #include "util.h"
 
-extern int yyparse(void); // bison parser routine
-extern FILE* yyin; // input file pointer
-
+extern int yyparse(void);   // bison parser routine
+extern FILE* yyin;          // input file pointer
+extern Code code;           // code instance
+//
 /////////////////////////////////////////////////////////////////////////////
 Assembler::Assembler() : m_pOut(nullptr)
 {
@@ -60,15 +61,14 @@ int Assembler::assemble(const char* source, const char* output)
         return nret;
 
     // second pass
-    Code* code = Code::getInstance();
-    code->pass2();
+    code.pass2();
 
     // write code to output file	
     if ((m_pOut = fopen(output, "wb")) == nullptr){
         throw Exception("can't open file \"%s\": %s.", output, strerror(errno));
     }
 
-    code->write(m_pOut);
+    code.write(m_pOut);
 
     close();
 

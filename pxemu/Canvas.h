@@ -2,39 +2,34 @@
 
 #include "Bitmap.h"
 
-class Canvas;
-typedef auto_ptr<Canvas> CanvasPtr;
+constexpr auto WM_CANVAS_SET_PIXEL = WM_USER + 1;
 
 /////////////////////////////////////////////////////////////////////////////
 class Canvas
 {
     // Construction / Destruction
-private:
-    Canvas();
 public:
-    ~Canvas();
+    Canvas();
 
     // Interface
 public:
-    static Canvas* getInstance();
-
     static CSize GetDimensions()
     {
-        return CSize(CX_SIZE, CY_SIZE);
+        return {CX_SIZE, CY_SIZE};
     }
 
     static CRect GetBoundingRect()
     {
         CRect rc;
 
-        CSize sz = GetDimensions();
+        const auto sz = GetDimensions();
         rc.right = sz.cx;
         rc.bottom = sz.cy;
 
         return rc;
     }
 
-    void Invalidate(CRect& rc);
+    void Invalidate(CRect& rc) const;
 
     void SetWnd(HWND hWnd)
     {
@@ -54,7 +49,6 @@ public:
 
     // Implementation
 private:
-    static CanvasPtr instance; // singleton instance
     Bitmap m_bitmap;
     HWND m_hWnd;
 };

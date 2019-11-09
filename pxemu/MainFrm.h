@@ -12,7 +12,7 @@
 
 #include "Canvas.h"
 #include "PxEmuView.h"
-#include "AboutDlg.h"
+#include "aboutdlg.h"
 
 typedef CWinTraits<WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
                    WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX, WS_EX_APPWINDOW |
@@ -72,15 +72,15 @@ BEGIN_MSG_MAP(CMainFrame)
     LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
     {
         // create command bar window
-        HWND hWndCmdBar = m_CmdBar.Create(m_hWnd, rcDefault, NULL, ATL_SIMPLE_CMDBAR_PANE_STYLE);
+        const auto hWndCmdBar = m_CmdBar.Create(m_hWnd, rcDefault, NULL, ATL_SIMPLE_CMDBAR_PANE_STYLE);
         // attach menu
         m_CmdBar.AttachMenu(GetMenu());
         // load command bar images
         m_CmdBar.LoadImages(IDR_MAINFRAME);
         // remove old menu
-        SetMenu(NULL);
+        SetMenu(nullptr);
 
-        HWND hWndToolBar = CreateSimpleToolBarCtrl(m_hWnd, IDR_MAINFRAME, FALSE, ATL_SIMPLE_TOOLBAR_PANE_STYLE);
+        const auto hWndToolBar = CreateSimpleToolBarCtrl(m_hWnd, IDR_MAINFRAME, FALSE, ATL_SIMPLE_TOOLBAR_PANE_STYLE);
 
         CreateSimpleReBar(ATL_SIMPLE_REBAR_NOBORDER_STYLE);
         AddSimpleReBarBand(hWndCmdBar);
@@ -89,9 +89,11 @@ BEGIN_MSG_MAP(CMainFrame)
         CreateSimpleStatusBar(ATL_IDS_IDLEMESSAGE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                               ATL_IDW_STATUS_BAR);
 
+        auto canvRect = Canvas::GetBoundingRect();
+
         m_hWndClient = m_view.Create(m_hWnd,
-                                     Canvas::GetBoundingRect(),
-                                     NULL,
+                                     canvRect,
+                                     nullptr,
                                      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
 
         UIAddToolBar(hWndToolBar);

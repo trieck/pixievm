@@ -10,8 +10,6 @@
 #include "PixieVM.h"
 #include "PixieIO.h"
 
-MemoryPtr Memory::instance(getInstance());
-
 /////////////////////////////////////////////////////////////////////////////
 Memory::Memory()
 {
@@ -23,15 +21,6 @@ Memory::Memory()
 Memory::~Memory()
 {
     delete[] memory;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Memory* Memory::getInstance()
-{
-    if (instance.get() == nullptr){
-        instance = MemoryPtr(new Memory);
-    }
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////

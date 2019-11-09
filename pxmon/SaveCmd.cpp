@@ -55,8 +55,7 @@ void SaveCmd::exec(const stringvec& v)
         return;
     }
 
-    Memory* mem = Memory::getInstance();
-    if (!mem->save(ofs, start, (end - start) + 1)){
+    if (!Memory::instance().save(ofs, start, (end - start) + 1)){
         fprintf(stderr, "unable to save to file \"%s\".\n",
                 filename.c_str());
     }

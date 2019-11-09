@@ -10,11 +10,10 @@
 #include "KeyboardHandler.h"
 
 class CPxemuView : public CWindowImpl<CPxemuView>,
-                   public KeyboardHandler<CPxemuView>
+    public KeyboardHandler<CPxemuView>
 {
     typedef KeyboardHandler<CPxemuView> KeyboardHandlerBase;
-private:
-    Canvas* m_pCanvas;
+
 public:
     DECLARE_WND_CLASS(NULL)
 
@@ -24,11 +23,11 @@ public:
         return FALSE;
     }
 
-BEGIN_MSG_MAP(CPxemuView)
-        MSG_WM_PAINT(OnPaint)
-        MSG_WM_CREATE(OnCreate)
-        MSG_WM_DESTROY(OnDestroy)
-        CHAIN_MSG_MAP(KeyboardHandlerBase)
+    BEGIN_MSG_MAP(CPxemuView)
+    MSG_WM_PAINT(OnPaint)
+    MSG_WM_CREATE(OnCreate)
+    MSG_WM_DESTROY(OnDestroy)
+    CHAIN_MSG_MAP(KeyboardHandlerBase)
     END_MSG_MAP()
 
     // Handler prototypes (uncomment arguments if needed):
@@ -38,8 +37,7 @@ BEGIN_MSG_MAP(CPxemuView)
 
     LRESULT OnCreate(LPCREATESTRUCT cs)
     {
-        m_pCanvas = Canvas::getInstance();
-        m_pCanvas->SetWnd(m_hWnd);
+        m_canvas.SetWnd(m_hWnd);
         return 0;
     }
 
@@ -50,6 +48,9 @@ BEGIN_MSG_MAP(CPxemuView)
     void OnPaint(CDCHandle /*hDC*/)
     {
         CPaintDC dc(*this);
-        m_pCanvas->Render(dc);
+        m_canvas.Render(dc);
     }
+
+private:
+    Canvas m_canvas;
 };

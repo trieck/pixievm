@@ -2,24 +2,23 @@
 //
 // MINIDISASSEMBLER.CPP : Mini Disassembler
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Memory.h"
+#include "common.h"
+#include "memory.h"
 #include "MiniDisassembler.h"
-#include "CPU.h"
+#include "CPU.H"
 
 /////////////////////////////////////////////////////////////////////////////
 MiniDisassembler::MiniDisassembler() : init(false)
 {
-    mem = Memory::getInstance();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 byte MiniDisassembler::fetch()
 {
-    return mem->fetch(ip++);
+    return Memory::instance().fetch(ip++);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -32,7 +31,7 @@ void MiniDisassembler::disassemble(word* start, word* end)
         init = true;
     } else if (!init){
         /* not entered */
-        ip = CPU::getInstance()->getIP();
+        ip = CPU::instance().getIP();
         init = true;
     }
 

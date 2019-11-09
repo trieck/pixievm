@@ -8,7 +8,7 @@
 #ifndef __INTERRUPT_H__
 #define __INTERRUPT_H__
 
-#include "Trap.h"
+#include "trap.h"
 #include "Handler.h"
 
 /////////////////////////////////////////////////////////////////////////////

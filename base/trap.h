@@ -30,6 +30,6 @@ private:
 
 /////////////////////////////////////////////////////////////////////////////
 
-typedef TrapHandler* LPTRAPHANDLER;
+using LPTRAPHANDLER = TrapHandler*;
 
 #endif // __TRAP_H__

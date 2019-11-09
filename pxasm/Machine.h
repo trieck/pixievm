@@ -9,32 +9,21 @@
 #define __MACHINE_H__
 
 #include "program.h"
-
-// forward references
-class Code;
-class Machine;
-
-typedef unique_ptr<Machine> MachinePtr;
+#include "Singleton.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class Machine
+class Machine : public Singleton<Machine>
 {
     // Construction / destruction
-private:
     Machine();
+    friend class Singleton<Machine>;
+
 public:
     ~Machine();
 
     // Interface
-    static Machine* getInstance();
-
     void exec(const Program& program);
     static Instruction lookup(uint32_t opcode);
-
-    // Implementation
-private:
-    Datum eval();
-    Datum evalsym(LPSYMBOL s);
 
     // instructions
     Datum plus();
@@ -46,13 +35,15 @@ private:
     Datum fixup();
     Datum memstore();
 
-    typedef map<uint32_t, Instruction> InstrMap;
+    // Implementation
+private:
+    Datum eval();
+    Datum evalsym(LPSYMBOL s);
 
-    static MachinePtr instance; // singleton instance
-    InstrMap m_instr; // instruction map
-    const Datum* m_pc; // program counter
-    Code* m_code; // code pointer
-    friend class Code;
+    typedef unordered_map<uint32_t, Instruction> InstrMap;
+
+    InstrMap m_instr;   // instruction map
+    const Datum* m_pc;  // program counter
 };
 
 #endif // __MACHINE_H__

@@ -9,37 +9,31 @@
 #define __ALARM_H__
 
 #include "Handler.h"
-
-class Alarms;
-typedef auto_ptr<Alarms> AlarmsPtr;
+#include "Singleton.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class Alarms
+class Alarms : public Singleton<Alarms>
 {
     // Construction / Destruction
-    // Construction / Destruction
-private:
     Alarms();
+
 public:
-    ~Alarms();
+    ~Alarms() = default;
 
-    // Interface
-    static Alarms* getInstance();
-
-    template <class T>
+    template <class T, typename std::enable_if<std::is_base_of<Handler, T>::value>::type* = nullptr>
     void addAlarm()
     {
-        alarms.push_back(new T());
+        alarms.push_back(std::make_unique<T>());
     }
 
     void process();
 
     // Implementation
 private:
-    static AlarmsPtr instance; // singleton instance
-
-    typedef vector<Handler*> HandlerVec;
+    typedef vector<std::unique_ptr<Handler>> HandlerVec;
     HandlerVec alarms;
+
+    friend class Singleton<Alarms>;
 };
 
 /////////////////////////////////////////////////////////////////////////////

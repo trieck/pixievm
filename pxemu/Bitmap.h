@@ -9,7 +9,7 @@ public:
     ~Bitmap();
 
     // Interface
-    void Render(CPaintDC& dc);
+    void Render(CPaintDC& dc) const;
     void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
 
     // Implementation

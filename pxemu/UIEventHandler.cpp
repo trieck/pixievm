@@ -5,18 +5,38 @@
 // Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "UIEventHandler.h"
 #include "CPU.H"
+#include "Canvas.h"
 
+
+ANON_BEGIN
 /////////////////////////////////////////////////////////////////////////////
+class CanvasMessageFilter : public CMessageFilter
+{
+public:
+    virtual ~CanvasMessageFilter() = default;
+
+    BOOL PreTranslateMessage(MSG* pMsg) override
+    {
+        if (pMsg->message == WM_CANVAS_SET_PIXEL) {
+            if (pMsg->hwnd == nullptr){
+                // pMsg->hwnd = hWndTop;
+            }
+
+        }
+
+        return FALSE;
+    }
+};
+
+CanvasMessageFilter canvasFilter;
+ANON_END
+
 UIEventHandler::UIEventHandler()
 {
-}
-
-/////////////////////////////////////////////////////////////////////////////
-UIEventHandler::~UIEventHandler()
-{
+    AddMessageFilter(&canvasFilter);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -27,14 +47,16 @@ void UIEventHandler::handle()
     MSG msg;
     while (PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE)){
         if (!GetMessage(&msg, nullptr, 0, 0)){
-            CPU::getInstance()->setShutdown(true, static_cast<int>(msg.wParam));
+            CPU::instance().setShutdown(true, static_cast<int>(msg.wParam));
             return;
         }
 
-        ::TranslateMessage(&msg);
-        ::DispatchMessage(&msg);
+        if (!PreTranslateMessage(&msg)) {
+            ::TranslateMessage(&msg);
+            ::DispatchMessage(&msg);
+        }
 
-        if (WTL::CMessageLoop::IsIdleMessage(&msg)){
+        if (IsIdleMessage(&msg)){
             pLoop->OnIdle(0);
         }
     }

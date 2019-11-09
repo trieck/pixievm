@@ -2,47 +2,37 @@
 //
 // SYMBOLTABLE.H : Symbol table
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __SYMBOLTABLE_H__
 #define __SYMBOLTABLE_H__
 
-#include "Modes.h"
 #include "Instructions.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol type
 enum class SymbolType
 {
-    ST_UNDEF = 0,
-    // undefined
-    ST_REG,
-    // cpu register
-    ST_INSTRUCTION,
-    // CPU instruction
-    ST_ID,
-    // identifier
-    ST_CONST,
-    // numeric constant
-    ST_STRING,
-    // string literal
-    ST_OP,
-    // operator
-    ST_LIST // list of symbols
+    ST_UNDEF = 0,   // undefined
+    ST_REG,         // cpu register
+    ST_INSTRUCTION, // CPU instruction
+    ST_ID,          // identifier
+    ST_CONST,       // numeric constant
+    ST_STRING,      // string literal
+    ST_OP,          // operator
+    ST_LIST         // list of symbols
 };
 
 class Symbol;
-typedef vector<Symbol*> SymbolVec;
-
-class SymbolTable;
-typedef unique_ptr<SymbolTable> SymbolTablePtr;
+using SymbolVec = vector<Symbol*>;
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol class
 class Symbol
 {
-private:
+    friend class SymbolTable;
+
     Symbol() : type(SymbolType::ST_UNDEF), sub(0), lineno(0), instr(nullptr), args(0)
     {
     }
@@ -55,15 +45,14 @@ public:
     union
     {
         const Instr* instr; // instruction
-        uint32_t opcode{}; // operator code
-        word val16; // word value
-        byte val8; // byte value
+        uint32_t opcode{};  // operator code
+        word val16;         // word value
+        byte val8;          // byte value
     };
 
-    string sval; // string value
-    Symbol* args; // operator arguments
-    SymbolVec vsyms; // list values
-    friend class SymbolTable;
+    string sval;            // string value
+    Symbol* args;           // operator arguments
+    SymbolVec vsyms;        // list values
 };
 
 typedef Symbol* LPSYMBOL;
@@ -71,14 +60,11 @@ typedef Symbol* LPSYMBOL;
 /////////////////////////////////////////////////////////////////////////////
 class SymbolTable
 {
-    // Construction / Destruction
-private:
-    SymbolTable();
 public:
+    SymbolTable();
     ~SymbolTable();
 
     // Interface
-    static SymbolTable* getInstance();
     LPSYMBOL install(const string& s); // undefined
     LPSYMBOL installs(const string& s); // string literal
     LPSYMBOL installw(SymbolType type, uint32_t sub, word value); // numeric
@@ -97,8 +83,7 @@ private:
     void idinsert(const string& s, uint32_t id);
 
     static string opname(uint32_t opcode);
-    static SymbolTablePtr instance; // singleton instance
-    typedef map<string, LPSYMBOL, stringless> symmap;
+    typedef unordered_map<string, LPSYMBOL, std::hash<string>, stringless> symmap;
     symmap table;
 };
 

@@ -2,15 +2,14 @@
 //
 // SYMBOLTABLE.CPP : Symbol table
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "Common.h"
 #include "SymbolTable.h"
 #include "Parser.hpp"
 #include "PixieVM.h"
-
-SymbolTablePtr SymbolTable::instance(SymbolTable::getInstance());
+#include "Instructions.h"
 
 /////////////////////////////////////////////////////////////////////////////
 SymbolTable::SymbolTable()
@@ -98,15 +97,6 @@ SymbolTable::~SymbolTable()
         LPSYMBOL sym = (*it).second;
         delete sym;
     }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-SymbolTable* SymbolTable::getInstance()
-{
-    if (instance.get() == NULL){
-        instance = SymbolTablePtr(new SymbolTable);
-    }
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////

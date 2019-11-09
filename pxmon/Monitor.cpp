@@ -150,7 +150,6 @@ void Monitor::trap(void* data)
 void Monitor::sighandler(int signum)
 {
     auto* This = Monitor::getInstance();
-    auto* cpu = CPU::getInstance();
 
     switch (signum){
     case SIGBREAK:
@@ -159,7 +158,7 @@ void Monitor::sighandler(int signum)
             This->setExit(false); // set back to running to break
             signal(SIGBREAK, &Monitor::sighandler); // re-install
         } else{
-            cpu->setShutdown(true); // shut down CPU
+            CPU::instance().setShutdown(true); // shut down CPU
             This->setExit(true); // exit monitor
         }
     default:

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Memory.h"
-
 /////////////////////////////////////////////////////////////////////////////
 class PxEmulator
 {
@@ -18,5 +16,4 @@ public:
 private:
     void loadROM(const char* filename, word base, word size) const;
     void loadROM(const char* filename) const;
-    Memory* memory; // pointer to memory
 };

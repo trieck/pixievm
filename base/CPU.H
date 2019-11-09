@@ -8,7 +8,7 @@
 #ifndef __CPU_H__
 #define __CPU_H__
 
-#include "Memory.h"
+#include "Singleton.h"
 
 #define NEG_FLAG (0x80)
 #define OVERFLOW_FLAG (0x40)
@@ -17,21 +17,16 @@
 #define ZERO_FLAG (0x02)
 #define CARRY_FLAG (0x01)
 
-class CPU;
-typedef unique_ptr<CPU> CPUPtr;
-
 /////////////////////////////////////////////////////////////////////////////
-class CPU
+class CPU : public Singleton<CPU>
 {
     // Construction / Destruction
 private:
     CPU();
+    friend class Singleton<CPU>;
 
 public:
     ~CPU();
-
-    // Interface
-    static CPU* getInstance();
 
     int run();
     void reset();
@@ -81,9 +76,7 @@ public:
 
     // Implementation
 private:
-    static CPUPtr instance; // singleton instance
     word regs[NREGS]; // registers
-    Memory* memory; // memory
     bool m_shutdown; // shut down flag
     int m_exitCode; // exit code
 };

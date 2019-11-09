@@ -2,13 +2,13 @@
 //
 // CODE.CPP : Code generation
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
+#include "common.h"
 #include "SymbolTable.h"
-#include "Code.h"
-#include "Memory.h"
+#include "code.h"
+#include "memory.h"
 #include "PixieVM.h"
 
 extern word address;
@@ -41,9 +41,6 @@ void A16(const Instr* instr, word a16);
 void IMPLIED(const Instr* instr);
 void I16(const Instr* instr, word i16);
 void I8(const Instr* instr, byte i8);
-
-Memory* memory = Memory::getInstance();
-
 ANON_END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -159,214 +156,268 @@ ANON_BEGIN
 /////////////////////////////////////////////////////////////////////////////
 void RR8(const Instr* instr, byte dest, byte src)
 {
-    memory->store(address++, OPCODE(instr, AM_RR8));
-    memory->store(address++, MAKEREG(dest, src));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RR8));
+    memory.store(address++, MAKEREG(dest, src));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RI8(const Instr* instr, byte r8, byte i8)
 {
-    memory->store(address++, OPCODE(instr, AM_RI8));
-    memory->store(address++, r8);
-    memory->store(address++, i8);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RI8));
+    memory.store(address++, r8);
+    memory.store(address++, i8);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RM8(const Instr* instr, byte r8, byte m16)
 {
-    memory->store(address++, OPCODE(instr, AM_RM8));
-    memory->store(address++, MAKEREG(r8, m16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RM8));
+    memory.store(address++, MAKEREG(r8, m16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RA8(const Instr* instr, byte r8, word a16)
 {
-    memory->store(address++, OPCODE(instr, AM_RA8));
-    memory->store(address++, r8);
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RA8));
+    memory.store(address++, r8);
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RR16(const Instr* instr, byte dest, byte src)
 {
-    memory->store(address++, OPCODE(instr, AM_RR16));
-    memory->store(address++, MAKEREG(dest, src));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RR16));
+    memory.store(address++, MAKEREG(dest, src));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RI16(const Instr* instr, byte r16, word i16)
 {
-    memory->store(address++, OPCODE(instr, AM_RI16));
-    memory->store(address++, r16);
-    memory->store(address++, HIBYTE(i16));
-    memory->store(address++, LOBYTE(i16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RI16));
+    memory.store(address++, r16);
+    memory.store(address++, HIBYTE(i16));
+    memory.store(address++, LOBYTE(i16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RM16(const Instr* instr, byte r16, byte m16)
 {
-    memory->store(address++, OPCODE(instr, AM_RM16));
-    memory->store(address++, MAKEREG(r16, m16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RM16));
+    memory.store(address++, MAKEREG(r16, m16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void RA16(const Instr* instr, byte r16, word a16)
 {
-    memory->store(address++, OPCODE(instr, AM_RA16));
-    memory->store(address++, r16);
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_RA16));
+    memory.store(address++, r16);
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void MR8(const Instr* instr, byte m16, byte r8)
 {
-    memory->store(address++, OPCODE(instr, AM_MR8));
-    memory->store(address++, MAKEREG(m16, r8));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_MR8));
+    memory.store(address++, MAKEREG(m16, r8));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void MR16(const Instr* instr, byte m16, byte r16)
 {
-    memory->store(address++, OPCODE(instr, AM_MR16));
-    memory->store(address++, MAKEREG(m16, r16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_MR16));
+    memory.store(address++, MAKEREG(m16, r16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void M8I8(const Instr* instr, byte m16, byte i8)
 {
-    memory->store(address++, OPCODE(instr, AM_M8I8));
-    memory->store(address++, m16);
-    memory->store(address++, i8);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_M8I8));
+    memory.store(address++, m16);
+    memory.store(address++, i8);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void M16I8(const Instr* instr, byte m16, byte i8)
 {
-    memory->store(address++, OPCODE(instr, AM_M16I8));
-    memory->store(address++, m16);
-    memory->store(address++, i8);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_M16I8));
+    memory.store(address++, m16);
+    memory.store(address++, i8);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void MI16(const Instr* instr, byte m16, word i16)
 {
-    memory->store(address++, OPCODE(instr, AM_MI16));
-    memory->store(address++, m16);
-    memory->store(address++, HIBYTE(i16));
-    memory->store(address++, LOBYTE(i16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_MI16));
+    memory.store(address++, m16);
+    memory.store(address++, HIBYTE(i16));
+    memory.store(address++, LOBYTE(i16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void AR8(const Instr* instr, word a16, byte r8)
 {
-    memory->store(address++, OPCODE(instr, AM_AR8));
-    memory->store(address++, r8);
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_AR8));
+    memory.store(address++, r8);
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void AR16(const Instr* instr, word a16, byte r16)
 {
-    memory->store(address++, OPCODE(instr, AM_AR16));
-    memory->store(address++, r16);
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_AR16));
+    memory.store(address++, r16);
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void A8I8(const Instr* instr, word a16, byte i8)
 {
-    memory->store(address++, OPCODE(instr, AM_A8I8));
-    memory->store(address++, i8);
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_A8I8));
+    memory.store(address++, i8);
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void A16I8(const Instr* instr, word a16, byte i8)
 {
-    memory->store(address++, OPCODE(instr, AM_A16I8));
-    memory->store(address++, i8);
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_A16I8));
+    memory.store(address++, i8);
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void AI16(const Instr* instr, word a16, word i16)
 {
-    memory->store(address++, OPCODE(instr, AM_AI16));
-    memory->store(address++, HIBYTE(i16));
-    memory->store(address++, LOBYTE(i16));
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_AI16));
+    memory.store(address++, HIBYTE(i16));
+    memory.store(address++, LOBYTE(i16));
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void R8(const Instr* instr, byte r8)
 {
-    memory->store(address++, OPCODE(instr, AM_R8));
-    memory->store(address++, r8);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_R8));
+    memory.store(address++, r8);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void R16(const Instr* instr, byte r16)
 {
-    memory->store(address++, OPCODE(instr, AM_R16));
-    memory->store(address++, r16);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_R16));
+    memory.store(address++, r16);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void M8(const Instr* instr, byte m16)
 {
-    memory->store(address++, OPCODE(instr, AM_M8));
-    memory->store(address++, m16);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_M8));
+    memory.store(address++, m16);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void M16(const Instr* instr, byte m16)
 {
-    memory->store(address++, OPCODE(instr, AM_M16));
-    memory->store(address++, m16);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_M16));
+    memory.store(address++, m16);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void A8(const Instr* instr, word a16)
 {
-    memory->store(address++, OPCODE(instr, AM_A8));
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_A8));
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void A16(const Instr* instr, word a16)
 {
-    memory->store(address++, OPCODE(instr, AM_A16));
-    memory->store(address++, HIBYTE(a16));
-    memory->store(address++, LOBYTE(a16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_A16));
+    memory.store(address++, HIBYTE(a16));
+    memory.store(address++, LOBYTE(a16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void IMPLIED(const Instr* instr)
 {
-    memory->store(address++, OPCODE(instr, AM_IMPLIED));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_IMPLIED));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void I16(const Instr* instr, word i16)
 {
-    memory->store(address++, OPCODE(instr, AM_I16));
-    memory->store(address++, HIBYTE(i16));
-    memory->store(address++, LOBYTE(i16));
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_I16));
+    memory.store(address++, HIBYTE(i16));
+    memory.store(address++, LOBYTE(i16));
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void I8(const Instr* instr, byte i8)
 {
-    memory->store(address++, OPCODE(instr, AM_I8));
-    memory->store(address++, i8);
+    auto& memory = Memory::instance();
+
+    memory.store(address++, OPCODE(instr, AM_I8));
+    memory.store(address++, i8);
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ void DumpCmd::exec(const stringvec& v)
     word start, end;
     if (v.size() == 0){
         if (!init){
-            start = CPU::getInstance()->getIP();
+            start = CPU::instance().getIP();
         } else{
             start = ip + 1;
         }
@@ -55,7 +55,7 @@ void DumpCmd::exec(const stringvec& v)
         }
     }
 
-    Memory* mem = Memory::getInstance();
+    auto& mem = Memory::instance();
     ip = start;
 
     word ndiff = (end + 1) - start;
@@ -67,7 +67,7 @@ void DumpCmd::exec(const stringvec& v)
         word j;
         for (j = 0; j < LINESIZE; j++){
             if (j > 0) putchar(' ');
-            byte b = mem->fetch(ip + j);
+            byte b = mem.fetch(ip + j);
             printf("%.2x", b);
             if (ip + j == end) break;
         }
@@ -79,7 +79,7 @@ void DumpCmd::exec(const stringvec& v)
         } while (++j < LINESIZE);
 
         for (j = 0; j < LINESIZE; j++){
-            byte b = mem->fetch(ip + j);
+            byte b = mem.fetch(ip + j);
             if (isprint(b))
                 putchar(b);
             else putchar('.');

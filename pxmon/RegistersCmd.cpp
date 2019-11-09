@@ -22,10 +22,10 @@ RegistersCmd::~RegistersCmd()
 /////////////////////////////////////////////////////////////////////////////
 void RegistersCmd::exec(const stringvec& v)
 {
-    CPU* cpu = CPU::getInstance();
+    auto& cpu = CPU::instance();
 
     char sr[9];
-    word flags = cpu->getFL();
+    word flags = cpu.getFL();
     sr[0] = flags & NEG_FLAG ? '1' : '0';
     sr[1] = flags & OVERFLOW_FLAG ? '1' : '0';
     sr[2] = '0'; /* unused */
@@ -44,6 +44,6 @@ void RegistersCmd::exec(const stringvec& v)
            " SP: $%.4hX"
            " IP: $%.4hX"
            " FL: %s (NV--BIZC)\n",
-           cpu->getA(), cpu->getB(), cpu->getC(), cpu->getD(),
-           cpu->getX(), cpu->getSP(), cpu->getIP(), sr);
+           cpu.getA(), cpu.getB(), cpu.getC(), cpu.getD(),
+           cpu.getX(), cpu.getSP(), cpu.getIP(), sr);
 }

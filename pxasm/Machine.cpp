@@ -13,13 +13,11 @@
 #include "code.h"
 #include "exception.h"
 
-MachinePtr Machine::instance(Machine::getInstance());
+extern Code code;
 
 /////////////////////////////////////////////////////////////////////////////
 Machine::Machine() : m_pc(nullptr)
 {
-    m_code = Code::getInstance();
-
     m_instr[PLUS] = &Machine::plus;
     m_instr[MINUS] = &Machine::minus;
     m_instr[MULT] = &Machine::mult;
@@ -34,21 +32,12 @@ Machine::~Machine()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-Machine* Machine::getInstance()
-{
-    if (instance.get() == nullptr){
-        instance = MachinePtr(new Machine);
-    }
-    return instance.get();
-}
-
-/////////////////////////////////////////////////////////////////////////////
 Instruction Machine::lookup(uint32_t opcode)
 {
-    Machine* machine = Machine::getInstance();
+    auto& machine = Machine::instance();
 
-    InstrMap::const_iterator it = machine->m_instr.find(opcode);
-    if (it == machine->m_instr.end())
+    InstrMap::const_iterator it = machine.m_instr.find(opcode);
+    if (it == machine.m_instr.end())
         return nullptr;
 
     return (*it).second;
@@ -59,7 +48,7 @@ void Machine::exec(const Program& program)
 {
     m_pc = program;
 
-    while (m_pc->type != DT_UNDEF) {
+    while (m_pc->type != DT_UNDEF){
         eval();
     }
 }
@@ -196,10 +185,10 @@ Datum Machine::fixup()
             // forward branch
             throw Exception("forward branch out of range.");
         }
-        m_code->putByteAt(loc.value, byte(diff));
+        code.putByteAt(loc.value, byte(diff));
     } else{
         // forward reference
-        m_code->putWordAt(loc.value, target.value);
+        code.putWordAt(loc.value, target.value);
     }
 
     return target;
@@ -213,9 +202,9 @@ Datum Machine::memstore()
     const auto value = eval();
 
     if (ctxt.value == IM16){
-        m_code->putWordAt(loc.value, value.value);
+        code.putWordAt(loc.value, value.value);
     } else{
-        m_code->putByteAt(loc.value, byte(value.value));
+        code.putByteAt(loc.value, byte(value.value));
     }
 
     return value;

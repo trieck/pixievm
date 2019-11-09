@@ -21,13 +21,12 @@
 
 #include <fstream>
 #include <iostream>
-#include <map>
 #include <memory>
 #include <sstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
-using std::auto_ptr;
 using std::unique_ptr;
 using std::cerr;
 using std::cin;
@@ -35,7 +34,7 @@ using std::cout;
 using std::endl;
 using std::ifstream;
 using std::istream;
-using std::map;
+using std::unordered_map;
 using std::ofstream;
 using std::ostream;
 using std::ostringstream;

@@ -2,14 +2,14 @@
 //
 // SYMBOLTABLE.H : Symbol table
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __SYMBOLTABLE_H__
 #define __SYMBOLTABLE_H__
 
-#include "Modes.h"
 #include "Instructions.h"
+#include "Singleton.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol type
@@ -34,20 +34,18 @@ typedef struct Symbol
     };
 } Symbol, *LPSYMBOL;
 
-class SymbolTable;
-typedef auto_ptr<SymbolTable> SymbolTablePtr;
-
 /////////////////////////////////////////////////////////////////////////////
-class SymbolTable
+class SymbolTable : public Singleton<SymbolTable>
 {
     // Construction / Destruction
 private:
     SymbolTable();
+    friend class Singleton<SymbolTable>;
+
 public:
     ~SymbolTable();
 
     // Interface
-    static SymbolTable* getInstance();
     LPSYMBOL installw(const string& s, int type, int sub, word w);
     LPSYMBOL installb(const string& s, int type, int sub, byte b);
     LPSYMBOL lookup(const string& s) const;
@@ -59,9 +57,7 @@ private:
     void rinsert(const string& s, int t, byte r);
     void idinsert(const string& s, int id);
 
-    static SymbolTablePtr instance; // singleton instance
-
-    typedef map<string, LPSYMBOL, stringless> symmap;
+    typedef unordered_map<string, LPSYMBOL, std::hash<string>, stringless> symmap;
     symmap table;
 };
 

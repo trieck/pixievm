@@ -23,10 +23,10 @@ StepCmd::~StepCmd()
 /////////////////////////////////////////////////////////////////////////////
 void StepCmd::exec(const stringvec& v)
 {
-    CPU* cpu = CPU::getInstance();
+    auto& cpu = CPU::instance();
 
-    word ip = cpu->getIP();
-    if (v.size() > 0){
+    word ip = cpu.getIP();
+    if (!v.empty()){
         int n = sscanf(v[0].c_str(), "%hx", &ip);
         if (n != 1){
             cerr << "? t [address]" << endl;
@@ -34,7 +34,7 @@ void StepCmd::exec(const stringvec& v)
         }
 
         // set instruction pointer
-        cpu->setIP(ip);
+        cpu.setIP(ip);
     }
 
     Monitor* mon = getMonitor();

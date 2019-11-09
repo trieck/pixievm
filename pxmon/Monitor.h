@@ -43,7 +43,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 
 using CommandPtr = std::shared_ptr<Command>;
-using CommandMap = map<string, CommandPtr, stringless>;
+using CommandMap = unordered_map<string, CommandPtr, std::hash<string>, stringless>;
 
 class Monitor;
 using MonitorPtr = unique_ptr<Monitor>;

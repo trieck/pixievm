@@ -7,37 +7,27 @@
 
 #include "common.h"
 #include "code.h"
+
 #include "program.h"
 #include "Parser.hpp"
-#include "Exception.h"
+#include "exception.h"
+#include "Modes.h"
+#include "SymbolTable.h"
+#include "machine.h"
+#include "Singleton.h"
 
-#define MAKEREG(hi, lo)	((hi << 4) | lo)
-#define OPCODE(i, m)	(*(*i)[m])
+#define MAKEREG(hi, lo) ((hi << 4) | lo)
+#define OPCODE(i, m)    (*(*i)[m])
 
-CodePtr Code::instance(Code::getInstance());
 extern SymbolTable* table;
 
 extern int yyerror(const char* s);
 
+
 /////////////////////////////////////////////////////////////////////////////
-Code::Code() : m_origin(0), m_bOrigin(false), m_pmem(m_memory)
+Code::Code() : m_origin(0), m_bOrigin(false)
 {
-    memset(m_memory, 0, sizeof(byte) * MEMSIZE);
     initialize();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Code::~Code()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Code* Code::getInstance()
-{
-    if (instance.get() == NULL){
-        instance = CodePtr(new Code);
-    }
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -95,7 +85,7 @@ void Code::putWord(word w)
 /////////////////////////////////////////////////////////////////////////////
 void Code::putList(LPSYMBOL s, uint32_t ctxt)
 {
-    SymbolVec::const_iterator it = s->vsyms.begin();
+    auto it = s->vsyms.begin();
 
     for (; it != s->vsyms.end(); ++it){
         putSym(*it, ctxt);
@@ -178,7 +168,7 @@ void Code::putFixup(LPSYMBOL s, uint32_t ctxt)
 /////////////////////////////////////////////////////////////////////////////
 void Code::putByte(byte b)
 {
-    if ((m_pmem - m_memory) >= MEMSIZE)
+    if ((m_pmem - &m_memory[0]) >= MEMSIZE)
         throw Exception("memory overflow.");
 
     *m_pmem++ = b;
@@ -452,8 +442,7 @@ void Code::i8(const Instr* instr, LPSYMBOL s)
 void Code::pass2()
 {
     // execute machine program
-    Machine* machine = Machine::getInstance();
-    machine->exec(program);
+    Machine::instance().exec(program);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -495,3 +484,4 @@ void Code::pushsym(LPSYMBOL s)
         program.push(s); // single argument
     };
 }
+

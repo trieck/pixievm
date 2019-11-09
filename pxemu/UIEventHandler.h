@@ -11,18 +11,13 @@
 #include "Handler.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class UIEventHandler : public Handler
+class UIEventHandler : public Handler, CMessageLoop
 {
-    // Construction / Destruction
 public:
     UIEventHandler();
-    ~UIEventHandler();
 
     // Interface
     void handle() override; // handler
-
-    // Implementation
-private:
 };
 
 #endif // __UI_EVENT_HANDLER_H__

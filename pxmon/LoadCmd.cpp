@@ -52,8 +52,7 @@ void LoadCmd::exec(const stringvec& v)
         return;
     }
 
-    Memory* mem = Memory::getInstance();
-    if (!mem->load(ifs, start, static_cast<word>(buf.st_size - sizeof(word)))){
+    if (!Memory::instance().load(ifs, start, static_cast<word>(buf.st_size - sizeof(word)))){
         fprintf(stderr, "unable to load file \"%s\".\n",
                 filename.c_str());
     }

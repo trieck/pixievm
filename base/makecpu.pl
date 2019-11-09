@@ -82,6 +82,7 @@ sub write_instr_h {
 	print FH $autogen;
 	print FH "#ifndef __INSTRUCTIONS_H__\n";
 	print FH "#define __INSTRUCTIONS_H__\n\n";
+	print FH "#include \"Modes.h\"\n\n";
 
 	print FH "typedef const byte *Instr[NMODES];\n\n";
 

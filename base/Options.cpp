@@ -11,44 +11,40 @@
 #include "util.h"
 
 namespace Options {
-const char __nil[1] = {'\0'};
+
+const string NIL;
 
 /////////////////////////////////////////////////////////////////////////////
 class Options
 {
     // Construction / Destruction
 public:
-    Options()
-    {
-    }
-
-    ~Options()
-    {
-    }
+    Options() = default;
+    ~Options() = default;
 
     // Interface
-    void put(const char* name, const char* value = __nil)
+    void put(const std::string& name, const std::string&value = NIL)
     {
         options[name] = value;
     }
 
-    bool isoption(const char* name) const
+    bool isoption(const std::string& name) const
     {
         return options.find(name) != options.end();
     }
 
-    string value(const char* name) const
+    string value(const std::string& name) const
     {
-        auto it = options.begin();
+        const auto it = options.begin();
         if (it == options.end())
-            return __nil;
+            return NIL;
 
         return (*it).second;
     }
 
     // Implementation
 private:
-    typedef map<string, string, stringless> OptionMap;
+    typedef unordered_map<string, string, std::hash<string>, stringless> OptionMap;
     OptionMap options;
 };
 
@@ -58,7 +54,6 @@ Options g_Options;
 void options(int argc, char** argv)
 {
     const char* pval;
-    string value;
 
     for (; argc; --argc, ++argv){
         if (argv[0][0] != '-' && argv[0][1] != '-')
@@ -67,12 +62,12 @@ void options(int argc, char** argv)
         argv[0]++;
         argv[0]++;
 
-        if ((pval = strchr(argv[0], '=')) != NULL){
+        if ((pval = strchr(argv[0], '=')) != nullptr){
             // option assignment
-            string name = string(argv[0], pval - argv[0]);
+            auto name = string(argv[0], pval - argv[0]);
             name = trim(name);
-            value = trim(++pval);
-            g_Options.put(name.c_str(), value.c_str());
+            const auto value = trim(++pval);
+            g_Options.put(name, value);
         } else{
             g_Options.put(argv[0]);
         }
