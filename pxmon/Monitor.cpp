@@ -22,13 +22,10 @@
 #include "CPU.H"
 #include <csignal>
 
-MonitorPtr Monitor::instance(Monitor::getInstance());
-
 /////////////////////////////////////////////////////////////////////////////
 Monitor::Monitor() : m_exit_mon(false), m_show_notice(true)
 {
-    m_commands["?"] = std::make_shared<HelpCmd>(this);
-    m_commands["help"] = m_commands["?"];
+    m_commands["help"] = m_commands["?"] = std::make_shared<HelpCmd>(this);
     m_commands["a"] = std::make_shared<AssemCmd>(this);
     m_commands["d"] = std::make_shared<DisassemCmd>(this);
     m_commands["l"] = std::make_shared<LoadCmd>(this);
@@ -38,18 +35,6 @@ Monitor::Monitor() : m_exit_mon(false), m_show_notice(true)
     m_commands["s"] = std::make_shared<SaveCmd>(this);
     m_commands["t"] = std::make_shared<StepCmd>(this);
     m_commands["u"] = std::make_shared<StepUntilCmd>(this);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Monitor::~Monitor() = default;
-
-/////////////////////////////////////////////////////////////////////////////
-Monitor* Monitor::getInstance()
-{
-    if (instance.get() == nullptr){
-        instance = MonitorPtr(new Monitor);
-    }
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -71,9 +56,9 @@ void Monitor::disassemble(const word address)
 {
     // this is a single line convenience method used by the stepper
     const auto command = m_commands.at("d");
-    if (command != nullptr) {
-      auto *disassembler = dynamic_cast<DisassemCmd *>(command.get());
-      disassembler->disassemble(address);
+    if (command != nullptr){
+        auto* disassembler = dynamic_cast<DisassemCmd *>(command.get());
+        disassembler->disassemble(address);
     }
 }
 
@@ -89,13 +74,13 @@ void Monitor::run()
 void Monitor::runLoop()
 {
     LineReader reader(cin);
-    string line;
 
     for (m_exit_mon = false; !m_exit_mon;){
         prompt();
-        line = reader.readLine();
-        if (line.length())
+        const auto line = reader.readLine();
+        if (line.length()){
             dispatch(line);
+        }
     }
 }
 
@@ -103,8 +88,8 @@ void Monitor::runLoop()
 void Monitor::notice() const
 {
     if (m_show_notice){
-        cout << "PixieVM Monitor version 0.0.1" << endl
-            << "Copyright (c) 2006-2013 Thomas A. Rieck" << endl
+        cout << "PixieVM Monitor version 0.0.2" << endl
+            << "Copyright (c) 2006-2019 Thomas A. Rieck" << endl
             << "use CTRL+BREAK to break execution." << endl
             << "type '?' for help." << endl;
     }
@@ -113,11 +98,11 @@ void Monitor::notice() const
 /////////////////////////////////////////////////////////////////////////////
 void Monitor::dispatch(const string& line)
 {
-    stringvec v = tokenize(line);
+    auto v = tokenize(line);
     if (v.empty()){
         cerr << '?' << endl;
     } else{
-        CommandMap::const_iterator it = m_commands.find(v[0]);
+        const auto it = m_commands.find(v.at(0));
         if (it == m_commands.end()){
             cerr << '?' << endl;
         } else{
@@ -149,19 +134,16 @@ void Monitor::trap(void* data)
 ////////////////////////////////////////////////////////////////////////////
 void Monitor::sighandler(int signum)
 {
-    auto* This = Monitor::getInstance();
+    auto& This = instance();
 
-    switch (signum){
-    case SIGBREAK:
-        if (!This->isRunning()){
+    if (signum == SIGBREAK){
+        if (!This.isRunning()){
             // executing code, not in monitor
-            This->setExit(false); // set back to running to break
+            This.setExit(false); // set back to running to break
             signal(SIGBREAK, &Monitor::sighandler); // re-install
         } else{
             CPU::instance().setShutdown(true); // shut down CPU
-            This->setExit(true); // exit monitor
-        }
-    default:
-        break;
-    };
+            This.setExit(true); // exit monitor
+        };
+    }
 }

@@ -2,7 +2,7 @@
 //
 // MINIASSEMBLER.H : Mini Assembler
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __MINIASSEMBLER_H__
@@ -21,10 +21,10 @@ public:
 
     // Implementation
 private:
-    void initialize(word* start);
-    bool tryParse();
-    int parse();
-    void prompt();
+    void initialize(const word* start);
+    static bool tryParse();
+    static int parse();
+    static void prompt();
 
     bool init; // have we been entered ?
 };

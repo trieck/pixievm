@@ -26,6 +26,8 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <boost/algorithm/string/case_conv.hpp>
+#include <boost/algorithm/string.hpp>
 
 using std::unique_ptr;
 using std::cerr;
@@ -47,13 +49,30 @@ typedef uint32_t dword;
 
 typedef vector<string> stringvec;
 
-struct stringless : std::binary_function<string, string, bool>
+template <typename Value>
+class StringKeyMap
 {
-    bool operator()(const string& x, const string& y) const
+    StringKeyMap() = default;
+    struct case_insensitive_hash
     {
-        return (_stricmp(x.c_str(), y.c_str()) > 0);
-    }
+        size_t operator()(const std::string& key) const
+        {
+            const auto copy = boost::to_lower_copy(key);
+            return std::hash<std::string>()(copy);
+        }
+    };
+
+    struct case_insensitive_compare
+    {
+        bool operator()(const string& left, const string& right) const {
+            return boost::iequals(left, right);
+        }
+    };
+public:
+    using Type = unordered_map<string, Value, case_insensitive_hash, case_insensitive_compare>;
 };
+
+using StringStringMap = StringKeyMap<string>::Type;
 
 #ifndef HIBYTE
 #define HIBYTE(w) ((w & 0xFF00) >> 8)

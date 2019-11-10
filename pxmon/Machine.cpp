@@ -19,7 +19,6 @@
 /////////////////////////////////////////////////////////////////////////////
 Machine::Machine()
 {
-
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -55,8 +54,8 @@ void Machine::loadROM(const char* filename)
 {
     // load rom with contained load address
 
-    struct _stat buf;
-    int n = stat(filename, (struct stat*)&buf);
+    struct _stat buf{};
+    const auto n = stat(filename, reinterpret_cast<struct stat*>(&buf));
     if (n){
         throw Exception("unable to stat ROM image \"%s\".", filename);
     }
@@ -81,11 +80,11 @@ void Machine::loadROM(const char* filename)
 /////////////////////////////////////////////////////////////////////////////
 void Machine::run()
 {
-    Monitor* mon = Monitor::getInstance();
+    auto& mon = Monitor::instance();
 
     // setup global interrupt
-    g_interrupt.setMonitor(mon);
-    g_interrupt.setTrap(mon);
+    g_interrupt.setMonitor(&mon);
+    g_interrupt.setTrap(&mon);
     g_interrupt.clearPending(IK_TRAP);
 
     // run!

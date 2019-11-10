@@ -83,7 +83,7 @@ private:
     void idinsert(const string& s, uint32_t id);
 
     static string opname(uint32_t opcode);
-    typedef unordered_map<string, LPSYMBOL, std::hash<string>, stringless> symmap;
+    using symmap = StringKeyMap<LPSYMBOL>::Type;
     symmap table;
 };
 

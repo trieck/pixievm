@@ -9,40 +9,36 @@
 #define __SYMBOLTABLE_H__
 
 #include "Instructions.h"
-#include "Singleton.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol type
-#define ST_REG			(0)			/* cpu register */
-#define ST_INSTRUCTION	(1 << 0)	/* machine instruction */
-#define ST_ID			(1 << 1)	/* identifier */
-#define ST_CONST		(1 << 2)	/* constant */
-#define ST_TEMP			(1 << 3)	/* temporary */
+#define ST_REG          (0)         /* cpu register */
+#define ST_INSTRUCTION  (1 << 0)    /* machine instruction */
+#define ST_ID           (1 << 1)    /* identifier */
+#define ST_CONST        (1 << 2)    /* constant */
+#define ST_TEMP         (1 << 3)    /* temporary */
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol struct
 typedef struct Symbol
 {
-    int type; /* symbol type */
-    int sub; /* sub-type */
-    string name; /* symbol name */
+    int type = 0;   /* symbol type */
+    int sub = 0;    /* sub-type */
+    string name;    /* symbol name */
     union
     {
         const Instr* instr; /* instruction */
-        word val16; /* word value */
+        word val16{}; /* word value */
         byte val8; /* byte value */
     };
 } Symbol, *LPSYMBOL;
 
 /////////////////////////////////////////////////////////////////////////////
-class SymbolTable : public Singleton<SymbolTable>
+class SymbolTable
 {
     // Construction / Destruction
-private:
-    SymbolTable();
-    friend class Singleton<SymbolTable>;
-
 public:
+    SymbolTable();
     ~SymbolTable();
 
     // Interface
@@ -57,7 +53,7 @@ private:
     void rinsert(const string& s, int t, byte r);
     void idinsert(const string& s, int id);
 
-    typedef unordered_map<string, LPSYMBOL, std::hash<string>, stringless> symmap;
+    using symmap = StringKeyMap<LPSYMBOL>::Type;
     symmap table;
 };
 

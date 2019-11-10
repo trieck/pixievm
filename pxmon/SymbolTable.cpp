@@ -5,7 +5,7 @@
 // Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
+#include "common.h"
 #include "SymbolTable.h"
 #include "Parser.hpp"
 #include "PixieVM.h"

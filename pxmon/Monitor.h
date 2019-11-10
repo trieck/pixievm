@@ -10,6 +10,8 @@
 
 #include "trap.h"
 #include "Handler.h"
+#include "Singleton.h"
+#include "common.h"
 
 // Forward declarations
 class Monitor;
@@ -43,24 +45,20 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 
 using CommandPtr = std::shared_ptr<Command>;
-using CommandMap = unordered_map<string, CommandPtr, std::hash<string>, stringless>;
+using CommandMap = StringKeyMap<CommandPtr>::Type;
 
 class Monitor;
 using MonitorPtr = unique_ptr<Monitor>;
 
 /////////////////////////////////////////////////////////////////////////////
 // Monitor class
-class Monitor : public TrapHandler, public Handler
+class Monitor : public Singleton<Monitor>, public TrapHandler, public Handler
 {
     // Construction / Destruction
-private:
     Monitor();
+    friend class Singleton<Monitor>;
 public:
-    virtual ~Monitor();
-
     // Interface
-    static Monitor* getInstance();
-
     void trap(void* data) override; // trap handler
     void handle() override; // monitor handler
 
@@ -84,10 +82,9 @@ private:
 
     static void sighandler(int signum);
 
-    CommandMap m_commands; // map of commands
-    bool m_exit_mon; // exit flag
-    bool m_show_notice; // show notice
-    static MonitorPtr instance; // singleton instance
+    CommandMap m_commands;  // map of commands
+    bool m_exit_mon;        // exit flag
+    bool m_show_notice;     // show notice
 };
 
 /////////////////////////////////////////////////////////////////////////////

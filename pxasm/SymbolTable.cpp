@@ -12,7 +12,7 @@
 #include "util.h"
 #include "exception.h"
 
-#define ISLIST(s) (s->type == SymbolType::ST_LIST)
+#define ISLIST(s) ((s)->type == SymbolType::ST_LIST)
 
 extern int yylineno;
 
@@ -154,7 +154,7 @@ LPSYMBOL SymbolTable::install(const string& s)
     // undefined symbol
 
     LPSYMBOL sym;
-    if ((sym = lookup(s)) == NULL){
+    if ((sym = lookup(s)) == nullptr){
         sym = new Symbol;
         sym->name = s;
         sym->type = SymbolType::ST_UNDEF;

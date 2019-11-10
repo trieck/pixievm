@@ -2,22 +2,19 @@
 //
 // MINIASSEMBLER.CPP : Mini Assembler
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
-#include "Common.h"
-#include "Memory.h"
-#include "Opcodes.h"
-#include "Instructions.h"
+#include "common.h"
 #include "SymbolTable.h"
 #include "MiniAssembler.h"
-#include "Exception.h"
+#include "exception.h"
 #include "Parser.hpp"
-#include "CPU.h"
+#include "CPU.H"
 
-extern int yyparse(void);
 extern void yyrestart(FILE*);
 extern FILE* yyin;
+extern SymbolTable table;
 
 struct yy_buffer_state;
 typedef yy_buffer_state* YY_BUFFER_STATE;
@@ -56,10 +53,10 @@ bool MiniAssembler::assemble(word* start, const char* str)
 {
     initialize(start);
 
-    YY_BUFFER_STATE buffer = yy_scan_string(str);
+    const auto buffer = yy_scan_string(str);
     yy_switch_to_buffer(buffer);
 
-    bool result = tryParse();
+    const auto result = tryParse();
 
     yy_delete_buffer(buffer);
 
@@ -69,7 +66,7 @@ bool MiniAssembler::assemble(word* start, const char* str)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void MiniAssembler::initialize(word* start)
+void MiniAssembler::initialize(const word* start)
 {
     if (start){
         // start addres
@@ -99,7 +96,7 @@ bool MiniAssembler::tryParse()
 /////////////////////////////////////////////////////////////////////////////
 int MiniAssembler::parse()
 {
-    int nret = yyparse();
-    SymbolTable::instance().flushtmp();
+    const auto nret = yyparse();
+    table.flushtmp();
     return nret;
 }

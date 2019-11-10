@@ -44,7 +44,7 @@ public:
 
     // Implementation
 private:
-    typedef unordered_map<string, string, std::hash<string>, stringless> OptionMap;
+    using OptionMap = StringStringMap;
     OptionMap options;
 };
 
