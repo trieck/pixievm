@@ -10,11 +10,14 @@
 #include "exception.h"
 #include "code.h"
 #include "util.h"
+#include <boost/format.hpp>
 
 extern int yyparse(void);   // bison parser routine
 extern FILE* yyin;          // input file pointer
 extern Code code;           // code instance
-//
+
+using boost::format;
+
 /////////////////////////////////////////////////////////////////////////////
 Assembler::Assembler() : m_pOut(nullptr)
 {
@@ -31,7 +34,7 @@ void Assembler::open(const char* filename)
 {
     close();
 
-    if ((yyin = fopen(filename, "r")) == NULL){
+    if ((yyin = fopen(filename, "r")) == nullptr){
         throw Exception("can't open file \"%s\": %s.", filename,
                         strerror(errno));
     }
@@ -78,6 +81,6 @@ int Assembler::assemble(const char* source, const char* output)
 /////////////////////////////////////////////////////////////////////////////
 int Assembler::assemble(const char* source)
 {
-    auto output = format("%s.o", basename(source).c_str());
+    const auto output = (format("%s.o") % basename(source).c_str()).str();
     return assemble(source, output.c_str());
 }

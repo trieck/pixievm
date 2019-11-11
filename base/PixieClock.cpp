@@ -20,11 +20,6 @@ PixieClock::PixieClock() : ticksPerSecond(0)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-PixieClock::~PixieClock()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 uint64_t PixieClock::LI2INT64(PLARGE_INTEGER li) const
 {
     return (static_cast<uint64_t>((*li).HighPart) << 32) + (*li).LowPart;
@@ -45,8 +40,8 @@ uint64_t PixieClock::clock() const
     uint64_t ndiff = 0;
 
     if (ticksPerSecond){
-        const uint64_t tstart = LI2INT64(const_cast<PLARGE_INTEGER>(&start));
-        const uint64_t tend = LI2INT64(&end);
+        const auto tstart = LI2INT64(const_cast<PLARGE_INTEGER>(&start));
+        const auto tend = LI2INT64(&end);
         ndiff = (tend - tstart) / (ticksPerSecond / 1022730);
     }
 

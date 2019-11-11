@@ -9,12 +9,14 @@
 #include "SymbolTable.h"
 #include "PixieVM.h"
 #include "Parser.hpp"
-#include "util.h"
 #include "exception.h"
+#include <boost/format.hpp>
 
 #define ISLIST(s) ((s)->type == SymbolType::ST_LIST)
 
 extern int yylineno;
+
+using boost::format;
 
 /////////////////////////////////////////////////////////////////////////////
 SymbolTable::SymbolTable()
@@ -170,9 +172,11 @@ LPSYMBOL SymbolTable::install(const string& s)
 LPSYMBOL SymbolTable::installs(const string& s)
 {
     // string literal
+    static auto counter = 0;
 
     auto sym = new Symbol;
-    sym->name = format("STRING:0x%.8X", counter32());
+    sym->name = (format("STRING:0x%08X") % counter++).str();
+
     sym->sval = s;
     sym->type = SymbolType::ST_STRING;
     sym->sub = 0;
@@ -186,9 +190,10 @@ LPSYMBOL SymbolTable::installs(const string& s)
 LPSYMBOL SymbolTable::installw(SymbolType type, uint32_t sub, word value)
 {
     // numeric
+    static auto counter = 0;
 
     auto sym = new Symbol;
-    sym->name = format("NUMERIC:0x%.8X", counter32());
+    sym->name = (format("NUMERIC:0x%08X") % counter++).str();
     sym->type = type;
     sym->sub = sub;
     sym->lineno = yylineno;
@@ -302,11 +307,12 @@ LPSYMBOL SymbolTable::lookup(const string& s) const
 LPSYMBOL SymbolTable::mklist(LPSYMBOL s1, LPSYMBOL s2)
 {
     LPSYMBOL list = nullptr;
+    static auto counter = 0;
 
     if (!ISLIST(s1) && !ISLIST(s2)){
         // make a new list
         list = new Symbol;
-        list->name = format("LIST:0x%.8X", counter32());
+        list->name = (format("LIST:0x%08X") % counter++).str();
         list->type = SymbolType::ST_LIST;
         list->lineno = yylineno;
         list->vsyms.push_back(s1);
@@ -341,7 +347,7 @@ string SymbolTable::opname(uint32_t opcode)
 {
     string opname;
 
-    const auto counter = counter32();
+    static auto counter = 0;
 
     switch (opcode){
     case PLUS:
@@ -366,7 +372,7 @@ string SymbolTable::opname(uint32_t opcode)
         opname = "unknown";
     }
 
-    auto name = format("OPERATOR(%s):0x%.8X", opname.c_str(), counter);
+    auto name = (format("OPERATOR(%s):0x%08X") % opname.c_str() % counter++).str();
 
     return name;
 }

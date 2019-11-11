@@ -13,7 +13,7 @@ class PixieClock
 {
 public:
     PixieClock();
-    ~PixieClock();
+    ~PixieClock() = default;
 
     void reset();
     uint64_t clock() const;

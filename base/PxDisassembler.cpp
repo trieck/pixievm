@@ -11,35 +11,25 @@
 #include "Modes.h"
 
 ANON_BEGIN
-char* r8_tbl[] = {
+const char* r8_tbl[] = {
     "al", "ah",
     "bl", "bh",
     "cl", "ch",
     "dl", "dh"
 };
 
-char* r16_tbl[] = {
+const char* r16_tbl[] = {
     "a", "b", "c", "d", "x", "sp"
 };
 
-char* r16ex_tbl[] = {
+const char* r16ex_tbl[] = {
     "a+x", "b+x", "c+x", "d+x", "x+x", "sp+x"
 };
 
 ANON_END
 
 #define R16STR(n)	\
-	(((n) & 8) ? r16ex_tbl[LOREG16(n)] : r16_tbl[LOREG16(n)])
-
-/////////////////////////////////////////////////////////////////////////////
-PxDisassembler::PxDisassembler() : ip(0)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-PxDisassembler::~PxDisassembler()
-{
-}
+    (((n) & 8) ? r16ex_tbl[LOREG16(n)] : r16_tbl[LOREG16(n)])
 
 /////////////////////////////////////////////////////////////////////////////
 word PxDisassembler::fetchWord()
@@ -56,7 +46,7 @@ void PxDisassembler::printip()
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::disassemble(byte b)
 {
-    LPOPINFO m = opinfo[b];
+    const auto m = opinfo[b];
     printf("%.2x", b);
 
     if (m == nullptr){
@@ -159,45 +149,45 @@ void PxDisassembler::DB(byte b)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RR8(LPOPINFO m)
 {
-    byte rp = fetch();
-    char* hi = r8_tbl[HIREG8(rp)];
-    char* lo = r8_tbl[LOREG8(rp)];
+    const auto rp = fetch();
+    const auto* hi = r8_tbl[HIREG8(rp)];
+    const auto* lo = r8_tbl[LOREG8(rp)];
     printf(" %.2x          %s %s, %s\n", rp, m->mnemonic, hi, lo);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RR16(LPOPINFO m)
 {
-    byte rp = fetch();
-    char* hi = r16_tbl[HIREG16(rp)];
-    char* lo = r16_tbl[LOREG16(rp)];
+    const auto rp = fetch();
+    const auto* hi = r16_tbl[HIREG16(rp)];
+    const auto* lo = r16_tbl[LOREG16(rp)];
     printf(" %.2x          %s %s, %s\n", rp, m->mnemonic, hi, lo);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RM8(LPOPINFO m)
 {
-    byte rp = fetch();
-    char* hi = r8_tbl[HIREG8(rp)];
-    char* lo = R16STR(LONYBBLE(rp));
+    const auto rp = fetch();
+    const auto* hi = r8_tbl[HIREG8(rp)];
+    const auto* lo = R16STR(LONYBBLE(rp));
     printf(" %.2x          %s %s, [%s]\n", rp, m->mnemonic, hi, lo);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RM16(LPOPINFO m)
 {
-    byte rp = fetch();
-    char* hi = r16_tbl[HIREG16(rp)];
-    char* lo = R16STR(LONYBBLE(rp));
+    const auto rp = fetch();
+    const auto* hi = r16_tbl[HIREG16(rp)];
+    const auto* lo = R16STR(LONYBBLE(rp));
     printf(" %.2x          %s %s, [%s]\n", rp, m->mnemonic, hi, lo);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RA8(LPOPINFO m)
 {
-    byte b = fetch();
-    word a16 = fetchWord();
-    char* r = r8_tbl[LOREG8(b)];
+    const auto b = fetch();
+    const auto a16 = fetchWord();
+    const auto* r = r8_tbl[LOREG8(b)];
     printf(" %.2x %.2x %.2x    %s %s, [$%.4x]\n",
            b, HIBYTE(a16), LOBYTE(a16), m->mnemonic, r, a16);
 }
@@ -205,9 +195,9 @@ void PxDisassembler::RA8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RA16(LPOPINFO m)
 {
-    byte b = fetch();
-    word a16 = fetchWord();
-    char* r = r16_tbl[LOREG16(b)];
+    const auto b = fetch();
+    const auto a16 = fetchWord();
+    const auto* r = r16_tbl[LOREG16(b)];
     printf(" %.2x %.2x %.2x    %s %s, [$%.4x]\n",
            b, HIBYTE(a16), LOBYTE(a16), m->mnemonic, r, a16);
 }
@@ -215,9 +205,9 @@ void PxDisassembler::RA16(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RI8(LPOPINFO m)
 {
-    byte b = fetch();
-    byte imm8 = fetch();
-    char* r = r8_tbl[LOREG8(b)];
+    const auto b = fetch();
+    const auto imm8 = fetch();
+    const auto* r = r8_tbl[LOREG8(b)];
     printf(" %.2x %.2x       %s %s, $%.2x\n",
            b, imm8, m->mnemonic, r, imm8);
 }
@@ -225,9 +215,9 @@ void PxDisassembler::RI8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::RI16(LPOPINFO m)
 {
-    byte b = fetch();
-    word imm16 = fetchWord();
-    char* r = r16_tbl[LOREG16(b)];
+    const auto b = fetch();
+    const auto imm16 = fetchWord();
+    const auto* r = r16_tbl[LOREG16(b)];
     printf(" %.2x %.2x %.2x    %s %s, $%.4x\n",
            b, HIBYTE(imm16), LOBYTE(imm16), m->mnemonic, r, imm16);
 }
@@ -235,27 +225,27 @@ void PxDisassembler::RI16(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::MR8(LPOPINFO m)
 {
-    byte rp = fetch();
-    char* hi = R16STR(HINYBBLE(rp));
-    char* lo = r8_tbl[LOREG8(rp)];
+    const auto rp = fetch();
+    const auto* hi = R16STR(HINYBBLE(rp));
+    const auto* lo = r8_tbl[LOREG8(rp)];
     printf(" %.2x          %s [%s], %s\n", rp, m->mnemonic, hi, lo);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::MR16(LPOPINFO m)
 {
-    byte rp = fetch();
-    char* hi = R16STR(HINYBBLE(rp));
-    char* lo = r16_tbl[LOREG16(rp)];
+    const auto rp = fetch();
+    const auto* hi = R16STR(HINYBBLE(rp));
+    const auto* lo = r16_tbl[LOREG16(rp)];
     printf(" %.2x          %s [%s], %s\n", rp, m->mnemonic, hi, lo);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::M8I8(LPOPINFO m)
 {
-    byte b = fetch();
-    byte imm8 = fetch();
-    char* r = R16STR(LONYBBLE(b));
+    const auto b = fetch();
+    const auto imm8 = fetch();
+    const auto* r = R16STR(LONYBBLE(b));
     printf(" %.2x %.2x       %s byte [%s], $%.2x\n", b, imm8,
            m->mnemonic, r, imm8);
 }
@@ -263,9 +253,9 @@ void PxDisassembler::M8I8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::M16I8(LPOPINFO m)
 {
-    byte b = fetch();
-    byte imm8 = fetch();
-    char* r = R16STR(LONYBBLE(b));
+    const auto b = fetch();
+    const auto imm8 = fetch();
+    const auto* r = R16STR(LONYBBLE(b));
     printf(" %.2x %.2x       %s word [%s], $%.2x\n", b, imm8, m->mnemonic,
            r, imm8);
 }
@@ -273,9 +263,9 @@ void PxDisassembler::M16I8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::MI16(LPOPINFO m)
 {
-    byte b = fetch();
-    word imm16 = fetchWord();
-    char* r = R16STR(LONYBBLE(b));
+    const auto b = fetch();
+    const auto imm16 = fetchWord();
+    const auto* r = R16STR(LONYBBLE(b));
     printf(" %.2x %.2x %.2x    %s [%s], $%.4x\n", b, HIBYTE(imm16),
            LOBYTE(imm16), m->mnemonic, r, imm16);
 }
@@ -283,9 +273,9 @@ void PxDisassembler::MI16(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::AR8(LPOPINFO m)
 {
-    byte b = fetch();
-    word a16 = fetchWord();
-    char* r = r8_tbl[LOREG8(b)];
+    const auto b = fetch();
+    const auto a16 = fetchWord();
+    const auto* r = r8_tbl[LOREG8(b)];
     printf(" %.2x %.2x %.2x    %s [$%.4x], %s\n", b, HIBYTE(a16),
            LOBYTE(a16), m->mnemonic, a16, r);
 }
@@ -293,9 +283,9 @@ void PxDisassembler::AR8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::AR16(LPOPINFO m)
 {
-    byte b = fetch();
-    word a16 = fetchWord();
-    char* r = r16_tbl[LOREG16(b)];
+    const auto b = fetch();
+    const auto a16 = fetchWord();
+    const auto* r = r16_tbl[LOREG16(b)];
     printf(" %.2x %.2x %.2x    %s [$%.4x], %s\n", b, HIBYTE(a16),
            LOBYTE(a16), m->mnemonic, a16, r);
 }
@@ -303,8 +293,8 @@ void PxDisassembler::AR16(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::A8I8(LPOPINFO m)
 {
-    byte imm8 = fetch();
-    word a16 = fetchWord();
+    const auto imm8 = fetch();
+    const auto a16 = fetchWord();
     printf(" %.2x %.2x %.2x    %s byte [$%.4x], $%.2x\n", imm8, HIBYTE(a16),
            LOBYTE(a16), m->mnemonic, a16, imm8);
 }
@@ -312,8 +302,8 @@ void PxDisassembler::A8I8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::A16I8(LPOPINFO m)
 {
-    byte imm8 = fetch();
-    word a16 = fetchWord();
+    const auto imm8 = fetch();
+    const auto a16 = fetchWord();
     printf(" %.2x %.2x %.2x    %s word [$%.4x], $%.2x\n", imm8, HIBYTE(a16),
            LOBYTE(a16), m->mnemonic, a16, imm8);
 }
@@ -321,8 +311,8 @@ void PxDisassembler::A16I8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::AI16(LPOPINFO m)
 {
-    word imm16 = fetchWord();
-    word a16 = fetchWord();
+    const auto imm16 = fetchWord();
+    const auto a16 = fetchWord();
     printf(" %.2x %.2x %.2x %.2x %s [$%.4x], $%.4x\n",
            HIBYTE(imm16), LOBYTE(imm16), HIBYTE(a16), LOBYTE(a16),
            m->mnemonic, a16, imm16);
@@ -331,32 +321,32 @@ void PxDisassembler::AI16(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::R8(LPOPINFO m)
 {
-    byte b = fetch();
-    char* r = r8_tbl[LOREG8(b)];
+    const auto b = fetch();
+    const auto* r = r8_tbl[LOREG8(b)];
     printf(" %.2x          %s %s\n", b, m->mnemonic, r);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::R16(LPOPINFO m)
 {
-    byte b = fetch();
-    char* r = r16_tbl[LOREG16(b)];
+    const auto b = fetch();
+    const auto* r = r16_tbl[LOREG16(b)];
     printf(" %.2x          %s %s\n", b, m->mnemonic, r);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::M8(LPOPINFO m)
 {
-    byte b = fetch();
-    char* r = R16STR(LONYBBLE(b));
+    const auto b = fetch();
+    const auto* r = R16STR(LONYBBLE(b));
     printf(" %.2x          %s byte [%s]\n", b, m->mnemonic, r);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::M16(LPOPINFO m)
 {
-    byte b = fetch();
-    char* r = R16STR(LONYBBLE(b));
+    const auto b = fetch();
+    const auto* r = R16STR(LONYBBLE(b));
     if (strcmp(m->mnemonic, "call") == 0 || strcmp(m->mnemonic, "jmp") == 0){
         printf(" %.2x          %s [%s]\n", b, m->mnemonic, r);
     } else{
@@ -367,7 +357,7 @@ void PxDisassembler::M16(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::A8(LPOPINFO m)
 {
-    word a16 = fetchWord();
+    const auto a16 = fetchWord();
     printf(" %.2x %.2x       %s byte [$%.4x]\n",
            HIBYTE(a16), LOBYTE(a16), m->mnemonic, a16);
 }
@@ -375,7 +365,7 @@ void PxDisassembler::A8(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::A16(LPOPINFO m)
 {
-    word a16 = fetchWord();
+    const auto a16 = fetchWord();
     if (strcmp(m->mnemonic, "call") == 0 || strcmp(m->mnemonic, "jmp")
         == 0){
         printf(" %.2x %.2x       %s [$%.4x]\n",
@@ -395,14 +385,14 @@ void PxDisassembler::IMPLIED(LPOPINFO m)
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::I8(LPOPINFO m)
 {
-    byte imm8 = fetch();
+    const auto imm8 = fetch();
     printf(" %.2x          %s $%.2x\n", imm8, m->mnemonic, imm8);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PxDisassembler::I16(LPOPINFO m)
 {
-    word imm16 = fetchWord();
+    const auto imm16 = fetchWord();
     printf(" %.2x %.2x       %s $%.4x\n", HIBYTE(imm16),
            LOBYTE(imm16), m->mnemonic, imm16);
 }

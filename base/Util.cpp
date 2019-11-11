@@ -106,27 +106,13 @@ string trim(const string& s)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-string format(const char* fmt, ...)
-{
-    va_list arglist;
-    va_start(arglist, fmt);
-
-    char buf[8000];
-    vsprintf(buf, fmt, arglist);
-
-    va_end(arglist);
-
-    return buf;
-}
-
-/////////////////////////////////////////////////////////////////////////////
 string basename(const string& filename)
 {
     string output;
 
-    const char* fname = filename.c_str();
+    const auto* fname = filename.c_str();
     const char* p;
-    if ((p = strrchr(fname, PATH_SEP)) != NULL){
+    if ((p = strrchr(fname, PATH_SEP)) != nullptr){
         fname = p + 1;
     }
 
@@ -138,17 +124,6 @@ string basename(const string& filename)
     }
 
     return output;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-string itoa(int n)
-{
-    static const int len = 20;
-    char buffer[len] = {0};
-
-    _itoa(n, buffer, 10);
-
-    return buffer;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -167,32 +142,3 @@ uint32_t hash32(const void* key, uint32_t len)
     return hash;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 64-bit Fowler/Noll/Vo hash
-uint64_t hash64(const void* key, uint64_t len)
-{
-    uint32_t i;
-    uint64_t hash;
-    const auto* k = static_cast<const uint8_t*>(key);
-
-    for (hash = 0, i = 0; i < len; ++i){
-        hash *= 1099511628211;
-        hash ^= k[i];
-    }
-
-    return hash;
-}
-
-#ifdef _MSC_VER
-
-/////////////////////////////////////////////////////////////////////////////
-uint32_t counter32()
-{
-    LARGE_INTEGER counter;
-    QueryPerformanceCounter(&counter);
-
-    // avalanche
-    return hash32(&counter.QuadPart, sizeof(uint64_t));
-}
-
-#endif // _MSC_VER

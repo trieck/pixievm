@@ -15,8 +15,8 @@ class PxDisassembler
 {
     // Construction / Destruction
 public:
-    PxDisassembler();
-    virtual ~PxDisassembler();
+    PxDisassembler() = default;
+    virtual ~PxDisassembler() = default;
 
     // Interface
 
@@ -58,7 +58,7 @@ protected:
 
     void printip();
 
-    word ip; // instruction pointer used during disassembly
+    word ip = 0; // instruction pointer used during disassembly
 };
 
 /////////////////////////////////////////////////////////////////////////////
