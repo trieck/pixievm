@@ -11,8 +11,8 @@ static int yyerror(const char *s);
 %}
 
 %union {
-    int n;                  /* token id */
-    LPSYMBOL sym;           /* symbol table pointer */
+    int n;          /* token id */
+    Symbol* sym;    /* symbol table pointer */
 }
 
 %token  <n>     BYTE_PTR WORD_PTR EOL

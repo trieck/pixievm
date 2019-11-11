@@ -10,12 +10,6 @@ Bitmap::Bitmap() : m_pBits(nullptr), m_bmi(nullptr)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-Bitmap::~Bitmap()
-{
-    GlobalFree(m_bmi);
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void Bitmap::SetPixel(uint16_t x, uint16_t y, uint8_t color) const
 {
     m_pBits[y * m_bmi->bmiHeader.biWidth + x] = color;
@@ -29,7 +23,8 @@ void Bitmap::CreateBitmap()
     const auto sz = sizeof(BITMAPINFOHEADER) +
                     sizeof(RGBQUAD) * Palette::NUM_COLORS;
 
-    m_bmi = static_cast<BITMAPINFO*>(GlobalAlloc(GPTR, sz));
+    m_bmi.reset(reinterpret_cast<LPBITMAPINFO>(std::malloc(sz)));
+
     m_bmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     m_bmi->bmiHeader.biWidth = Canvas::CX_SIZE;
     m_bmi->bmiHeader.biHeight = -Canvas::CY_SIZE; // top-down
@@ -42,7 +37,7 @@ void Bitmap::CreateBitmap()
         m_bmi->bmiColors[i] = Palette::Color(i);
     }
 
-    m_bm.CreateDIBSection(m_dc, m_bmi, DIB_RGB_COLORS,
+    m_bm.CreateDIBSection(m_dc, m_bmi.get(), DIB_RGB_COLORS,
                           reinterpret_cast<void**>(&m_pBits), nullptr, 0);
 }
 
@@ -61,7 +56,7 @@ void Bitmap::Render(CPaintDC& dc) const
         rc.top,                 // starting scan line of image
         rc.top + rc.Height(),   // number of scan lines contained in the array
         m_pBits,                // pointer to color data
-        m_bmi,                  // pointer to BITMAPINFO structure
+        m_bmi.get(),            // pointer to BITMAPINFO structure
         DIB_RGB_COLORS
     );
 }

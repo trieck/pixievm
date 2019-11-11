@@ -2,7 +2,7 @@
 //
 // ASSEMCMD.CPP : Monitor assembler command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
@@ -23,14 +23,14 @@ void AssemCmd::exec(const stringvec& v)
 {
     word address;
     if (v.size()){
-        int n = sscanf(v[0].c_str(), "%hx", &address);
+        const auto n = sscanf(v[0].c_str(), "%hx", &address);
         if (n != 1){
             cerr << "? a [address]" << endl;
             return;
         }
         assembler.assemble(&address);
     } else{
-        assembler.assemble(NULL);
+        assembler.assemble(nullptr);
     }
 }
 

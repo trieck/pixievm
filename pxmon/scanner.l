@@ -42,8 +42,8 @@ newline         [\n]
 
 {offset-reg}                        {
     string reg = trim(string(yytext, strchr(yytext, '+') - yytext));
-    LPSYMBOL sym = table.lookup(reg);
-    if (sym == NULL) {
+    auto sym = table.lookup(reg);
+    if (sym == nullptr) {
         throw Exception("unexpected token \"%s\".", yytext);
     }
     if (sym->type != ST_REG) {
@@ -56,8 +56,8 @@ newline         [\n]
 }
 
 {identifier}                {
-    LPSYMBOL sym = table.lookup(yytext);
-    if (sym == NULL) {
+    auto sym = table.lookup(yytext);
+    if (sym == nullptr) {
         throw Exception("unexpected token \"%s\".", yytext);
     }
     

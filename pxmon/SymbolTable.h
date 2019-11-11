@@ -20,18 +20,20 @@
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol struct
-typedef struct Symbol
+struct Symbol
 {
     int type = 0;   /* symbol type */
     int sub = 0;    /* sub-type */
     string name;    /* symbol name */
     union
     {
-        const Instr* instr; /* instruction */
-        word val16{}; /* word value */
+        const Instr* instr{}; /* instruction */
+        word val16; /* word value */
         byte val8; /* byte value */
     };
-} Symbol, *LPSYMBOL;
+};
+
+using SymbolPtr = std::shared_ptr<Symbol>;
 
 /////////////////////////////////////////////////////////////////////////////
 class SymbolTable
@@ -39,12 +41,12 @@ class SymbolTable
     // Construction / Destruction
 public:
     SymbolTable();
-    ~SymbolTable();
+    ~SymbolTable() = default;
 
     // Interface
-    LPSYMBOL installw(const string& s, int type, int sub, word w);
-    LPSYMBOL installb(const string& s, int type, int sub, byte b);
-    LPSYMBOL lookup(const string& s) const;
+    Symbol* installw(const string& s, int type, int sub, word w);
+    Symbol* installb(const string& s, int type, int sub, byte b);
+    Symbol* lookup(const string& s) const;
     void flushtmp();
 
     // Implementation
@@ -53,7 +55,7 @@ private:
     void rinsert(const string& s, int t, byte r);
     void idinsert(const string& s, int id);
 
-    using symmap = StringKeyMap<LPSYMBOL>::Type;
+    using symmap = StringKeyMap<SymbolPtr>::Type;
     symmap table;
 };
 

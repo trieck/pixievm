@@ -44,7 +44,7 @@ void I8(const Instr* instr, byte i8);
 ANON_END
 
 /////////////////////////////////////////////////////////////////////////////
-void code1(int mode, LPSYMBOL s1)
+void code1(int mode, Symbol* s1)
 {
     switch (mode){
     case AM_IMPLIED:
@@ -56,7 +56,7 @@ void code1(int mode, LPSYMBOL s1)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void code2(int mode, LPSYMBOL s1, LPSYMBOL s2)
+void code2(int mode, Symbol* s1, Symbol* s2)
 {
     switch (mode){
     case AM_R8:
@@ -89,7 +89,7 @@ void code2(int mode, LPSYMBOL s1, LPSYMBOL s2)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void code3(int mode, LPSYMBOL s1, LPSYMBOL s2, LPSYMBOL s3)
+void code3(int mode, Symbol* s1, Symbol* s2, Symbol* s3)
 {
     switch (mode){
     case AM_RR8:

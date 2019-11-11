@@ -90,19 +90,10 @@ SymbolTable::SymbolTable()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-SymbolTable::~SymbolTable()
-{
-    symmap::const_iterator it = table.begin();
-    for (; it != table.end(); it++){
-        LPSYMBOL sym = (*it).second;
-        delete sym;
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void SymbolTable::iinsert(const string& s, int t, const Instr* i)
 {
-    LPSYMBOL sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
+
     sym->name = s;
     sym->type = ST_INSTRUCTION;
     sym->sub = t;
@@ -113,7 +104,7 @@ void SymbolTable::iinsert(const string& s, int t, const Instr* i)
 /////////////////////////////////////////////////////////////////////////////
 void SymbolTable::rinsert(const string& s, int t, byte r)
 {
-    LPSYMBOL sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = s;
     sym->type = ST_REG;
     sym->sub = t;
@@ -124,7 +115,7 @@ void SymbolTable::rinsert(const string& s, int t, byte r)
 /////////////////////////////////////////////////////////////////////////////
 void SymbolTable::idinsert(const string& s, int id)
 {
-    LPSYMBOL sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = s;
     sym->type = ST_ID;
     sym->sub = id;
@@ -132,53 +123,55 @@ void SymbolTable::idinsert(const string& s, int id)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LPSYMBOL SymbolTable::installw(const string& s, int type, int sub, word w)
+Symbol* SymbolTable::installw(const string& s, int type, int sub, word w)
 {
-    LPSYMBOL sym;
-    if ((sym = lookup(s)) == NULL){
-        sym = new Symbol;
-        sym->name = s;
-        sym->type = type | ST_TEMP;
-        sym->sub = sub;
-        sym->val16 = w;
-        table[s] = sym;
+    auto* sym = lookup(s);
+    if (sym == nullptr){
+        auto symPtr = std::make_shared<Symbol>();
+        symPtr->name = s;
+        symPtr->type = type | ST_TEMP;
+        symPtr->sub = sub;
+        symPtr->val16 = w;
+        table[s] = symPtr;
+        sym = symPtr.get();
     }
     return sym;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LPSYMBOL SymbolTable::installb(const string& s, int type, int sub, byte b)
+Symbol* SymbolTable::installb(const string& s, int type, int sub, byte b)
 {
-    LPSYMBOL sym;
-    if ((sym = lookup(s)) == NULL){
-        sym = new Symbol;
-        sym->name = s;
-        sym->type = type | ST_TEMP;
-        sym->sub = sub;
-        sym->val8 = b;
-        table[s] = sym;
+    auto* sym = lookup(s);
+    if (sym == nullptr) {
+        auto symPtr = std::make_shared<Symbol>();
+        symPtr->name = s;
+        symPtr->type = type | ST_TEMP;
+        symPtr->sub = sub;
+        symPtr->val8 = b;
+        table[s] = symPtr;
+        sym = symPtr.get();
     }
+
     return sym;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LPSYMBOL SymbolTable::lookup(const string& s) const
+Symbol* SymbolTable::lookup(const string& s) const
 {
-    symmap::const_iterator it = table.find(s);
+    const auto it = table.find(s);
     if (it == table.end())
-        return NULL;
+        return nullptr;
 
-    return (*it).second;
+    return (*it).second.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // flush temporary symbols
 void SymbolTable::flushtmp()
 {
-    symmap::iterator it = table.begin();
-    for (; it != table.end(); it++){
+    auto it = table.begin();
+    for (; it != table.end(); ++it){
         if ((*it).second->type & ST_TEMP){
-            delete (*it).second;
             table.erase(it);
             it = table.begin();
         }

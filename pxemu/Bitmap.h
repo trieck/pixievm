@@ -6,7 +6,7 @@ class Bitmap
     // Construction / Destruction
 public:
     Bitmap();
-    ~Bitmap();
+    ~Bitmap() = default;
 
     // Interface
     void Render(CPaintDC& dc) const;
@@ -18,5 +18,5 @@ private:
     CBitmap m_bm;
     CDC m_dc;
     LPBYTE m_pBits;
-    LPBITMAPINFO m_bmi;
+    std::unique_ptr<BITMAPINFO> m_bmi;
 };

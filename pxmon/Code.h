@@ -9,9 +9,9 @@
 #define __CODE_H__
 
 /////////////////////////////////////////////////////////////////////////////
-void code1(int mode, LPSYMBOL s1);
-void code2(int mode, LPSYMBOL s1, LPSYMBOL s2);
-void code3(int mode, LPSYMBOL s1, LPSYMBOL s2, LPSYMBOL s3);
+void code1(int mode, Symbol* s1);
+void code2(int mode, Symbol* s1, Symbol* s2);
+void code3(int mode, Symbol* s1, Symbol* s2, Symbol* s3);
 /////////////////////////////////////////////////////////////////////////////
 
 #endif // __CODE_H__
