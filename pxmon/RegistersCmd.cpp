@@ -2,30 +2,20 @@
 //
 // REGISTERSCMD.CPP : Monitor registers command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "RegistersCmd.h"
-#include "CPU.h"
-
-/////////////////////////////////////////////////////////////////////////////
-RegistersCmd::RegistersCmd(Monitor* mon) : Command(mon)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-RegistersCmd::~RegistersCmd()
-{
-}
+#include <CPU.H>
 
 /////////////////////////////////////////////////////////////////////////////
 void RegistersCmd::exec(const stringvec& v)
 {
     auto& cpu = CPU::instance();
 
-    char sr[9];
-    word flags = cpu.getFL();
+    char sr[9]{};
+    const auto flags = cpu.getFL();
     sr[0] = flags & NEG_FLAG ? '1' : '0';
     sr[1] = flags & OVERFLOW_FLAG ? '1' : '0';
     sr[2] = '0'; /* unused */
@@ -45,5 +35,5 @@ void RegistersCmd::exec(const stringvec& v)
            " IP: $%.4hX"
            " FL: %s (NV--BIZC)\n",
            cpu.getA(), cpu.getB(), cpu.getC(), cpu.getD(),
-           cpu.getX(), cpu.getSP(), cpu.getIP(), sr);
+           cpu.getX(), cpu.getSP(), cpu.getIP(), &sr[0]);
 }

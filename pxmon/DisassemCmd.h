@@ -2,7 +2,7 @@
 //
 // DISASSEMCMD.H : Monitor assembler command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __DISASSEMCMD_H__
@@ -14,10 +14,7 @@
 class DisassemCmd : public Command
 {
 public:
-    DisassemCmd(Monitor* mon);
-    ~DisassemCmd();
-
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
     void disassemble(word address);
 
 private:

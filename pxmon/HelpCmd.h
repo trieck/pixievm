@@ -2,7 +2,7 @@
 //
 // HELPCMD.H : Monitor help command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __HELPCMD_H__
@@ -14,10 +14,7 @@
 class HelpCmd : public Command
 {
 public:
-    HelpCmd(Monitor* mon);
-    ~HelpCmd();
-
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
 };
 
 #endif // __HELPCMD_H__

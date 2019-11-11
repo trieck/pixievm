@@ -13,15 +13,6 @@
 #include "Opcodes.h"
 
 /////////////////////////////////////////////////////////////////////////////
-StepUntilCmd::StepUntilCmd(Monitor* mon) : Command(mon)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-StepUntilCmd::~StepUntilCmd()
-= default;
-
-/////////////////////////////////////////////////////////////////////////////
 void StepUntilCmd::exec(const stringvec& v)
 {
     auto& cpu = CPU::instance();
@@ -36,7 +27,7 @@ void StepUntilCmd::exec(const stringvec& v)
     word ip = cpu.getIP();
     cpu.push16(ip);
 
-    if (v.size() > 0){
+    if (!v.empty()){
         const auto n = sscanf(v[0].c_str(), "%hx", &ip);
         if (n != 1){
             cerr << "? u [address]" << endl;
@@ -47,16 +38,15 @@ void StepUntilCmd::exec(const stringvec& v)
         cpu.setIP(ip);
     }
 
-    auto* mon = getMonitor();
-
     g_interrupt.setTrap(this, reinterpret_cast<void*>(ip));
-    mon->setExit(true);
+
+    Monitor::instance().setExit(true);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void StepUntilCmd::trap(void* data)
 {
-    auto* mon = getMonitor();
+    auto& mon = Monitor::instance();
     auto& mem = Memory::instance();
     auto& cpu = CPU::instance();
 
@@ -66,8 +56,8 @@ void StepUntilCmd::trap(void* data)
     // if so, break back into the monitor. Otherwise, keep stepping.
 
     const byte instruction = mem.fetch(ip);
-    if (instruction == RET || mon->isRunning()){
-        g_interrupt.setMonitorBreak(mon);
+    if (instruction == RET || mon.isRunning()){
+        g_interrupt.setMonitorBreak(&mon);
     } else{
         ip = cpu.getIP();
         g_interrupt.setTrap(this, reinterpret_cast<void*>(ip));

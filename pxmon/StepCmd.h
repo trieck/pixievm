@@ -2,7 +2,7 @@
 //
 // STEPCMD.H : Monitor step command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __STEPCMD_H__
@@ -13,12 +13,7 @@
 class StepCmd : public Command
 {
 public:
-    StepCmd(Monitor* mon);
-    ~StepCmd();
-
-    virtual void exec(const stringvec& v);
-
-private:
+    void exec(const stringvec& v) override;
 };
 
 #endif // __STEPCMD_H__

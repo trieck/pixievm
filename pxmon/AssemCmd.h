@@ -2,7 +2,7 @@
 //
 // ASSEMCMD.H : Monitor assembler command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __ASSEMCMD_H__
@@ -14,9 +14,6 @@
 class AssemCmd : public Command
 {
 public:
-    AssemCmd(Monitor* mon);
-    ~AssemCmd();
-
     void exec(const stringvec& v) override;
     bool assemble(word address, const string& str);
 

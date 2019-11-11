@@ -2,7 +2,7 @@
 //
 // LOADCMD.H : Monitor load command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __LOADCMD_H__
@@ -14,10 +14,7 @@
 class LoadCmd : public Command
 {
 public:
-    LoadCmd(Monitor* mon);
-    ~LoadCmd();
-
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
 };
 
 #endif // __LOADCMD_H__

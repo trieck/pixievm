@@ -8,7 +8,7 @@
 #include "common.h"
 #include "PixieVM.h"
 #include "memory.h"
-#include "Interrupt.h"
+#include "interrupt.h"
 #include "Alarm.h"
 #include "CPU.h"
 #include "Opcodes.h"

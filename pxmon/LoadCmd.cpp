@@ -2,23 +2,13 @@
 //
 // LOADCMD.CPP : Monitor load command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "LoadCmd.h"
-#include "Memory.h"
+#include <memory.h>
 #include <sys/stat.h>
-
-/////////////////////////////////////////////////////////////////////////////
-LoadCmd::LoadCmd(Monitor* mon) : Command(mon)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-LoadCmd::~LoadCmd()
-{
-}
 
 /////////////////////////////////////////////////////////////////////////////
 void LoadCmd::exec(const stringvec& v)
@@ -28,10 +18,10 @@ void LoadCmd::exec(const stringvec& v)
         return;
     }
 
-    string filename = v[0];
+    auto filename = v[0];
 
-    struct _stat buf;
-    int n = stat(filename.c_str(), (struct stat*)&buf);
+    struct stat buf;
+    const auto n = stat(filename.c_str(), &buf);
     if (n){
         fprintf(stderr, "unable to stat file \"%s\".\n", filename.c_str());
         return;

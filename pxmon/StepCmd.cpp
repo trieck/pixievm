@@ -2,7 +2,7 @@
 //
 // STEPCMD.CPP : Monitor step command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
@@ -11,23 +11,13 @@
 #include "Interrupt.h"
 
 /////////////////////////////////////////////////////////////////////////////
-StepCmd::StepCmd(Monitor* mon) : Command(mon)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-StepCmd::~StepCmd()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void StepCmd::exec(const stringvec& v)
 {
     auto& cpu = CPU::instance();
 
-    word ip = cpu.getIP();
+    auto ip = cpu.getIP();
     if (!v.empty()){
-        int n = sscanf(v[0].c_str(), "%hx", &ip);
+        const auto n = sscanf(v[0].c_str(), "%hx", &ip);
         if (n != 1){
             cerr << "? t [address]" << endl;
             return;
@@ -37,9 +27,9 @@ void StepCmd::exec(const stringvec& v)
         cpu.setIP(ip);
     }
 
-    Monitor* mon = getMonitor();
-    mon->disassemble(ip);
+    auto& mon = Monitor::instance();
+    mon.disassemble(ip);
 
     g_interrupt.setPending(IK_TRAP);
-    mon->setExit(true);
+    mon.setExit(true);
 }

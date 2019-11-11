@@ -25,16 +25,16 @@
 /////////////////////////////////////////////////////////////////////////////
 Monitor::Monitor() : m_exit_mon(false), m_show_notice(true)
 {
-    m_commands["help"] = m_commands["?"] = std::make_shared<HelpCmd>(this);
-    m_commands["a"] = std::make_shared<AssemCmd>(this);
-    m_commands["d"] = std::make_shared<DisassemCmd>(this);
-    m_commands["l"] = std::make_shared<LoadCmd>(this);
-    m_commands["m"] = std::make_shared<DumpCmd>(this);
-    m_commands["q"] = std::make_shared<QuitCmd>(this);
-    m_commands["r"] = std::make_shared<RegistersCmd>(this);
-    m_commands["s"] = std::make_shared<SaveCmd>(this);
-    m_commands["t"] = std::make_shared<StepCmd>(this);
-    m_commands["u"] = std::make_shared<StepUntilCmd>(this);
+    m_commands["help"] = m_commands["?"] = std::make_shared<HelpCmd>();
+    m_commands["a"] = std::make_shared<AssemCmd>();
+    m_commands["d"] = std::make_shared<DisassemCmd>();
+    m_commands["l"] = std::make_shared<LoadCmd>();
+    m_commands["m"] = std::make_shared<DumpCmd>();
+    m_commands["q"] = std::make_shared<QuitCmd>();
+    m_commands["r"] = std::make_shared<RegistersCmd>();
+    m_commands["s"] = std::make_shared<SaveCmd>();
+    m_commands["t"] = std::make_shared<StepCmd>();
+    m_commands["u"] = std::make_shared<StepUntilCmd>();
 }
 
 /////////////////////////////////////////////////////////////////////////////

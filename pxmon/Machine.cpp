@@ -17,16 +17,6 @@
 #include <sys/stat.h>
 
 /////////////////////////////////////////////////////////////////////////////
-Machine::Machine()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Machine::~Machine()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void Machine::init()
 {
     loadROM("chargen.rom", CHARGEN_BASE, CHARGEN_SIZE);
@@ -54,8 +44,8 @@ void Machine::loadROM(const char* filename)
 {
     // load rom with contained load address
 
-    struct _stat buf{};
-    const auto n = stat(filename, reinterpret_cast<struct stat*>(&buf));
+    struct stat buf{};
+    const auto n = stat(filename, &buf);
     if (n){
         throw Exception("unable to stat ROM image \"%s\".", filename);
     }
@@ -67,7 +57,7 @@ void Machine::loadROM(const char* filename)
     }
 
     word start;
-    ifs.read((char*)&start, sizeof(word));
+    ifs.read(reinterpret_cast<char*>(&start), sizeof(word));
     if (ifs.bad()){
         throw Exception("unable to read from ROM image \"%s\".", filename);
     }
@@ -78,7 +68,7 @@ void Machine::loadROM(const char* filename)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Machine::run()
+int Machine::run()
 {
     auto& mon = Monitor::instance();
 
@@ -88,5 +78,5 @@ void Machine::run()
     g_interrupt.clearPending(IK_TRAP);
 
     // run!
-    CPU::instance().run();
+    return CPU::instance().run();
 }

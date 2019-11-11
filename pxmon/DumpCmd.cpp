@@ -6,23 +6,12 @@
 //
 
 #include "common.h"
-#include <stdlib.h>
 #include "DumpCmd.h"
-#include "Memory.h"
-#include "CPU.h"
+#include <memory.h>
+#include "CPU.H"
 
-#define CEILING(x, y) ((x+(y-1))/y)
-#define MAX(a,b)  (((a) > (b)) ? (a) : (b))
-
-/////////////////////////////////////////////////////////////////////////////
-DumpCmd::DumpCmd(Monitor* mon) : Command(mon), init(false), ip(0)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-DumpCmd::~DumpCmd()
-{
-}
+#define CEILING(x, y)   (((x)+((y)-1))/(y))
+#define MAX(a,b)        (((a) > (b)) ? (a) : (b))
 
 /////////////////////////////////////////////////////////////////////////////
 void DumpCmd::exec(const stringvec& v)

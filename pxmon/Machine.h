@@ -13,12 +13,12 @@ class Machine
 {
     // Construction / Destruction
 public:
-    Machine();
-    ~Machine();
+    Machine() = default;
+    ~Machine() = default;
 
     // Interface
     void init();
-    void run();
+    int run();
 
     // Implementation
 private:

@@ -2,7 +2,7 @@
 //
 // DUMPCMD.H : Monitor dump command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __DUMPCMD_H__
@@ -14,16 +14,13 @@
 class DumpCmd : public Command
 {
 public:
-    DumpCmd(Monitor* mon);
-    ~DumpCmd();
-
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
 private:
     enum { LINESIZE = 16 }; // number of bytes per line to dump
-    enum { DEFLINES = 9 }; // default number of lines
+    enum { DEFLINES = 9 };  // default number of lines
 
-    bool init; // have we been initialized
-    word ip; // instruction pointer used during dump
+    bool init = false;  // have we been initialized
+    word ip = 0;    // instruction pointer used during dump
 };
 
 #endif // __DUMPCMD_H__

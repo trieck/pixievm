@@ -2,7 +2,7 @@
 //
 // QUITCMD.H: Monitor quit command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __QUITCMD_H__
@@ -14,10 +14,7 @@
 class QuitCmd : public Command
 {
 public:
-    QuitCmd(Monitor* mon);
-    ~QuitCmd();
-
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
 };
 
 #endif // __QUITCMD_H__

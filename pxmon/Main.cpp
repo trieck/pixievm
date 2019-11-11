@@ -2,7 +2,7 @@
 //
 // MAIN.CPP : Application entry point
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
@@ -11,19 +11,21 @@
 #include "options.h"
 
 ////////////////////////////////////////////////////////////////////////////
-int main(int argc, char* argv[])
+int main(int argc, char** argv)
 {
     Options::options(argc, argv);
 
     Machine machine;
 
+    auto ret = 0;
+
     try{
         machine.init();
-        machine.run();
+        ret = machine.run();
     } catch (const Exception& e){
         cerr << e.getDescription() << endl;
         return 1;
     }
 
-    return 0;
+    return ret;
 }

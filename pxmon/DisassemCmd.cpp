@@ -2,21 +2,11 @@
 //
 // DISASSEMCMD.CPP : Monitor assembler command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "DisassemCmd.h"
-
-/////////////////////////////////////////////////////////////////////////////
-DisassemCmd::DisassemCmd(Monitor* mon) : Command(mon)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-DisassemCmd::~DisassemCmd()
-{
-}
 
 /////////////////////////////////////////////////////////////////////////////
 void DisassemCmd::disassemble(word address)

@@ -2,7 +2,7 @@
 //
 // SAVECMD.H : Monitor save command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __SAVECMD_H__
@@ -14,10 +14,7 @@
 class SaveCmd : public Command
 {
 public:
-    SaveCmd(Monitor* mon);
-    ~SaveCmd();
-
-    virtual void exec(const stringvec& v);
+    void exec(const stringvec& v) override;
 };
 
 #endif // __SAVECMD_H__

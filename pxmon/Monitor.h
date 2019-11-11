@@ -21,25 +21,10 @@ class Monitor;
 class Command
 {
 protected:
-    Command(Monitor* pmon) : m_mon(pmon)
-    {
-    }
-
+    Command() = default;
 public:
-    virtual ~Command()
-    {
-    }
-
+    virtual ~Command() = default;
     virtual void exec(const stringvec& v) = 0;
-
-protected:
-    Monitor* getMonitor() const noexcept
-    {
-        return m_mon;
-    }
-
-private:
-    Monitor* m_mon; // back pointer to the monitor
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -63,8 +48,8 @@ public:
     void handle() override; // monitor handler
 
     void setExit(bool f) noexcept;
-    bool assemble(const word address, const string& str);
-    void disassemble(const word address);
+    bool assemble(word address, const string& str);
+    void disassemble(word address);
 
     bool isRunning() const noexcept
     {

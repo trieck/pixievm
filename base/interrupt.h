@@ -28,8 +28,8 @@ enum cpu_int
 class Interrupt
 {
 public:
-    Interrupt();
-    virtual ~Interrupt();
+    Interrupt() = default;
+    virtual ~Interrupt() = default;
 
     int getPending() const
     {
@@ -56,16 +56,16 @@ public:
 
 private:
     // pending interrupt
-    int m_pending;
+    int m_pending = 0;
 
     // trap handler
-    LPTRAPHANDLER m_trapHandler;
+    LPTRAPHANDLER m_trapHandler = nullptr;
 
     // monitor handler
-    LPHANDLER m_monHandler;
+    LPHANDLER m_monHandler = nullptr;
 
     // trap data
-    void* m_trapData;
+    void* m_trapData = nullptr;
 };
 
 // global interrupt declaration

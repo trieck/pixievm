@@ -12,20 +12,9 @@
 Interrupt g_interrupt;
 
 /////////////////////////////////////////////////////////////////////////////
-Interrupt::Interrupt()
-{
-    memset(this, 0, sizeof(Interrupt));
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Interrupt::~Interrupt()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void Interrupt::handleTrap()
 {
-    if (m_trapHandler != NULL){
+    if (m_trapHandler != nullptr){
         m_trapHandler->trap(m_trapData);
     }
 }
@@ -55,7 +44,7 @@ void Interrupt::setMonitorBreak(LPTRAPHANDLER handler)
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::handleMonitor()
 {
-    if (m_monHandler != NULL){
+    if (m_monHandler != nullptr){
         m_monHandler->handle();
     }
 }

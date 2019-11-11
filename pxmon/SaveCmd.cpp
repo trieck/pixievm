@@ -2,23 +2,12 @@
 //
 // SAVECMD.CPP : Monitor save command
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #include "common.h"
 #include "SaveCmd.h"
-#include "Memory.h"
-#include <sys/stat.h>
-
-/////////////////////////////////////////////////////////////////////////////
-SaveCmd::SaveCmd(Monitor* mon) : Command(mon)
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
-SaveCmd::~SaveCmd()
-{
-}
+#include <memory.h>
 
 /////////////////////////////////////////////////////////////////////////////
 void SaveCmd::exec(const stringvec& v)
@@ -28,7 +17,7 @@ void SaveCmd::exec(const stringvec& v)
         cerr << "? s range file" << endl;
         return;
     }
-    int n = sscanf(v[0].c_str(), "%hx", &start);
+    auto n = sscanf(v[0].c_str(), "%hx", &start);
     if (n != 1){
         cerr << "? s range file" << endl;
         return;
@@ -39,7 +28,7 @@ void SaveCmd::exec(const stringvec& v)
         return;
     }
 
-    string filename = v[2];
+    auto filename = v[2];
     ofstream ofs;
     ofs.open(filename.c_str(), ofstream::out | ofstream::binary);
     if (!ofs.is_open()){
