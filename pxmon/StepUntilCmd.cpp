@@ -24,7 +24,7 @@ void StepUntilCmd::exec(const stringvec& v)
     }
 
     // push the current value of IP onto the stack
-    word ip = cpu.getIP();
+    auto ip = cpu.getIP();
     cpu.push16(ip);
 
     if (!v.empty()) {
@@ -55,7 +55,7 @@ void StepUntilCmd::trap(void* data)
     // check whether the last instruction executed was RET
     // if so, break back into the monitor. Otherwise, keep stepping.
 
-    const byte instruction = mem.fetch(ip);
+    const auto instruction = mem.fetch(ip);
     if (instruction == RET || mon.isRunning()) {
         g_interrupt.setMonitorBreak(&mon);
     } else {

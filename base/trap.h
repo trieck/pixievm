@@ -13,13 +13,8 @@ class TrapHandler
 {
     // Construction / Destruction
 public:
-    TrapHandler()
-    {
-    }
-
-    virtual ~TrapHandler()
-    {
-    }
+    TrapHandler() = default;
+    virtual ~TrapHandler() = default;
 
     // Interface
     virtual void trap(void* data) = 0;
