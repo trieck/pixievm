@@ -12,14 +12,14 @@
 void AssemCmd::exec(const stringvec& v)
 {
     word address;
-    if (v.size()){
+    if (v.size()) {
         const auto n = sscanf(v[0].c_str(), "%hx", &address);
-        if (n != 1){
+        if (n != 1) {
             cerr << "? a [address]" << endl;
             return;
         }
         assembler.assemble(&address);
-    } else{
+    } else {
         assembler.assemble(nullptr);
     }
 }

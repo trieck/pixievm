@@ -22,11 +22,11 @@ public:
         return FALSE;
     }
 
-    BEGIN_MSG_MAP(CPxemuView)
-    MSG_WM_PAINT(OnPaint)
-    MSG_WM_CREATE(OnCreate)
-    MSG_WM_DESTROY(OnDestroy)
-    CHAIN_MSG_MAP(KeyboardHandlerBase)
+BEGIN_MSG_MAP(CPxemuView)
+        MSG_WM_PAINT(OnPaint)
+        MSG_WM_CREATE(OnCreate)
+        MSG_WM_DESTROY(OnDestroy)
+        CHAIN_MSG_MAP(KeyboardHandlerBase)
     END_MSG_MAP()
 
     // Handler prototypes (uncomment arguments if needed):

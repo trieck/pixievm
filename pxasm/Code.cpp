@@ -6,11 +6,12 @@
 //
 
 #include "common.h"
+#include <boost/format.hpp>
+
 #include "code.h"
 
 #include "program.h"
 #include "Parser.hpp"
-#include "exception.h"
 #include "Modes.h"
 #include "SymbolTable.h"
 #include "machine.h"
@@ -23,6 +24,7 @@ extern SymbolTable* table;
 
 extern int yyerror(const char* s);
 
+using boost::format;
 
 /////////////////////////////////////////////////////////////////////////////
 Code::Code() : m_origin(0), m_bOrigin(false)
@@ -70,7 +72,7 @@ void Code::initialize()
 /////////////////////////////////////////////////////////////////////////////
 void Code::putString(const string& str)
 {
-    for (auto c : str){
+    for (auto c : str) {
         putByte(c);
     }
 }
@@ -87,7 +89,7 @@ void Code::putList(LPSYMBOL s, uint32_t ctxt)
 {
     auto it = s->vsyms.begin();
 
-    for (; it != s->vsyms.end(); ++it){
+    for (; it != s->vsyms.end(); ++it) {
         putSym(*it, ctxt);
     }
 }
@@ -95,7 +97,7 @@ void Code::putList(LPSYMBOL s, uint32_t ctxt)
 /////////////////////////////////////////////////////////////////////////////
 void Code::putSym(LPSYMBOL s, uint32_t ctxt)
 {
-    switch (s->type){
+    switch (s->type) {
     case SymbolType::ST_OP: // operator
         putOp(s, ctxt);
         break;
@@ -107,14 +109,14 @@ void Code::putSym(LPSYMBOL s, uint32_t ctxt)
         break;
     case SymbolType::ST_ID:
     case SymbolType::ST_CONST:
-        if (ctxt == IM8){
+        if (ctxt == IM8) {
             putByte(s->val8);
-        } else{
+        } else {
             putWord(s->val16);
         }
         break;
     default:
-        throw Exception("unexpected symbol type.");
+        throw std::exception("unexpected symbol type.");
     }
 }
 
@@ -123,7 +125,7 @@ void Code::putSyms(LPSYMBOL s1, LPSYMBOL s2, uint32_t ctxt)
 {
     // s2 is a critical expression and evaluated during first pass
 
-    for (word i = 0; i < s2->val16; ++i){
+    for (word i = 0; i < s2->val16; ++i) {
         putSym(s1, ctxt);
     }
 }
@@ -140,9 +142,9 @@ void Code::putOp(LPSYMBOL s, uint32_t ctxt)
     // push symbol
     pushsym(s);
 
-    if (ctxt == IM8){
+    if (ctxt == IM8) {
         putByte(0);
-    } else{
+    } else {
         putWord(0);
     }
 }
@@ -158,9 +160,9 @@ void Code::putFixup(LPSYMBOL s, uint32_t ctxt)
     // push symbol
     pushsym(s);
 
-    if (ctxt == IM8){
+    if (ctxt == IM8) {
         putByte(0);
-    } else{
+    } else {
         putWord(0);
     }
 }
@@ -169,7 +171,7 @@ void Code::putFixup(LPSYMBOL s, uint32_t ctxt)
 void Code::putByte(byte b)
 {
     if ((m_pmem - &m_memory[0]) >= MEMSIZE)
-        throw Exception("memory overflow.");
+        throw std::exception("memory overflow.");
 
     *m_pmem++ = b;
 }
@@ -195,8 +197,8 @@ void Code::putByteAt(word location, byte b)
 void Code::code0(uint32_t mode, LPSYMBOL s1)
 {
     Code0FncMap::const_iterator it = m_code0Map.find(mode);
-    if (it == m_code0Map.end()){
-        throw Exception("unexpected addressing mode %d.", mode);
+    if (it == m_code0Map.end()) {
+        throw std::exception((format("unexpected addressing mode %d. ") % mode).str().c_str());
     }
 
     const Code0Ptr pfnc = (*it).second;
@@ -208,11 +210,11 @@ void Code::code0(uint32_t mode, LPSYMBOL s1)
 void Code::code1(uint32_t mode, LPSYMBOL s1, LPSYMBOL s2)
 {
     Code1FncMap::const_iterator it = m_code1Map.find(mode);
-    if (it == m_code1Map.end()){
-        throw Exception("unexpected addressing mode %d.", mode);
+    if (it == m_code1Map.end()) {
+        throw std::exception((format("unexpected addressing mode %d. ") % mode).str().c_str());
     }
 
-    Code1Ptr pfnc = (*it).second;
+    const auto pfnc = (*it).second;
 
     (this->*(pfnc))(s1->instr, s2);
 }
@@ -221,11 +223,11 @@ void Code::code1(uint32_t mode, LPSYMBOL s1, LPSYMBOL s2)
 void Code::code2(uint32_t mode, LPSYMBOL s1, LPSYMBOL s2, LPSYMBOL s3)
 {
     Code2FncMap::const_iterator it = m_code2Map.find(mode);
-    if (it == m_code2Map.end()){
-        throw Exception("unexpected addressing mode %d.", mode);
+    if (it == m_code2Map.end()) {
+        throw std::exception((format("unexpected addressing mode %d. ") % mode).str().c_str());
     }
 
-    const Code2Ptr pfnc = (*it).second;
+    const auto pfnc = (*it).second;
 
     (this->*(pfnc))(s1->instr, s2, s3);
 }
@@ -448,17 +450,17 @@ void Code::pass2()
 /////////////////////////////////////////////////////////////////////////////
 void Code::write(FILE* fp) const
 {
-    const byte* pmem = &m_memory[0];
+    const auto* pmem = &m_memory[0];
 
-    if (fwrite(&m_origin, sizeof(word), 1, fp) != 1){
-        throw Exception("can't write to file: %s.",
-                        strerror(errno));
+    if (fwrite(&m_origin, sizeof(word), 1, fp) != 1) {
+        throw std::exception((format("can't write to file: %s.")
+            % strerror(errno)).str().c_str());
     }
 
-    for (; pmem < m_pmem; pmem++){
-        if (fputc(*pmem, fp) == EOF){
-            throw Exception("can't write to file: %s.",
-                            strerror(errno));
+    for (; pmem < m_pmem; pmem++) {
+        if (fputc(*pmem, fp) == EOF) {
+            throw std::exception((format("can't write to file: %s.")
+                % strerror(errno)).str().c_str());
         }
     }
 
@@ -470,9 +472,9 @@ void Code::pushsym(LPSYMBOL s)
 {
     SymbolVec::const_iterator it;
 
-    switch (s->type){
+    switch (s->type) {
     case SymbolType::ST_LIST: // list of arguments
-        for (it = s->vsyms.begin(); it != s->vsyms.end(); it++){
+        for (it = s->vsyms.begin(); it != s->vsyms.end(); ++it) {
             pushsym(*it);
         }
         break;
@@ -482,6 +484,5 @@ void Code::pushsym(LPSYMBOL s)
         break;
     default:
         program.push(s); // single argument
-    };
+    }
 }
-

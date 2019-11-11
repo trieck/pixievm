@@ -23,7 +23,7 @@ public:
     ~Options() = default;
 
     // Interface
-    void put(const std::string& name, const std::string&value = NIL)
+    void put(const std::string& name, const std::string& value = NIL)
     {
         options[name] = value;
     }
@@ -55,20 +55,20 @@ void options(int argc, char** argv)
 {
     const char* pval;
 
-    for (; argc; --argc, ++argv){
+    for (; argc; --argc, ++argv) {
         if (argv[0][0] != '-' && argv[0][1] != '-')
             continue;
 
         argv[0]++;
         argv[0]++;
 
-        if ((pval = strchr(argv[0], '=')) != nullptr){
+        if ((pval = strchr(argv[0], '=')) != nullptr) {
             // option assignment
             auto name = string(argv[0], pval - argv[0]);
             name = trim(name);
             const auto value = trim(++pval);
             g_Options.put(name, value);
-        } else{
+        } else {
             g_Options.put(argv[0]);
         }
     }

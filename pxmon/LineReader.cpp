@@ -15,7 +15,7 @@ string LineReader::readLine()
     string output;
 
     int c;
-    while ((c = is.get()) != -1){
+    while ((c = is.get()) != -1) {
         if (c == '\r' || c == '\n')
             break;
         output += c;

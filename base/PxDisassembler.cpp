@@ -49,10 +49,10 @@ void PxDisassembler::disassemble(byte b)
     const auto m = opinfo[b];
     printf("%.2x", b);
 
-    if (m == nullptr){
+    if (m == nullptr) {
         DB(b);
-    } else{
-        switch (m->mode){
+    } else {
+        switch (m->mode) {
         case AM_RR8:
             RR8(m);
             break;
@@ -347,9 +347,9 @@ void PxDisassembler::M16(LPOPINFO m)
 {
     const auto b = fetch();
     const auto* r = R16STR(LONYBBLE(b));
-    if (strcmp(m->mnemonic, "call") == 0 || strcmp(m->mnemonic, "jmp") == 0){
+    if (strcmp(m->mnemonic, "call") == 0 || strcmp(m->mnemonic, "jmp") == 0) {
         printf(" %.2x          %s [%s]\n", b, m->mnemonic, r);
-    } else{
+    } else {
         printf(" %.2x          %s word [%s]\n", b, m->mnemonic, r);
     }
 }
@@ -367,10 +367,10 @@ void PxDisassembler::A16(LPOPINFO m)
 {
     const auto a16 = fetchWord();
     if (strcmp(m->mnemonic, "call") == 0 || strcmp(m->mnemonic, "jmp")
-        == 0){
+        == 0) {
         printf(" %.2x %.2x       %s [$%.4x]\n",
                HIBYTE(a16), LOBYTE(a16), m->mnemonic, a16);
-    } else{
+    } else {
         printf(" %.2x %.2x       %s word [$%.4x]\n",
                HIBYTE(a16), LOBYTE(a16), m->mnemonic, a16);
     }

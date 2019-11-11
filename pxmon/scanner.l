@@ -3,8 +3,11 @@
 #include "Instructions.h"
 #include "SymbolTable.h"
 #include "Parser.hpp"
-#include "Exception.h"
 #include "Util.h"
+
+#include <boost/format.hpp>
+
+using boost::format;
 
 #define YY_ALWAYS_INTERACTIVE   (1)
 #define YY_NO_UNISTD_H (1)
@@ -29,7 +32,7 @@ newline         [\n]
 {hexnum}                    {
     word d; 
     if (!sscanf(&yytext[1], "%hx", &d)) {
-        throw Exception("invalid hex number \"%s\".", yytext);
+        throw std::exception((format("invalid hex number \"%s\".") % yytext).str().c_str());
     }       
     if (d < 0x100) {
         yylval.sym = table.installw(yytext, ST_CONST, IM8, d); 
@@ -44,10 +47,10 @@ newline         [\n]
     string reg = trim(string(yytext, strchr(yytext, '+') - yytext));
     auto sym = table.lookup(reg);
     if (sym == nullptr) {
-        throw Exception("unexpected token \"%s\".", yytext);
+        throw std::exception((format("unexpected token \"%s\".") % yytext).str().c_str());
     }
     if (sym->type != ST_REG) {
-        throw Exception("unsupported symbol \"%s\".", yytext);
+        throw std::exception((format("unsupported symbol \"%s\".") % yytext).str().c_str());
     }
 
     /* encode offset bit in register */
@@ -58,7 +61,7 @@ newline         [\n]
 {identifier}                {
     auto sym = table.lookup(yytext);
     if (sym == nullptr) {
-        throw Exception("unexpected token \"%s\".", yytext);
+        throw std::exception((format("unexpected token \"%s\".") % yytext).str().c_str());
     }
     
     switch (sym->type) {
@@ -70,7 +73,7 @@ newline         [\n]
         yylval.n = sym->sub;
         return yylval.n;
     default:
-        throw Exception("unsupported symbol \"%s\".", yytext);
+        throw std::exception((format("unsupported symbol\"%s\".") % yytext).str().c_str());
     }
     
     return 0;

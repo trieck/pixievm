@@ -126,7 +126,7 @@ void SymbolTable::idinsert(const string& s, int id)
 Symbol* SymbolTable::installw(const string& s, int type, int sub, word w)
 {
     auto* sym = lookup(s);
-    if (sym == nullptr){
+    if (sym == nullptr) {
         auto symPtr = std::make_shared<Symbol>();
         symPtr->name = s;
         symPtr->type = type | ST_TEMP;
@@ -170,8 +170,8 @@ Symbol* SymbolTable::lookup(const string& s) const
 void SymbolTable::flushtmp()
 {
     auto it = table.begin();
-    for (; it != table.end(); ++it){
-        if ((*it).second->type & ST_TEMP){
+    for (; it != table.end(); ++it) {
+        if ((*it).second->type & ST_TEMP) {
             table.erase(it);
             it = table.begin();
         }

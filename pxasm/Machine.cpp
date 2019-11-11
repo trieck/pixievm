@@ -6,14 +6,17 @@
 //
 
 #include "common.h"
+#include <boost/format.hpp>
+
+#include "code.h"
 #include "machine.h"
-#include "SymbolTable.h"
 #include "Parser.hpp"
 #include "program.h"
-#include "code.h"
-#include "exception.h"
+#include "SymbolTable.h"
 
 extern Code code;
+
+using boost::format;
 
 /////////////////////////////////////////////////////////////////////////////
 Machine::Machine() : m_pc(nullptr)
@@ -27,16 +30,11 @@ Machine::Machine() : m_pc(nullptr)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-Machine::~Machine()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 Instruction Machine::lookup(uint32_t opcode)
 {
-    auto& machine = Machine::instance();
+    auto& machine = instance();
 
-    InstrMap::const_iterator it = machine.m_instr.find(opcode);
+    const auto it = machine.m_instr.find(opcode);
     if (it == machine.m_instr.end())
         return nullptr;
 
@@ -48,7 +46,7 @@ void Machine::exec(const Program& program)
 {
     m_pc = program;
 
-    while (m_pc->type != DT_UNDEF){
+    while (m_pc->type != DT_UNDEF) {
         eval();
     }
 }
@@ -57,7 +55,7 @@ void Machine::exec(const Program& program)
 Datum Machine::eval()
 {
     Datum d;
-    switch (m_pc->type){
+    switch (m_pc->type) {
     case DT_UNDEF:
         return d;
     case DT_SYM:
@@ -66,7 +64,7 @@ Datum Machine::eval()
         return (this->*m_pc++->instr)();
     default:
         return *m_pc++;
-    };
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -75,20 +73,21 @@ Datum Machine::evalsym(LPSYMBOL s)
     Datum d;
     Instruction i;
 
-    switch (s->type){
+    switch (s->type) {
     case SymbolType::ST_UNDEF:
-        throw Exception("identifier \"%s\" was undefined near line %d.",
-                        s->name.c_str(), s->lineno);
+        throw std::exception((format("identifier \"%s\" was undefined near line %d.")
+                        % s->name.c_str() % s->lineno).str().c_str());
     case SymbolType::ST_OP:
-        if ((i = lookup(s->opcode)) == NULL){
-            throw Exception("unrecognized opcode %d.", s->opcode);
+        if ((i = lookup(s->opcode)) == NULL) {
+            throw std::exception((format("unrecognized opcode %d")
+                % s->opcode).str().c_str());
         }
         return (this->*i)();
     default:
         d.type = DT_CONST;
         d.value = s->val16;
         return d;
-    };
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -174,19 +173,20 @@ Datum Machine::fixup()
     const auto loc = eval();
     const auto target = eval();
 
-    if (ctxt.value == IM8){
+    if (ctxt.value == IM8) {
         // relative branch fix-up
         const int16_t diff = target.value - (loc.value + 1);
 
-        if (diff < int8_t(0x80)){
+        if (diff < int8_t(0x80)) {
             // backward branch
-            throw Exception("backward branch out of range.");
-        } else if (diff > 0x7F){
+            throw std::exception("backward branch out of range.");
+        }
+        if (diff > 0x7F) {
             // forward branch
-            throw Exception("forward branch out of range.");
+            throw std::exception("forward branch out of range.");
         }
         code.putByteAt(loc.value, byte(diff));
-    } else{
+    } else {
         // forward reference
         code.putWordAt(loc.value, target.value);
     }
@@ -201,9 +201,9 @@ Datum Machine::memstore()
     const auto loc = eval();
     const auto value = eval();
 
-    if (ctxt.value == IM16){
+    if (ctxt.value == IM16) {
         code.putWordAt(loc.value, value.value);
-    } else{
+    } else {
         code.putByteAt(loc.value, byte(value.value));
     }
 

@@ -7,7 +7,6 @@
 
 #include "common.h"
 #include "machine.h"
-#include "exception.h"
 #include "options.h"
 
 ////////////////////////////////////////////////////////////////////////////
@@ -19,11 +18,11 @@ int main(int argc, char** argv)
 
     auto ret = 0;
 
-    try{
+    try {
         machine.init();
         ret = machine.run();
-    } catch (const Exception& e){
-        cerr << e.getDescription() << endl;
+    } catch (const std::exception& e) {
+        cerr << e.what() << endl;
         return 1;
     }
 

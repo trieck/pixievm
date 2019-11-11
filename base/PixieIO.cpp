@@ -84,7 +84,7 @@ void PixieIO::keyOff(uint8_t key_code)
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::clockTrigger()
 {
-    if (--TIMER_A_LO == 0xFF && --TIMER_A_HI == 0xFF){  // underflow
+    if (--TIMER_A_LO == 0xFF && --TIMER_A_HI == 0xFF) {  // underflow
         TIMER_A_LO = LATCH_A_LO;
         TIMER_A_HI = LATCH_A_HI;
         g_interrupt.setPending(IK_IRQ);

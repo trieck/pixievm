@@ -2,7 +2,6 @@
 #include "Common.h"
 #include "SymbolTable.h"
 #include "Code.h"
-#include "Exception.h"
 #include "Util.h"
 
 extern char *yytext;

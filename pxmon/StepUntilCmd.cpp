@@ -19,7 +19,7 @@ void StepUntilCmd::exec(const stringvec& v)
 
     // set the stack pointer to a sane value if zero
     word sp;
-    if ((sp = cpu.getSP()) == 0){
+    if ((sp = cpu.getSP()) == 0) {
         cpu.setSP(0x1FF);
     }
 
@@ -27,9 +27,9 @@ void StepUntilCmd::exec(const stringvec& v)
     word ip = cpu.getIP();
     cpu.push16(ip);
 
-    if (!v.empty()){
+    if (!v.empty()) {
         const auto n = sscanf(v[0].c_str(), "%hx", &ip);
-        if (n != 1){
+        if (n != 1) {
             cerr << "? u [address]" << endl;
             return;
         }
@@ -56,9 +56,9 @@ void StepUntilCmd::trap(void* data)
     // if so, break back into the monitor. Otherwise, keep stepping.
 
     const byte instruction = mem.fetch(ip);
-    if (instruction == RET || mon.isRunning()){
+    if (instruction == RET || mon.isRunning()) {
         g_interrupt.setMonitorBreak(&mon);
-    } else{
+    } else {
         ip = cpu.getIP();
         g_interrupt.setTrap(this, reinterpret_cast<void*>(ip));
     }

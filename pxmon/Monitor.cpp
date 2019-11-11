@@ -43,7 +43,7 @@ bool Monitor::assemble(word address, const string& str)
     auto result = false;
 
     const auto command = m_commands.at("a");
-    if (command != nullptr){
+    if (command != nullptr) {
         auto* assembler = dynamic_cast<AssemCmd *>(command.get());
         result = assembler->assemble(address, str);
     }
@@ -56,7 +56,7 @@ void Monitor::disassemble(const word address)
 {
     // this is a single line convenience method used by the stepper
     const auto command = m_commands.at("d");
-    if (command != nullptr){
+    if (command != nullptr) {
         auto* disassembler = dynamic_cast<DisassemCmd *>(command.get());
         disassembler->disassemble(address);
     }
@@ -75,10 +75,10 @@ void Monitor::runLoop()
 {
     LineReader reader(cin);
 
-    for (m_exit_mon = false; !m_exit_mon;){
+    for (m_exit_mon = false; !m_exit_mon;) {
         prompt();
         const auto line = reader.readLine();
-        if (line.length()){
+        if (line.length()) {
             dispatch(line);
         }
     }
@@ -87,7 +87,7 @@ void Monitor::runLoop()
 /////////////////////////////////////////////////////////////////////////////
 void Monitor::notice() const
 {
-    if (m_show_notice){
+    if (m_show_notice) {
         cout << "PixieVM Monitor version 0.0.2" << endl
             << "Copyright (c) 2006-2019 Thomas A. Rieck" << endl
             << "use CTRL+BREAK to break execution." << endl
@@ -99,13 +99,13 @@ void Monitor::notice() const
 void Monitor::dispatch(const string& line)
 {
     auto v = tokenize(line);
-    if (v.empty()){
+    if (v.empty()) {
         cerr << '?' << endl;
-    } else{
+    } else {
         const auto it = m_commands.find(v.at(0));
-        if (it == m_commands.end()){
+        if (it == m_commands.end()) {
             cerr << '?' << endl;
-        } else{
+        } else {
             v.erase(v.begin());
             auto command = (*it).second;
             command->exec(v);
@@ -136,14 +136,14 @@ void Monitor::sighandler(int signum)
 {
     auto& This = instance();
 
-    if (signum == SIGBREAK){
-        if (!This.isRunning()){
+    if (signum == SIGBREAK) {
+        if (!This.isRunning()) {
             // executing code, not in monitor
             This.setExit(false); // set back to running to break
             signal(SIGBREAK, &Monitor::sighandler); // re-install
-        } else{
+        } else {
             CPU::instance().setShutdown(true); // shut down CPU
             This.setExit(true); // exit monitor
-        };
+        }
     }
 }

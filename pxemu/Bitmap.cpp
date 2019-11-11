@@ -21,7 +21,7 @@ void Bitmap::CreateBitmap()
     m_dc.CreateCompatibleDC(nullptr);
 
     const auto sz = sizeof(BITMAPINFOHEADER) +
-                    sizeof(RGBQUAD) * Palette::NUM_COLORS;
+        sizeof(RGBQUAD) * Palette::NUM_COLORS;
 
     m_bmi.reset(reinterpret_cast<LPBITMAPINFO>(std::malloc(sz)));
 

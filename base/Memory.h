@@ -26,6 +26,7 @@ public:
     bool save(ostream& os, word base, int size);
 private:
     enum { MEM_SIZE = 0x10000 };
+
     byte* memory;
 };
 

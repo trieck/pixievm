@@ -33,7 +33,7 @@ int KeyboardMatrix::translate(WPARAM virtkey, LPARAM keydata)
     int sc = (keydata & 0x00FF0000) >> 16;
 
     auto result = -1;
-    switch (virtkey){
+    switch (virtkey) {
     case VK_F1: return MATRIX(0, 7);
     case VK_F2: return MATRIX(0, 7) | 0x80;
     case VK_F3: return MATRIX(0, 6);
@@ -130,7 +130,7 @@ int KeyboardMatrix::translate(WPARAM virtkey, LPARAM keydata)
         break;
     default:
         break;
-    };
+    }
 
     if (result != -1 && GetKeyState(VK_CAPITAL))
         result |= 0x80;

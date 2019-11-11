@@ -1,6 +1,5 @@
 #include "StdAfx.h"
 #include "Palette.h"
-#include "exception.h"
 
 constexpr auto HEIGHT = (16 * 16);
 constexpr auto WIDTH = (16 * 16);
@@ -26,8 +25,8 @@ void SavePalette()
     bmih.biClrUsed = 256;
 
     FILE* fp;
-    if ((fp = fopen("palette.bmp", "wb")) == nullptr){
-        throw Exception("Cannot write file \"palette.bmp\".");
+    if ((fp = fopen("palette.bmp", "wb")) == nullptr) {
+        throw std::exception("Cannot write file \"palette.bmp\".");
     }
 
     fwrite(&bmfh, 1, sizeof(BITMAPFILEHEADER), fp);
@@ -35,19 +34,19 @@ void SavePalette()
 
     // write color table
     RGBQUAD rgbColor;
-    for (UINT i = 0; i < Palette::NUM_COLORS; ++i){
+    for (UINT i = 0; i < Palette::NUM_COLORS; ++i) {
         rgbColor = Palette::Color(i);
         fwrite(&rgbColor, 1, sizeof(RGBQUAD), fp);
     }
 
     // write pixel data
     uint8_t color = 0, rowColor = 0;
-    for (auto i = 0; i < HEIGHT; ++i){
+    for (auto i = 0; i < HEIGHT; ++i) {
         if (i > 0 && i % 16 == 0)
             rowColor = color + 1;
 
         color = rowColor;
-        for (auto j = 0; j < WIDTH; ++j){
+        for (auto j = 0; j < WIDTH; ++j) {
             if (j > 0 && j % 16 == 0)
                 color++;
 
@@ -60,10 +59,10 @@ void SavePalette()
 
 int main(int argc, char* argv[])
 {
-    try{
+    try {
         SavePalette();
-    } catch (const Exception& e){
-        cerr << e.getDescription() << endl;
+    } catch (const std::exception& e) {
+        cerr << e.what() << endl;
         return 1;
     }
 

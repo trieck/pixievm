@@ -3,7 +3,6 @@
 #include "Instructions.h"
 #include "SymbolTable.h"
 #include "Code.h"
-#include "Exception.h"
 
 extern int yylex(void);
 extern int yyterminate(void);
@@ -87,6 +86,6 @@ A16:        '[' IM8 ']'     { $$ = $2; }
     
 int yyerror(const char *s)
 {
-    throw Exception(s);
+    throw std::exception(s);
     return 0;
 }

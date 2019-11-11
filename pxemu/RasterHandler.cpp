@@ -29,14 +29,14 @@ void RasterHandler::handle()
     const auto borderColor = memory.fetch(IO_REG_BORDER_COLOR);
 
     // handle 4-pixels at a time
-    for (auto i = 0; i < 4; ++i){
+    for (auto i = 0; i < 4; ++i) {
         // are we on a border?
         if (m_scanLine < Canvas::CY_BORDER ||
             m_scanLine >= Canvas::CY_SIZE - Canvas::CY_BORDER ||
             m_offset < Canvas::CX_BORDER ||
-            m_offset >= Canvas::CX_SIZE - Canvas::CY_BORDER){
+            m_offset >= Canvas::CX_SIZE - Canvas::CY_BORDER) {
             canvas.SetPixel(m_offset, m_scanLine, borderColor);
-        } else{
+        } else {
             const uint16_t scanLine = m_scanLine - Canvas::CY_BORDER;
             const uint16_t offset = m_offset - Canvas::CX_BORDER;
             const uint16_t row = scanLine / 8;
@@ -54,9 +54,9 @@ void RasterHandler::handle()
             const auto color = memory.fetch(color_ptr);
 
             const uint8_t start = 7 - (offset % 8);
-            if (ch & 1 << start){
+            if (ch & 1 << start) {
                 canvas.SetPixel(m_offset, m_scanLine, color);
-            } else{
+            } else {
                 canvas.SetPixel(m_offset, m_scanLine, bkgndColor);
             }
         }
@@ -65,11 +65,11 @@ void RasterHandler::handle()
     }
 
     if (m_offset == 0 && (m_scanLine > 0
-        && ((m_scanLine % 8) == 0) || m_scanLine == Canvas::CY_SIZE - 1)){
+        && ((m_scanLine % 8) == 0) || m_scanLine == Canvas::CY_SIZE - 1)) {
         canvas.Invalidate({ 0, m_scanLine - 8, Canvas::CX_SIZE, m_scanLine });
     }
 
-    if (m_offset == 0){
+    if (m_offset == 0) {
         // beginning of scan line
         ui.handle(); // dispatch ui events
         m_scanLine = (m_scanLine + 1) % Canvas::CY_SIZE;

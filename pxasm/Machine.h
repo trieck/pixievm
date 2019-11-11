@@ -19,7 +19,7 @@ class Machine : public Singleton<Machine>
     friend class Singleton<Machine>;
 
 public:
-    ~Machine();
+    ~Machine() = default;
 
     // Interface
     void exec(const Program& program);

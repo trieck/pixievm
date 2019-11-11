@@ -6,9 +6,11 @@
 //
 
 #include "common.h"
-#include "Program.h"
 #include "Machine.h"
-#include "Exception.h"
+#include "Program.h"
+#include <boost/format.hpp>
+
+using boost::format;
 
 /////////////////////////////////////////////////////////////////////////////
 Program::Program() : m_pmem(m_memory)
@@ -17,14 +19,9 @@ Program::Program() : m_pmem(m_memory)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-Program::~Program()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void Program::init()
 {
-    m_pmem = m_memory;
+    m_pmem = &m_memory[0];
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -32,8 +29,8 @@ void Program::pushop(uint32_t opcode)
 {
     Instruction i;
 
-    if ((i = Machine::lookup(opcode)) == NULL){
-        throw Exception("unrecognized opcode %d.", opcode);
+    if ((i = Machine::lookup(opcode)) == NULL) {
+        std::exception((format("unrecognized opcode %d.") % opcode).str().c_str());
     }
 
     push(i);
@@ -70,7 +67,7 @@ void Program::push(LPSYMBOL s)
 void Program::push(const Datum& d)
 {
     if (m_pmem >= &m_memory[NPROG])
-        throw Exception("memory overflow.");
+        throw std::exception("memory overflow.");
 
     *m_pmem++ = d;
 }

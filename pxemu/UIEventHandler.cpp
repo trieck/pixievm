@@ -20,18 +20,18 @@ void UIEventHandler::handle()
     auto pLoop = _Module.GetMessageLoop();
 
     MSG msg;
-    while (PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE)){
-        if (!GetMessage(&msg, nullptr, 0, 0)){
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_NOREMOVE)) {
+        if (!GetMessage(&msg, nullptr, 0, 0)) {
             CPU::instance().setShutdown(true, static_cast<int>(msg.wParam));
             return;
         }
 
         if (!PreTranslateMessage(&msg)) {
-            ::TranslateMessage(&msg);
+            TranslateMessage(&msg);
             ::DispatchMessage(&msg);
         }
 
-        if (IsIdleMessage(&msg)){
+        if (IsIdleMessage(&msg)) {
             pLoop->OnIdle(0);
         }
     }

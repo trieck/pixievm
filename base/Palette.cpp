@@ -266,7 +266,7 @@ RGBQUAD Palette::Color(UINT index)
 {
     RGBQUAD color;
 
-    index %= Palette::NUM_COLORS;
+    index %= NUM_COLORS;
 
     color.rgbBlue = GetBValue(m_palette[index]);
     color.rgbGreen = GetGValue(m_palette[index]);

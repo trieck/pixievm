@@ -8,7 +8,6 @@
 #include "common.h"
 #include "SymbolTable.h"
 #include "MiniAssembler.h"
-#include "exception.h"
 #include "Parser.hpp"
 #include "CPU.H"
 
@@ -41,7 +40,7 @@ void MiniAssembler::assemble(word* start)
 {
     initialize(start);
 
-    for (;;){
+    for (;;) {
         prompt();
         if (!tryParse())
             break;
@@ -68,11 +67,11 @@ bool MiniAssembler::assemble(word* start, const char* str)
 /////////////////////////////////////////////////////////////////////////////
 void MiniAssembler::initialize(const word* start)
 {
-    if (start){
+    if (start) {
         // start addres
         address = *start;
         init = true;
-    } else if (!init){
+    } else if (!init) {
         // not entered
         address = CPU::instance().getIP();
         init = true;
@@ -82,12 +81,12 @@ void MiniAssembler::initialize(const word* start)
 /////////////////////////////////////////////////////////////////////////////
 bool MiniAssembler::tryParse()
 {
-    try{
+    try {
         if (parse() == 0)
             return true;
-    } catch (const Exception& e){
+    } catch (const std::exception& e) {
         yyrestart(yyin);
-        cerr << e.getDescription() << endl;
+        cerr << e.what() << endl;
     }
 
     return false;

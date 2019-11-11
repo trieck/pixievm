@@ -53,6 +53,7 @@ template <typename Value>
 class StringKeyMap
 {
     StringKeyMap() = default;
+
     struct case_insensitive_hash
     {
         size_t operator()(const std::string& key) const
@@ -64,10 +65,12 @@ class StringKeyMap
 
     struct case_insensitive_compare
     {
-        bool operator()(const string& left, const string& right) const {
+        bool operator()(const string& left, const string& right) const
+        {
             return boost::iequals(left, right);
         }
     };
+
 public:
     using Type = unordered_map<string, Value, case_insensitive_hash, case_insensitive_compare>;
 };

@@ -25,7 +25,7 @@ stringvec split(const string& s, const char* del)
     strcpy(p, s.c_str());
 
     char* tok = strtok(p, del);
-    while (tok != nullptr){
+    while (tok != nullptr) {
         output.push_back(tok);
         tok = strtok(nullptr, del);
     }
@@ -44,16 +44,16 @@ stringvec tokenize(const string& s)
     const char** ppin = &pstart;
     const char* pin = *ppin;
 
-    for (;;){
-        switch (*pin){
+    for (;;) {
+        switch (*pin) {
         case '\0':
-            if (pin > *ppin){
+            if (pin > *ppin) {
                 output.push_back(string(*ppin, pin - *ppin));
                 *ppin = pin;
             }
             return output;
         case '"':
-            if (pin > *ppin){
+            if (pin > *ppin) {
                 output.push_back(string(*ppin, pin - *ppin));
                 *ppin = pin;
             }
@@ -67,7 +67,7 @@ stringvec tokenize(const string& s)
         case '\n':
         case '\t':
         case ' ':
-            if (pin > *ppin){
+            if (pin > *ppin) {
                 output.push_back(string(*ppin, pin - *ppin));
                 *ppin = pin;
             }
@@ -87,18 +87,18 @@ string trim(const string& s)
     string output;
 
     const char* pin = s.c_str();
-    for (; *pin; pin++){
+    for (; *pin; pin++) {
         if (!isspace(*pin))
             break;
     }
 
     const char* pend = s.c_str() + s.length();
-    for (; pend != pin;){
+    for (; pend != pin;) {
         if (!isspace(*--pend))
             break;
     }
 
-    for (; *pin && pin <= pend; pin++){
+    for (; *pin && pin <= pend; pin++) {
         output += *pin;
     }
 
@@ -112,11 +112,11 @@ string basename(const string& filename)
 
     const auto* fname = filename.c_str();
     const char* p;
-    if ((p = strrchr(fname, PATH_SEP)) != nullptr){
+    if ((p = strrchr(fname, PATH_SEP)) != nullptr) {
         fname = p + 1;
     }
 
-    for (; *fname != '\0'; fname++){
+    for (; *fname != '\0'; fname++) {
         if (*fname == SUFFIX_SEP)
             break;
 
@@ -134,11 +134,10 @@ uint32_t hash32(const void* key, uint32_t len)
     uint32_t hash;
     const auto* k = static_cast<const uint8_t*>(key);
 
-    for (hash = 0, i = 0; i < len; ++i){
+    for (hash = 0, i = 0; i < len; ++i) {
         hash *= 16777619;
         hash ^= k[i];
     }
 
     return hash;
 }
-

@@ -12,7 +12,7 @@
 class Assembler
 {
 public:
-    Assembler();
+    Assembler() = default;
     ~Assembler();
 
     int assemble(const char* source);

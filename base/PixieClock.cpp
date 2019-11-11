@@ -12,7 +12,7 @@
 PixieClock::PixieClock() : ticksPerSecond(0)
 {
     LARGE_INTEGER li;
-    if (QueryPerformanceFrequency(&li)){
+    if (QueryPerformanceFrequency(&li)) {
         ticksPerSecond = LI2INT64(&li);
     }
 
@@ -39,7 +39,7 @@ uint64_t PixieClock::clock() const
 
     uint64_t ndiff = 0;
 
-    if (ticksPerSecond){
+    if (ticksPerSecond) {
         const auto tstart = LI2INT64(const_cast<PLARGE_INTEGER>(&start));
         const auto tend = LI2INT64(&end);
         ndiff = (tend - tstart) / (ticksPerSecond / 1022730);

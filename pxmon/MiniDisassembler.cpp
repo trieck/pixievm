@@ -25,17 +25,17 @@ byte MiniDisassembler::fetch()
 void MiniDisassembler::disassemble(word* start, word* end)
 {
     word lastip = 0;
-    if (start){
+    if (start) {
         /* start address supplied */
         ip = *start;
         init = true;
-    } else if (!init){
+    } else if (!init) {
         /* not entered */
         ip = CPU::instance().getIP();
         init = true;
     }
 
-    for (int i = 0; ip >= lastip && (end ? ip <= *end : i < NLINES); i++){
+    for (int i = 0; ip >= lastip && (end ? ip <= *end : i < NLINES); i++) {
         printip();
         lastip = ip;
         byte b = fetch();

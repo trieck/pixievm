@@ -16,9 +16,9 @@ void StepCmd::exec(const stringvec& v)
     auto& cpu = CPU::instance();
 
     auto ip = cpu.getIP();
-    if (!v.empty()){
+    if (!v.empty()) {
         const auto n = sscanf(v[0].c_str(), "%hx", &ip);
-        if (n != 1){
+        if (n != 1) {
             cerr << "? t [address]" << endl;
             return;
         }

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "pxemu.h"
-#include "Exception.h"
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int nCmdShow)
 {
@@ -8,10 +7,10 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 
     auto ret = 0;
 
-    try{
+    try {
         emulator.init();
         ret = emulator.run();
-    } catch (const Exception& /*e*/){
+    } catch (const std::exception& /*e*/) {
         return 1;
     }
 

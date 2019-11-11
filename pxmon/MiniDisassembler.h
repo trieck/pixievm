@@ -22,7 +22,7 @@ public:
 
     // Implementation
 protected:
-    virtual byte fetch();
+    byte fetch() override;
 private:
     enum { NLINES = 16 };
 

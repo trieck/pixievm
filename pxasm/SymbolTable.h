@@ -33,7 +33,7 @@ class Symbol
 {
     friend class SymbolTable;
 
-    Symbol() : type(SymbolType::ST_UNDEF), sub(0), lineno(0), instr(nullptr), args(0)
+    Symbol() : type(SymbolType::ST_UNDEF), sub(0), lineno(0), instr(nullptr), args(nullptr)
     {
     }
 

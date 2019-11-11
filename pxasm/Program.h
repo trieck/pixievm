@@ -45,7 +45,7 @@ class Program
 {
 public:
     Program();
-    ~Program();
+    ~Program() = default;
 
     void init();
     void pushop(uint32_t opcode);
@@ -65,7 +65,7 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 inline Program::operator const Datum*() const
 {
-    return m_memory;
+    return &m_memory[0];
 }
 
 #endif // __PROGRAM_H__

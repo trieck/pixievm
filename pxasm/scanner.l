@@ -5,7 +5,6 @@
 #include "SymbolTable.h"
 #include "Code.h"
 #include "Parser.hpp"
-#include "Exception.h"
 #include "Util.h"
 
 #define YY_NO_UNISTD_H (1)

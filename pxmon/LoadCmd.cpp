@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 void LoadCmd::exec(const stringvec& v)
 {
-    if (v.size() < 1){
+    if (v.size() < 1) {
         cerr << "? l file" << endl;
         return;
     }
@@ -22,27 +22,27 @@ void LoadCmd::exec(const stringvec& v)
 
     struct stat buf;
     const auto n = stat(filename.c_str(), &buf);
-    if (n){
+    if (n) {
         fprintf(stderr, "unable to stat file \"%s\".\n", filename.c_str());
         return;
     }
 
     ifstream ifs;
     ifs.open(filename.c_str(), ifstream::in | ifstream::binary);
-    if (!ifs.is_open()){
+    if (!ifs.is_open()) {
         fprintf(stderr, "unable to open file \"%s\".\n", filename.c_str());
         return;
     }
 
     word start;
     ifs.read((char*)&start, sizeof(word));
-    if (ifs.bad()){
+    if (ifs.bad()) {
         fprintf(stderr, "unable to read from file \"%s\".\n",
                 filename.c_str());
         return;
     }
 
-    if (!Memory::instance().load(ifs, start, static_cast<word>(buf.st_size - sizeof(word)))){
+    if (!Memory::instance().load(ifs, start, static_cast<word>(buf.st_size - sizeof(word)))) {
         fprintf(stderr, "unable to load file \"%s\".\n",
                 filename.c_str());
     }

@@ -30,7 +30,7 @@ public:
 
     CCommandBarCtrl m_CmdBar;
 
-    virtual BOOL PreTranslateMessage(MSG* pMsg)
+    BOOL PreTranslateMessage(MSG* pMsg) override
     {
         if (CMainFrameImpl::PreTranslateMessage(pMsg))
             return TRUE;
@@ -38,7 +38,7 @@ public:
         return m_view.PreTranslateMessage(pMsg);
     }
 
-    virtual BOOL OnIdle()
+    BOOL OnIdle() override
     {
         UIUpdateToolBar();
         return FALSE;
@@ -69,7 +69,7 @@ BEGIN_MSG_MAP(CMainFrame)
     LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
     {
         // create command bar window
-        const auto hWndCmdBar = m_CmdBar.Create(m_hWnd, rcDefault, NULL, ATL_SIMPLE_CMDBAR_PANE_STYLE);
+        const auto hWndCmdBar = m_CmdBar.Create(m_hWnd, rcDefault, nullptr, ATL_SIMPLE_CMDBAR_PANE_STYLE);
         // attach menu
         m_CmdBar.AttachMenu(GetMenu());
         // load command bar images
@@ -81,7 +81,7 @@ BEGIN_MSG_MAP(CMainFrame)
 
         CreateSimpleReBar(ATL_SIMPLE_REBAR_NOBORDER_STYLE);
         AddSimpleReBarBand(hWndCmdBar);
-        AddSimpleReBarBand(hWndToolBar, NULL, TRUE);
+        AddSimpleReBarBand(hWndToolBar, nullptr, TRUE);
 
         CreateSimpleStatusBar(ATL_IDS_IDLEMESSAGE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                               ATL_IDW_STATUS_BAR);

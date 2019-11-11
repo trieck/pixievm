@@ -2684,7 +2684,7 @@ void CPU::setAL(byte b)
 /////////////////////////////////////////////////////////////////////////////
 void CPU::setAH(byte b)
 {
-    R8VAL(REG8_AH) = b;;
+    R8VAL(REG8_AH) = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2789,16 +2789,16 @@ int CPU::run()
 
     PROCESS_ALARMS();
 
-    while (!m_shutdown){
+    while (!m_shutdown) {
         DO_INTERRUPT();
 
         if (m_shutdown)
             break;
 
         b = FETCH(REG_IP);
-        switch (b){
+        switch (b) {
 #include "FetchEx.cpp"
-        };
+        }
     }
 
     return m_exitCode;

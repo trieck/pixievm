@@ -46,7 +46,7 @@ ANON_END
 /////////////////////////////////////////////////////////////////////////////
 void code1(int mode, Symbol* s1)
 {
-    switch (mode){
+    switch (mode) {
     case AM_IMPLIED:
         IMPLIED(s1->instr);
         break;
@@ -58,7 +58,7 @@ void code1(int mode, Symbol* s1)
 /////////////////////////////////////////////////////////////////////////////
 void code2(int mode, Symbol* s1, Symbol* s2)
 {
-    switch (mode){
+    switch (mode) {
     case AM_R8:
         R8(s1->instr, s2->val8);
         break;
@@ -91,7 +91,7 @@ void code2(int mode, Symbol* s1, Symbol* s2)
 /////////////////////////////////////////////////////////////////////////////
 void code3(int mode, Symbol* s1, Symbol* s2, Symbol* s3)
 {
-    switch (mode){
+    switch (mode) {
     case AM_RR8:
         RR8(s1->instr, s2->val8, s3->val8);
         break;

@@ -14,7 +14,7 @@ Interrupt g_interrupt;
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::handleTrap()
 {
-    if (m_trapHandler != nullptr){
+    if (m_trapHandler != nullptr) {
         m_trapHandler->trap(m_trapData);
     }
 }
@@ -44,7 +44,7 @@ void Interrupt::setMonitorBreak(LPTRAPHANDLER handler)
 /////////////////////////////////////////////////////////////////////////////
 void Interrupt::handleMonitor()
 {
-    if (m_monHandler != nullptr){
+    if (m_monHandler != nullptr) {
         m_monHandler->handle();
     }
 }

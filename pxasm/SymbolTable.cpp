@@ -6,10 +6,10 @@
 //
 
 #include "common.h"
-#include "SymbolTable.h"
+
 #include "PixieVM.h"
+#include "SymbolTable.h"
 #include "Parser.hpp"
-#include "exception.h"
 #include <boost/format.hpp>
 
 #define ISLIST(s) ((s)->type == SymbolType::ST_LIST)
@@ -107,7 +107,7 @@ SymbolTable::SymbolTable()
 SymbolTable::~SymbolTable()
 {
     symmap::const_iterator it = table.begin();
-    for (; it != table.end(); ++it){
+    for (; it != table.end(); ++it) {
         delete (*it).second;
     }
 }
@@ -156,7 +156,7 @@ LPSYMBOL SymbolTable::install(const string& s)
     // undefined symbol
 
     LPSYMBOL sym;
-    if ((sym = lookup(s)) == nullptr){
+    if ((sym = lookup(s)) == nullptr) {
         sym = new Symbol;
         sym->name = s;
         sym->type = SymbolType::ST_UNDEF;
@@ -225,7 +225,7 @@ LPSYMBOL SymbolTable::installo(uint32_t op, uint32_t sub, Symbol* args)
 LPSYMBOL SymbolTable::opeval(uint32_t opcode, uint32_t sub, LPSYMBOL args)
 {
     // critical expression operator evaluation
-    switch (opcode){
+    switch (opcode) {
     case PLUS:
         return plus(sub, args);
     case MINUS:
@@ -235,8 +235,8 @@ LPSYMBOL SymbolTable::opeval(uint32_t opcode, uint32_t sub, LPSYMBOL args)
     case DIV:
         return div(sub, args);
     default:
-        throw Exception("unrecognized opcode %d.", opcode);
-    };
+        throw std::exception((format("unrecognized opcode %d.") % opcode).str().c_str());
+    }
 
     return nullptr;
 }
@@ -309,7 +309,7 @@ LPSYMBOL SymbolTable::mklist(LPSYMBOL s1, LPSYMBOL s2)
     LPSYMBOL list = nullptr;
     static auto counter = 0;
 
-    if (!ISLIST(s1) && !ISLIST(s2)){
+    if (!ISLIST(s1) && !ISLIST(s2)) {
         // make a new list
         list = new Symbol;
         list->name = (format("LIST:0x%08X") % counter++).str();
@@ -318,23 +318,23 @@ LPSYMBOL SymbolTable::mklist(LPSYMBOL s1, LPSYMBOL s2)
         list->vsyms.push_back(s1);
         list->vsyms.push_back(s2);
         table[list->name] = list;
-    } else if (ISLIST(s1) && !ISLIST(s2)){
+    } else if (ISLIST(s1) && !ISLIST(s2)) {
         // s1 is an existing list
         list = s1;
         list->vsyms.push_back(s2);
-    } else if (!ISLIST(s1) && ISLIST(s2)){
+    } else if (!ISLIST(s1) && ISLIST(s2)) {
         // s2 is an existing list
         list = s2;
         list->vsyms.push_back(s1);
-    } else if (s1 != s2){
+    } else if (s1 != s2) {
         // s1 and s2 are distinct existing lists
         list = s1; // copy list values from s2 to s1
 
         SymbolVec::const_iterator it = s2->vsyms.begin();
-        for (; it != s2->vsyms.end(); it++){
+        for (; it != s2->vsyms.end(); ++it) {
             list->vsyms.push_back(*it);
         }
-    } else{
+    } else {
         // existing list s1 == s2
         list = s1;
     }
@@ -349,7 +349,7 @@ string SymbolTable::opname(uint32_t opcode)
 
     static auto counter = 0;
 
-    switch (opcode){
+    switch (opcode) {
     case PLUS:
         opname = "+";
         break;

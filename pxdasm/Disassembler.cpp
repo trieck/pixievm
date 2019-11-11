@@ -7,7 +7,7 @@
 
 #include "common.h"
 #include "Disassembler.h"
-#include "exception.h"
+#include <boost/format.hpp>
 
 /////////////////////////////////////////////////////////////////////////////
 Disassembler::Disassembler() : m_fp(nullptr)
@@ -23,7 +23,7 @@ Disassembler::~Disassembler()
 /////////////////////////////////////////////////////////////////////////////
 void Disassembler::close() noexcept
 {
-    if (m_fp != nullptr){
+    if (m_fp != nullptr) {
         fclose(m_fp);
         m_fp = nullptr;
     }
@@ -34,9 +34,9 @@ void Disassembler::open(const char* filename)
 {
     close();
 
-    if ((m_fp = fopen(filename, "rb")) == nullptr){
-        throw Exception("can't open file \"%s\": %s.", filename,
-                        strerror(errno));
+    if ((m_fp = fopen(filename, "rb")) == nullptr) {
+        throw std::exception((boost::format("can't open file \"%s\": %s.") % filename
+            % strerror(errno)).str().c_str());
     }
 }
 
@@ -46,15 +46,15 @@ void Disassembler::disassemble(const char* filename)
     open(filename);
 
     word start;
-    if ((1 != fread(&start, sizeof(word), 1, m_fp))){
-        throw Exception("can't read from file \"%s\": %s", filename,
-                        strerror(errno));
+    if ((1 != fread(&start, sizeof(word), 1, m_fp))) {
+        throw std::exception((boost::format("can't read from file \"%s\": %s.") % filename
+            % strerror(errno)).str().c_str());
     }
 
-    PxDisassembler::ip = start;
+    ip = start;
 
     int c;
-    while ((c = fgetc(m_fp)) != EOF){
+    while ((c = fgetc(m_fp)) != EOF) {
         ungetc(c, m_fp);
         printip();
         PxDisassembler::disassemble(fetch());

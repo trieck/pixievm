@@ -7,7 +7,6 @@
 
 #include "common.h"
 #include "Disassembler.h"
-#include "exception.h"
 
 ANON_BEGIN
 void usage()
@@ -26,10 +25,10 @@ int main(int argc, const char** argv)
 
     Disassembler disassembler;
 
-    try{
+    try {
         disassembler.disassemble(argv[1]);
-    } catch (const Exception& e){
-        cerr << e.getDescription() << endl;
+    } catch (const std::exception& e) {
+        cerr << e.what() << endl;
         exit(EXIT_FAILURE);
     }
 
