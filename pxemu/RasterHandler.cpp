@@ -14,11 +14,6 @@
 constexpr auto IO_REG_BKGND_COLOR = (IO_REGISTER_BASE + 0);
 constexpr auto IO_REG_BORDER_COLOR = (IO_REGISTER_BASE + 1);
 
-static void SetPixel(uint16_t x, uint16_t y, uint8_t color)
-{
-    PostThreadMessage(GetCurrentThreadId(), WM_CANVAS_SET_PIXEL, MAKEWPARAM(x, y), MAKELPARAM(color, 0));
-}
-
 /////////////////////////////////////////////////////////////////////////////
 RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)
 {
@@ -28,18 +23,19 @@ RasterHandler::RasterHandler() : m_scanLine(0), m_offset(0)
 void RasterHandler::handle()
 {
     auto& memory = Memory::instance();
+    auto& canvas = Canvas::instance();
 
     const auto bkgndColor = memory.fetch(IO_REG_BKGND_COLOR);
     const auto borderColor = memory.fetch(IO_REG_BORDER_COLOR);
 
     // handle 4-pixels at a time
-    for (int i = 0; i < 4; ++i){
+    for (auto i = 0; i < 4; ++i){
         // are we on a border?
         if (m_scanLine < Canvas::CY_BORDER ||
             m_scanLine >= Canvas::CY_SIZE - Canvas::CY_BORDER ||
             m_offset < Canvas::CX_BORDER ||
             m_offset >= Canvas::CX_SIZE - Canvas::CY_BORDER){
-            SetPixel(m_offset, m_scanLine, borderColor);
+            canvas.SetPixel(m_offset, m_scanLine, borderColor);
         } else{
             const uint16_t scanLine = m_scanLine - Canvas::CY_BORDER;
             const uint16_t offset = m_offset - Canvas::CX_BORDER;
@@ -59,9 +55,9 @@ void RasterHandler::handle()
 
             const uint8_t start = 7 - (offset % 8);
             if (ch & 1 << start){
-                SetPixel(m_offset, m_scanLine, color);
+                canvas.SetPixel(m_offset, m_scanLine, color);
             } else{
-                SetPixel(m_offset, m_scanLine, bkgndColor);
+                canvas.SetPixel(m_offset, m_scanLine, bkgndColor);
             }
         }
 
@@ -70,8 +66,7 @@ void RasterHandler::handle()
 
     if (m_offset == 0 && (m_scanLine > 0
         && ((m_scanLine % 8) == 0) || m_scanLine == Canvas::CY_SIZE - 1)){
-        CRect rc(0, m_scanLine - 8, Canvas::CX_SIZE, m_scanLine);
-        // Canvas::instance().Invalidate(rc);
+        canvas.Invalidate({ 0, m_scanLine - 8, Canvas::CX_SIZE, m_scanLine });
     }
 
     if (m_offset == 0){

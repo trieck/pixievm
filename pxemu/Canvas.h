@@ -1,21 +1,20 @@
 #pragma once
 
+#include "Singleton.h"
 #include "Bitmap.h"
 
-constexpr auto WM_CANVAS_SET_PIXEL = WM_USER + 1;
-
 /////////////////////////////////////////////////////////////////////////////
-class Canvas
+class Canvas : public Singleton<Canvas>
 {
     // Construction / Destruction
-public:
     Canvas();
+    friend class Singleton<Canvas>;
+public:
 
     // Interface
-public:
     static CSize GetDimensions()
     {
-        return {CX_SIZE, CY_SIZE};
+        return { CX_SIZE, CY_SIZE };
     }
 
     static CRect GetBoundingRect()
@@ -29,15 +28,14 @@ public:
         return rc;
     }
 
-    void Invalidate(CRect& rc) const;
+    void Invalidate(CRect&& rc) const;
+    void Render(CPaintDC& dc) const;
+    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
 
     void SetWnd(HWND hWnd)
     {
         m_hWnd = hWnd;
     }
-
-    void Render(CPaintDC& dc);
-    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
 
     enum { CX_BORDER = 20 };
 

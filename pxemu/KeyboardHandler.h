@@ -2,7 +2,7 @@
 //
 // KEYBOARDHANDLER.H : keyboard handling
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __KEYBOARD_HANDLER_H__
@@ -17,13 +17,8 @@ class KeyboardHandler
 {
     // Construction / Destruction
 public:
-    KeyboardHandler()
-    {
-    }
-
-    ~KeyboardHandler()
-    {
-    }
+    KeyboardHandler() = default;
+    ~KeyboardHandler() = default;
 
     // Interface
 BEGIN_MSG_MAP(KeyboardHandler)
@@ -35,22 +30,22 @@ BEGIN_MSG_MAP(KeyboardHandler)
 private:
     LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
-        int key_code = KeyboardMatrix::translate(wParam, lParam);
-        if (key_code < 0 || key_code >= 256)
+        const auto keyCode = KeyboardMatrix::translate(wParam, lParam);
+        if (keyCode < 0 || keyCode >= 256)
             return 0;
 
-        PixieIO::getInstance()->keyOn(key_code);
+        PixieIO::instance().keyOn(keyCode);
 
         return 0;
     }
 
     LRESULT OnKeyUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
-        int key_code = KeyboardMatrix::translate(wParam, lParam);
+        const auto key_code = KeyboardMatrix::translate(wParam, lParam);
         if (key_code < 0 || key_code >= 256)
             return 0;
 
-        PixieIO::getInstance()->keyOff(key_code);
+        PixieIO::instance().keyOff(key_code);
 
         return 0;
     }

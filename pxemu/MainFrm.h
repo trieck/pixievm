@@ -7,10 +7,7 @@
 #include <atlframe.h>
 #include <atlctrls.h>
 #include <atlctrlw.h>
-
 #include "resource.h"
-
-#include "Canvas.h"
 #include "PxEmuView.h"
 #include "aboutdlg.h"
 

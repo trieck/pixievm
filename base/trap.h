@@ -23,9 +23,6 @@ public:
 
     // Interface
     virtual void trap(void* data) = 0;
-
-    // Implementation
-private:
 };
 
 /////////////////////////////////////////////////////////////////////////////

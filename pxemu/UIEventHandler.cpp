@@ -10,33 +10,8 @@
 #include "CPU.H"
 #include "Canvas.h"
 
-
-ANON_BEGIN
-/////////////////////////////////////////////////////////////////////////////
-class CanvasMessageFilter : public CMessageFilter
-{
-public:
-    virtual ~CanvasMessageFilter() = default;
-
-    BOOL PreTranslateMessage(MSG* pMsg) override
-    {
-        if (pMsg->message == WM_CANVAS_SET_PIXEL) {
-            if (pMsg->hwnd == nullptr){
-                // pMsg->hwnd = hWndTop;
-            }
-
-        }
-
-        return FALSE;
-    }
-};
-
-CanvasMessageFilter canvasFilter;
-ANON_END
-
 UIEventHandler::UIEventHandler()
 {
-    AddMessageFilter(&canvasFilter);
 }
 
 /////////////////////////////////////////////////////////////////////////////

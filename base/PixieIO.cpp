@@ -9,27 +9,25 @@
 #include "PixieIO.h"
 #include "interrupt.h"
 
-PixieIOPtr PixieIO::instance(PixieIO::getInstance());
+#define DATA_REG_A  (regs[0])
+#define DATA_REG_B  (regs[1])
+#define DDR_A       (regs[2])
+#define DDR_B       (regs[3])
+#define TIMER_A_LO  (regs[4])
+#define TIMER_A_HI  (regs[5])
+#define TIMER_B_LO  (regs[6])
+#define TIMER_B_HI  (regs[7])
+#define TOD_10THS   (regs[8])
+#define TOD_SEC     (regs[9])
+#define TOD_MIN     (regs[10])
+#define TOD_HR      (regs[11])
+#define SDR         (regs[12])
+#define ICR         (regs[13])
+#define CRA         (regs[14])
+#define CRB         (regs[15])
 
-#define DATA_REG_A	(regs[0])
-#define DATA_REG_B	(regs[1])
-#define DDR_A				(regs[2])
-#define DDR_B				(regs[3])
-#define TIMER_A_LO	(regs[4])
-#define TIMER_A_HI	(regs[5])
-#define TIMER_B_LO	(regs[6])
-#define TIMER_B_HI	(regs[7])
-#define	TOD_10THS		(regs[8])
-#define TOD_SEC			(regs[9])
-#define TOD_MIN			(regs[10])
-#define TOD_HR			(regs[11])
-#define SDR					(regs[12])
-#define ICR					(regs[13])
-#define CRA					(regs[14])
-#define CRB					(regs[15])
-
-#define LATCH_A_LO	(149)
-#define LATCH_A_HI	(66)
+#define LATCH_A_LO  (149)
+#define LATCH_A_HI  (66)
 
 /////////////////////////////////////////////////////////////////////////////
 PixieIO::PixieIO()
@@ -40,15 +38,6 @@ PixieIO::PixieIO()
 /////////////////////////////////////////////////////////////////////////////
 PixieIO::~PixieIO()
 {
-}
-
-/////////////////////////////////////////////////////////////////////////////
-PixieIO* PixieIO::getInstance()
-{
-    if (instance.get() == NULL){
-        instance = PixieIOPtr(new PixieIO);
-    }
-    return instance.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,29 +68,25 @@ void PixieIO::writeRegister(uint16_t address, uint8_t b)
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::keyOn(uint8_t key_code)
 {
-    int byte = key_code >> 3;
-    int bit = key_code & 7;
+    const auto byte = key_code >> 3;
+    const auto bit = key_code & 7;
     key_matrix[byte] &= ~(1 << bit);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::keyOff(uint8_t key_code)
 {
-    int byte = key_code >> 3;
-    int bit = key_code & 7;
+    const auto byte = key_code >> 3;
+    const auto bit = key_code & 7;
     key_matrix[byte] |= (1 << bit);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void PixieIO::clockTrigger()
 {
-    if (--TIMER_A_LO == 0xFF){
-        // underflow
-        if (--TIMER_A_HI == 0xFF){
-            // underflow
-            TIMER_A_LO = LATCH_A_LO;
-            TIMER_A_HI = LATCH_A_HI;
-            g_interrupt.setPending(IK_IRQ);
-        }
+    if (--TIMER_A_LO == 0xFF && --TIMER_A_HI == 0xFF){  // underflow
+        TIMER_A_LO = LATCH_A_LO;
+        TIMER_A_HI = LATCH_A_HI;
+        g_interrupt.setPending(IK_IRQ);
     }
 }

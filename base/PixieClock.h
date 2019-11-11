@@ -2,7 +2,7 @@
 //
 //	PIXIECLOCK.H : 1,022,730 cycles per second clock
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __PIXIE_CLOCK_H__

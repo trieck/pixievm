@@ -27,7 +27,7 @@ Memory::~Memory()
 byte Memory::fetch(word address)
 {
     if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP){
-        return PixieIO::getInstance()->readRegister(address & 0x0F);
+        return PixieIO::instance().readRegister(address & 0x0F);
     }
 
     return memory[address];
@@ -42,7 +42,7 @@ void Memory::store(word address, byte b)
         return;
 
     if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP){
-        PixieIO::getInstance()->writeRegister(address & 0x0F, b);
+        PixieIO::instance().writeRegister(address & 0x0F, b);
         return;
     }
 

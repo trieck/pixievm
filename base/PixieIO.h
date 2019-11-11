@@ -8,22 +8,18 @@
 #ifndef __PIXIE_IO_H__
 #define __PIXIE_IO_H__
 
-class PixieIO;
-typedef unique_ptr<PixieIO> PixieIOPtr;
+#include "Singleton.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class PixieIO
+class PixieIO : public Singleton<PixieIO>
 {
     // Construction / Destruction
-private:
     PixieIO();
+    friend class Singleton<PixieIO>;
 public:
     ~PixieIO();
 
     // Interface
-public:
-    static PixieIO* getInstance();
-
     void reset();
     uint8_t readRegister(uint16_t address);
     void writeRegister(uint16_t address, uint8_t b);
@@ -33,11 +29,9 @@ public:
 
     // Implementation
 private:
-    static PixieIOPtr instance; // singleton instance
-
-    enum { NREGS = 16 }; // number of registers
-    byte regs[NREGS]; // registers
-    byte key_matrix[8]; // keyboard matrix
+    enum { NREGS = 16 };    // number of registers
+    byte regs[NREGS];       // registers
+    byte key_matrix[8];     // keyboard matrix
 };
 
 /////////////////////////////////////////////////////////////////////////////

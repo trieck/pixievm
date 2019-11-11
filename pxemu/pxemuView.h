@@ -4,22 +4,21 @@
 
 #pragma once
 
+#include <atlapp.h>
 #include <atlwinx.h>
 
 #include "Canvas.h"
 #include "KeyboardHandler.h"
 
-class CPxemuView : public CWindowImpl<CPxemuView>,
-    public KeyboardHandler<CPxemuView>
+class CPxemuView : public CWindowImpl<CPxemuView>, public KeyboardHandler<CPxemuView>
 {
-    typedef KeyboardHandler<CPxemuView> KeyboardHandlerBase;
+    using KeyboardHandlerBase = KeyboardHandler<CPxemuView>;
 
 public:
     DECLARE_WND_CLASS(NULL)
 
-    BOOL PreTranslateMessage(MSG* pMsg)
+    BOOL PreTranslateMessage(MSG* /*pMsg*/)
     {
-        pMsg;
         return FALSE;
     }
 
@@ -37,7 +36,7 @@ public:
 
     LRESULT OnCreate(LPCREATESTRUCT cs)
     {
-        m_canvas.SetWnd(m_hWnd);
+        Canvas::instance().SetWnd(m_hWnd);
         return 0;
     }
 
@@ -48,9 +47,6 @@ public:
     void OnPaint(CDCHandle /*hDC*/)
     {
         CPaintDC dc(*this);
-        m_canvas.Render(dc);
+        Canvas::instance().Render(dc);
     }
-
-private:
-    Canvas m_canvas;
 };

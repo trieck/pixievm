@@ -2,7 +2,7 @@
 //
 // ALARM.H : Alarm handling
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __ALARM_H__
@@ -30,7 +30,7 @@ public:
 
     // Implementation
 private:
-    typedef vector<std::unique_ptr<Handler>> HandlerVec;
+    using HandlerVec = vector<std::unique_ptr<Handler>>;
     HandlerVec alarms;
 
     friend class Singleton<Alarms>;

@@ -27,7 +27,7 @@ void IOAlarm::handle()
 
     const uint64_t diff = clock - m_LastClock;
     if (diff != 0){
-        PixieIO::getInstance()->clockTrigger();
+        PixieIO::instance().clockTrigger();
     }
 
     m_LastClock = clock;

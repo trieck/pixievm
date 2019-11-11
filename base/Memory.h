@@ -2,7 +2,7 @@
 //
 // MEMORY.H : Pixie Virtual Machine Memory
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck, All Rights Reserved
+// Copyright (c) 2006-2019, Thomas A. Rieck, All Rights Reserved
 //
 
 #ifndef __MEMORY_H__
@@ -14,7 +14,6 @@
 class Memory : public Singleton<Memory>
 {
     // Construction / Destruction
-private:
     Memory();
     friend class Singleton<Memory>;
 public:

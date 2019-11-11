@@ -83,14 +83,13 @@ int PxEmulator::run()
 
     STARTUPINFO info;
     GetStartupInfo(&info);
-    int nCmdShow = info.dwFlags & STARTF_USESHOWWINDOW
+    auto nCmdShow = info.dwFlags & STARTF_USESHOWWINDOW
                        ? info.wShowWindow
                        : SW_SHOWDEFAULT;
 
     wndMain.ShowWindow(nCmdShow);
 
     Alarms::instance().addAlarm<RasterHandler>();
-    //auto nRet = theLoop.Run();
 
     auto nRet = CPU::instance().run();
 
