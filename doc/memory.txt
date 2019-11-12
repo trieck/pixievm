@@ -1,41 +1,41 @@
 important memory locations
 
 : $0000-$9FFF -- RAM
-		$00-FF		-- system storage
-		$00			 -- jiffy clock#1
-		$01			 -- jiffy clock#2
-		$02			 -- jiffy clock#3
-		$03			 -- cursor flash countdown
-		$04			 -- pointer: current scan line in video ram
-		$06			 -- pointer: current color ram location
-		$08			 -- cursor column on current line
-		$0A			 -- matrix coordinate of current key pressed; $40 = no key
-		$0B			 -- flag for shift/ctrl keypress; bit 0 : 1 = shift pressed, bit 1 : 1 = ctrl pressed
-		$1FF-$100	-- normal stack area grows downward
+    $00-FF		-- system storage
+    $00			 -- jiffy clock#1
+    $01			 -- jiffy clock#2
+    $02			 -- jiffy clock#3
+    $03			 -- cursor flash countdown
+    $04			 -- pointer: current scan line in video ram
+    $06			 -- pointer: current color ram location
+    $08			 -- cursor column on current line
+    $0A			 -- matrix coordinate of current key pressed; $40 = no key
+    $0B			 -- flag for shift/ctrl keypress; bit 0 : 1 = shift pressed, bit 1 : 1 = ctrl pressed
+    $1FF-$100	-- normal stack area grows downward
 : $A000-$AFFF -- video ram
 : $B000-$BFFF -- color ram
 : $C000-$CFFF -- character generator rom
 : $D000-$DFFF -- I/O registers
-	:$D000			-- background color
-	:$D001			-- border color
-	:$D100			-- data port A; keyboard
-	:$D101			-- data port B; keyboard
-	:$D102			-- data direction register A
-	:$D103			-- data direction register B
-	:$D104			-- timer A low-byte
-	:$D105			-- timer A high-byte
-	:$D106		  -- timer B low-byte
-	:$D107			-- timer B high-byte
-	:$D108			-- TOD clock: 1/10 seconds
-	:$D109			-- TOD clock: seconds
-	:$D10A			-- TOD clock: minutes
-	:$D10B			-- TOD clock: hours
-	:$D10C			-- serial data register
-	:$D10D			-- IRQ control register
-	:$D10E			-- control register A
-	:$D10F			-- control register B
-	
+  :$D000			-- background color
+  :$D001			-- border color
+  :$D100			-- data port A; keyboard
+  :$D101			-- data port B; keyboard
+  :$D102			-- data direction register A
+  :$D103			-- data direction register B
+  :$D104			-- timer A low-byte
+  :$D105			-- timer A high-byte
+  :$D106		  -- timer B low-byte
+  :$D107			-- timer B high-byte
+  :$D108			-- TOD clock: 1/10 seconds
+  :$D109			-- TOD clock: seconds
+  :$D10A			-- TOD clock: minutes
+  :$D10B			-- TOD clock: hours
+  :$D10C			-- serial data register
+  :$D10D			-- IRQ control register
+  :$D10E			-- control register A
+  :$D10F			-- control register B
+  
 : $E000-$FFFF -- kernel rom
-	:$FFFC-$FFFD -- reset vector, main kernel entry point
- 	:$FFFE-$FFFE -- IRQ vector
- 		
+  :$FFFC-$FFFD -- reset vector, main kernel entry point
+   :$FFFE-$FFFE -- IRQ vector
+     
