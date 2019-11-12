@@ -20,10 +20,13 @@ class Alarms : public Singleton<Alarms>
 public:
     ~Alarms() = default;
 
-    template <class T, typename std::enable_if<std::is_base_of<Handler, T>::value>::type* = nullptr>
-    void addAlarm()
+    template <class T>
+    using isHandler = std::enable_if<std::is_base_of<Handler, T>::value>;
+
+    template <class T, class... _Types, typename isHandler<T>::type* = nullptr>
+    void addAlarm(_Types&&... _Args)
     {
-        alarms.push_back(std::make_unique<T>());
+        alarms.push_back(std::make_unique<T>(std::forward<_Types>(_Args)...));
     }
 
     void process();

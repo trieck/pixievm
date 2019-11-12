@@ -8,11 +8,6 @@
 #include "StdAfx.h"
 #include "UIEventHandler.h"
 #include "CPU.H"
-#include "Canvas.h"
-
-UIEventHandler::UIEventHandler()
-{
-}
 
 /////////////////////////////////////////////////////////////////////////////
 void UIEventHandler::handle()

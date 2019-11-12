@@ -26,7 +26,7 @@ class CMainFrame :
 public:
     DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME)
 
-    CPxemuView m_view;
+    CPxEmuView m_view;
 
     CCommandBarCtrl m_CmdBar;
 
@@ -53,7 +53,6 @@ BEGIN_MSG_MAP(CMainFrame)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
         COMMAND_ID_HANDLER(ID_APP_EXIT, OnFileExit)
-        COMMAND_ID_HANDLER(ID_FILE_NEW, OnFileNew)
         COMMAND_ID_HANDLER(ID_VIEW_TOOLBAR, OnViewToolBar)
         COMMAND_ID_HANDLER(ID_VIEW_STATUS_BAR, OnViewStatusBar)
         COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAppAbout)
@@ -86,10 +85,8 @@ BEGIN_MSG_MAP(CMainFrame)
         CreateSimpleStatusBar(ATL_IDS_IDLEMESSAGE, WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
                               ATL_IDW_STATUS_BAR);
 
-        auto canvRect = Canvas::GetBoundingRect();
-
         m_hWndClient = m_view.Create(m_hWnd,
-                                     canvRect,
+                                     nullptr,
                                      nullptr,
                                      WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, WS_EX_CLIENTEDGE);
 
@@ -100,7 +97,7 @@ BEGIN_MSG_MAP(CMainFrame)
 
         // register object for message filtering and idle updates
 
-        CMessageLoop* pLoop = _Module.GetMessageLoop();
+        auto* pLoop = _Module.GetMessageLoop();
         ATLASSERT(pLoop != NULL);
         pLoop->AddMessageFilter(this);
         pLoop->AddIdleHandler(this);
@@ -129,16 +126,9 @@ BEGIN_MSG_MAP(CMainFrame)
         return 0;
     }
 
-    LRESULT OnFileNew(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
-    {
-        // TODO: add code to initialize document
-
-        return 0;
-    }
-
     LRESULT OnViewToolBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
     {
-        static BOOL bVisible = TRUE; // initially visible
+        static auto bVisible = TRUE; // initially visible
         bVisible = !bVisible;
         CReBarCtrl rebar = m_hWndToolBar;
         const auto nBandIndex = rebar.IdToIndex(ATL_IDW_BAND_FIRST + 1); // toolbar is 2nd added band
@@ -151,7 +141,7 @@ BEGIN_MSG_MAP(CMainFrame)
 
     LRESULT OnViewStatusBar(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
     {
-        const BOOL bVisible = !::IsWindowVisible(m_hWndStatusBar);
+        const auto bVisible = !::IsWindowVisible(m_hWndStatusBar);
         ::ShowWindow(m_hWndStatusBar, bVisible ? SW_SHOWNOACTIVATE : SW_HIDE);
         UISetCheck(ID_VIEW_STATUS_BAR, bVisible);
         UpdateLayout();
@@ -168,25 +158,25 @@ BEGIN_MSG_MAP(CMainFrame)
 
     void ResizeFrame()
     {
-        CRect rc = Canvas::GetBoundingRect();
+        auto rc = Canvas<CPxEmuView>::GetBoundingRect();
 
         // make room for the status bar
         CRect rcStatus;
-        CStatusBarCtrl wndStatus(m_hWndStatusBar);
+        const CStatusBarCtrl wndStatus(m_hWndStatusBar);
         wndStatus.GetWindowRect(rcStatus);
 
         // make room for the toolbar
         CRect rcToolbar;
-        CReBarCtrl rebar = m_hWndToolBar;
+        const CReBarCtrl rebar = m_hWndToolBar;
         rebar.GetWindowRect(rcToolbar);
         rc.bottom += rcToolbar.Height();
 
-        DWORD dwVisible = wndStatus.GetWindowLong(GWL_STYLE) & WS_VISIBLE;
+        const auto dwVisible = wndStatus.GetWindowLong(GWL_STYLE) & WS_VISIBLE;
         if (!dwVisible)
             rc.bottom -= rcStatus.Height();
 
-        DWORD style = GetStyle();
-        DWORD dwExStyle = GetExStyle() | WS_EX_CLIENTEDGE;
+        const auto style = GetStyle();
+        const auto dwExStyle = GetExStyle() | WS_EX_CLIENTEDGE;
         AdjustWindowRectEx(&rc, style, TRUE, dwExStyle);
 
         SetWindowPos(nullptr, 0, 0, rc.Width(), rc.Height(),

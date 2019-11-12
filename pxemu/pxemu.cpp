@@ -12,14 +12,9 @@
 CAppModule _Module;
 
 /////////////////////////////////////////////////////////////////////////////
-PxEmulator::PxEmulator()
-{
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void PxEmulator::init()
 {
-    auto hr = _Module.Init(nullptr, ModuleHelper::GetModuleInstance());
+    const auto hr = _Module.Init(nullptr, ModuleHelper::GetModuleInstance());
     if (FAILED(hr))
         throw std::exception("could not initialize module.");
 
@@ -83,15 +78,13 @@ int PxEmulator::run()
 
     STARTUPINFO info;
     GetStartupInfo(&info);
-    auto nCmdShow = info.dwFlags & STARTF_USESHOWWINDOW
+    const auto nCmdShow = info.dwFlags & STARTF_USESHOWWINDOW
                         ? info.wShowWindow
                         : SW_SHOWDEFAULT;
 
     wndMain.ShowWindow(nCmdShow);
 
-    Alarms::instance().addAlarm<RasterHandler>();
-
-    auto nRet = CPU::instance().run();
+    const auto nRet = CPU::instance().run();
 
     _Module.Term();
 

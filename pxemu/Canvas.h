@@ -1,20 +1,28 @@
 #pragma once
 
-#include "Singleton.h"
+#include "StdAfx.h"
 #include "Bitmap.h"
+#include "Alarm.h"
+#include "RasterHandler.h"
 
 /////////////////////////////////////////////////////////////////////////////
-class Canvas : public Singleton<Canvas>
+template <typename T>
+class Canvas
 {
     // Construction / Destruction
-    Canvas();
-    friend class Singleton<Canvas>;
 public:
+    Canvas() = default;
+    ~Canvas() = default;
+
+BEGIN_MSG_MAP(Canvas)
+        MESSAGE_HANDLER_WND(WM_CREATE, OnCreate)
+        MESSAGE_HANDLER_WND(WM_PAINT, OnPaint)
+    END_MSG_MAP()
 
     // Interface
     static CSize GetDimensions()
     {
-        return { CX_SIZE, CY_SIZE };
+        return { CANVAS_CX_SIZE, CANVAS_CY_SIZE };
     }
 
     static CRect GetBoundingRect()
@@ -28,25 +36,36 @@ public:
         return rc;
     }
 
-    void Invalidate(CRect&& rc) const;
-    void Render(CPaintDC& dc) const;
-    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
-
-    void SetWnd(HWND hWnd)
+    void Invalidate(CRect&& rc) const
     {
-        m_hWnd = hWnd;
+        InvalidateRect(m_hWnd, rc, FALSE);
     }
 
-    enum { CX_BORDER = 20 };
+    LRESULT OnCreate(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        ASSERT(IsWindow(hWnd));
+        m_hWnd = hWnd;
 
-    enum { CY_BORDER = 20 };
+        Alarms::instance().addAlarm<RasterHandler<T>>(this);
 
-    enum { CX_SIZE = 80 * 8 + (CX_BORDER * 2) };
+        return 0;
+    }
 
-    enum { CY_SIZE = 50 * 8 + (CY_BORDER * 2) };
+    LRESULT OnPaint(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    {
+        CPaintDC dc(hWnd);
+        m_bitmap.Render(dc);
+        bHandled = TRUE;
+        return 0;
+    }
 
+    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const
+    {
+        m_bitmap.SetPixel(x, y, color);
+    }
+    
     // Implementation
 private:
     Bitmap m_bitmap;
-    HWND m_hWnd;
+    HWND m_hWnd = nullptr;
 };

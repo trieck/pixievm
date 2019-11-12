@@ -5,7 +5,7 @@ class PxEmulator
 {
     // Construction / Destruction
 public:
-    PxEmulator();
+    PxEmulator() = default;
     ~PxEmulator() = default;
 
     // Interface

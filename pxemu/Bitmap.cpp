@@ -26,8 +26,8 @@ void Bitmap::CreateBitmap()
     m_bmi.reset(reinterpret_cast<LPBITMAPINFO>(std::malloc(sz)));
 
     m_bmi->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    m_bmi->bmiHeader.biWidth = Canvas::CX_SIZE;
-    m_bmi->bmiHeader.biHeight = -Canvas::CY_SIZE; // top-down
+    m_bmi->bmiHeader.biWidth = CANVAS_CX_SIZE;
+    m_bmi->bmiHeader.biHeight = -CANVAS_CY_SIZE; // top-down
     m_bmi->bmiHeader.biPlanes = 1;
     m_bmi->bmiHeader.biBitCount = 8; // 256 colors
     m_bmi->bmiHeader.biCompression = BI_RGB;

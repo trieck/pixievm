@@ -19,7 +19,7 @@ Alarms::Alarms()
 /////////////////////////////////////////////////////////////////////////////
 void Alarms::process()
 {
-    HandlerVec::const_iterator it = alarms.begin();
+    auto it = alarms.begin();
     for (; it != alarms.end(); ++it) {
         (*it)->handle();
     }

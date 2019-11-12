@@ -14,8 +14,6 @@
 class UIEventHandler : public Handler, CMessageLoop
 {
 public:
-    UIEventHandler();
-
     // Interface
     void handle() override; // handler
 };
