@@ -133,8 +133,9 @@ Symbol* SymbolTable::installw(const string& s, int type, int sub, word w)
         symPtr->sub = sub;
         symPtr->val16 = w;
         table[s] = symPtr;
-        sym = symPtr.get();
+        return symPtr.get();
     }
+
     return sym;
 }
 
@@ -149,7 +150,7 @@ Symbol* SymbolTable::installb(const string& s, int type, int sub, byte b)
         symPtr->sub = sub;
         symPtr->val8 = b;
         table[s] = symPtr;
-        sym = symPtr.get();
+        return symPtr.get();
     }
 
     return sym;

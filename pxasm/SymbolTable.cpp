@@ -104,20 +104,11 @@ SymbolTable::SymbolTable()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-SymbolTable::~SymbolTable()
-{
-    symmap::const_iterator it = table.begin();
-    for (; it != table.end(); ++it) {
-        delete (*it).second;
-    }
-}
-
-/////////////////////////////////////////////////////////////////////////////
 void SymbolTable::iinsert(const string& s, uint32_t t, const Instr* i)
 {
     // instruction
 
-    auto sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = s;
     sym->type = SymbolType::ST_INSTRUCTION;
     sym->sub = t;
@@ -130,7 +121,7 @@ void SymbolTable::rinsert(const string& s, uint32_t t, byte r)
 {
     // register
 
-    auto sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = s;
     sym->type = SymbolType::ST_REG;
     sym->sub = t;
@@ -143,7 +134,7 @@ void SymbolTable::idinsert(const string& s, uint32_t id)
 {
     // identifier
 
-    auto sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = s;
     sym->type = SymbolType::ST_ID;
     sym->sub = id;
@@ -157,12 +148,13 @@ LPSYMBOL SymbolTable::install(const string& s)
 
     LPSYMBOL sym;
     if ((sym = lookup(s)) == nullptr) {
-        sym = new Symbol;
-        sym->name = s;
-        sym->type = SymbolType::ST_UNDEF;
-        sym->sub = 0;
-        sym->lineno = yylineno;
-        table[s] = sym;
+        const auto symPtr = std::make_shared<Symbol>();
+        symPtr->name = s;
+        symPtr->type = SymbolType::ST_UNDEF;
+        symPtr->sub = 0;
+        symPtr->lineno = yylineno;
+        table[s] = symPtr;
+        return symPtr.get();
     }
 
     return sym;
@@ -174,7 +166,7 @@ LPSYMBOL SymbolTable::installs(const string& s)
     // string literal
     static auto counter = 0;
 
-    auto sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = (format("STRING:0x%08X") % counter++).str();
 
     sym->sval = s;
@@ -183,7 +175,7 @@ LPSYMBOL SymbolTable::installs(const string& s)
     sym->lineno = yylineno;
     table[sym->name] = sym;
 
-    return sym;
+    return sym.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -192,7 +184,7 @@ LPSYMBOL SymbolTable::installw(SymbolType type, uint32_t sub, word value)
     // numeric
     static auto counter = 0;
 
-    auto sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
     sym->name = (format("NUMERIC:0x%08X") % counter++).str();
     sym->type = type;
     sym->sub = sub;
@@ -200,15 +192,15 @@ LPSYMBOL SymbolTable::installw(SymbolType type, uint32_t sub, word value)
     sym->val16 = value;
     table[sym->name] = sym;
 
-    return sym;
+    return sym.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LPSYMBOL SymbolTable::installo(uint32_t op, uint32_t sub, Symbol* args)
+LPSYMBOL SymbolTable::installo(uint32_t op, uint32_t sub, LPSYMBOL args)
 {
     // operator
 
-    auto sym = new Symbol;
+    auto sym = std::make_shared<Symbol>();
 
     sym->name = opname(op);
     sym->type = SymbolType::ST_OP;
@@ -218,7 +210,7 @@ LPSYMBOL SymbolTable::installo(uint32_t op, uint32_t sub, Symbol* args)
     sym->opcode = op; // operator code
     table[sym->name] = sym;
 
-    return sym;
+    return sym.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -237,8 +229,6 @@ LPSYMBOL SymbolTable::opeval(uint32_t opcode, uint32_t sub, LPSYMBOL args)
     default:
         throw std::exception((format("unrecognized opcode %d.") % opcode).str().c_str());
     }
-
-    return nullptr;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -300,7 +290,7 @@ LPSYMBOL SymbolTable::lookup(const string& s) const
     if (it == table.end())
         return nullptr;
 
-    return (*it).second;
+    return (*it).second.get();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -311,13 +301,14 @@ LPSYMBOL SymbolTable::mklist(LPSYMBOL s1, LPSYMBOL s2)
 
     if (!ISLIST(s1) && !ISLIST(s2)) {
         // make a new list
-        list = new Symbol;
-        list->name = (format("LIST:0x%08X") % counter++).str();
-        list->type = SymbolType::ST_LIST;
-        list->lineno = yylineno;
-        list->vsyms.push_back(s1);
-        list->vsyms.push_back(s2);
-        table[list->name] = list;
+        auto listPtr = std::make_shared<Symbol>();
+        listPtr->name = (format("LIST:0x%08X") % counter++).str();
+        listPtr->type = SymbolType::ST_LIST;
+        listPtr->lineno = yylineno;
+        listPtr->vsyms.push_back(s1);
+        listPtr->vsyms.push_back(s2);
+        table[listPtr->name] = listPtr;
+        list = listPtr.get();
     } else if (ISLIST(s1) && !ISLIST(s2)) {
         // s1 is an existing list
         list = s1;

@@ -13,14 +13,8 @@
 /////////////////////////////////////////////////////////////////////////////
 Memory::Memory()
 {
-    memory = new byte[MEM_SIZE];
-    memset(memory, 0, MEM_SIZE * sizeof(byte));
-}
-
-/////////////////////////////////////////////////////////////////////////////
-Memory::~Memory()
-{
-    delete[] memory;
+    memory_ = std::make_unique<byte[]>(MEM_SIZE);
+    memset(&memory_[0], 0, MEM_SIZE * sizeof(byte));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -30,7 +24,7 @@ byte Memory::fetch(word address)
         return PixieIO::instance().readRegister(address & 0x0F);
     }
 
-    return memory[address];
+    return memory_[address];
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -46,19 +40,19 @@ void Memory::store(word address, byte b)
         return;
     }
 
-    memory[address] = b;
+    memory_[address] = b;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 bool Memory::load(istream& is, word base, int size)
 {
-    is.read(reinterpret_cast<char *>(&memory[base]), size);
+    is.read(reinterpret_cast<char *>(&memory_[base]), size);
     return is.good();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 bool Memory::save(ostream& os, word base, int size)
 {
-    os.write(reinterpret_cast<const char *>(&memory[base]), size);
+    os.write(reinterpret_cast<const char *>(&memory_[base]), size);
     return os.good();
 }

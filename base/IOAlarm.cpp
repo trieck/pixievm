@@ -23,9 +23,9 @@ IOAlarm::~IOAlarm()
 /////////////////////////////////////////////////////////////////////////////
 void IOAlarm::handle()
 {
-    uint64_t clock = m_clock.clock();
+    const auto clock = m_clock.clock();
 
-    const uint64_t diff = clock - m_LastClock;
+    const auto diff = clock - m_LastClock;
     if (diff != 0) {
         PixieIO::instance().clockTrigger();
     }

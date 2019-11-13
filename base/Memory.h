@@ -17,7 +17,7 @@ class Memory : public Singleton<Memory>
     Memory();
     friend class Singleton<Memory>;
 public:
-    ~Memory();
+    ~Memory() = default;
 
     // Interface
     byte fetch(word address);
@@ -27,7 +27,7 @@ public:
 private:
     enum { MEM_SIZE = 0x10000 };
 
-    byte* memory;
+    std::unique_ptr<byte[]> memory_;
 };
 
 #endif // __MEMORY_H__

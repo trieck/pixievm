@@ -17,32 +17,13 @@
 #define SUFFIX_SEP '.'
 
 /////////////////////////////////////////////////////////////////////////////
-stringvec split(const string& s, const char* del)
-{
-    stringvec output;
-
-    char* p = new char[s.length() + 1];
-    strcpy(p, s.c_str());
-
-    char* tok = strtok(p, del);
-    while (tok != nullptr) {
-        output.push_back(tok);
-        tok = strtok(nullptr, del);
-    }
-
-    delete []p;
-
-    return output;
-}
-
-/////////////////////////////////////////////////////////////////////////////
 stringvec tokenize(const string& s)
 {
     stringvec output;
 
-    const char* pstart = s.c_str();
-    const char** ppin = &pstart;
-    const char* pin = *ppin;
+    const auto* pstart = s.c_str();
+    const auto** ppin = &pstart;
+    const auto* pin = *ppin;
 
     for (;;) {
         switch (*pin) {
@@ -86,13 +67,13 @@ string trim(const string& s)
 {
     string output;
 
-    const char* pin = s.c_str();
+    const auto* pin = s.c_str();
     for (; *pin; pin++) {
         if (!isspace(*pin))
             break;
     }
 
-    const char* pend = s.c_str() + s.length();
+    const auto* pend = s.c_str() + s.length();
     for (; pend != pin;) {
         if (!isspace(*--pend))
             break;

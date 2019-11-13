@@ -99,9 +99,10 @@ void RasterHandler<T>::handle()
 
     if (m_offset == 0) {
         // beginning of scan line
-        ui.handle(); // dispatch ui events
         m_scanLine = (m_scanLine + 1) % CANVAS_CY_SIZE;
     }
+
+    ui.handle(); // dispatch ui events
 }
 
 #endif // __RASTER_HANDLER_H__

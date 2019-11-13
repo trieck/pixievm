@@ -62,6 +62,7 @@ END
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Menu
@@ -94,6 +95,7 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\pxemu.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -105,7 +107,7 @@ CAPTION "About Pixie Emulator"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,130,81,50,14
-    CTEXT           "Pixie Emulator v1.0\nCopyright(c) 2006-2013\nThomas A. Rieck",IDC_STATIC,25,57,78,32
+    CTEXT           "Pixie Emulator v1.0.2\nCopyright(c) 2006-2019\nThomas A. Rieck",IDC_STATIC,25,57,78,32
     ICON            IDR_MAINFRAME,IDC_STATIC,55,26,20,20
     GROUPBOX        "",IDC_STATIC,7,7,115,88
 END
@@ -177,18 +179,29 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "FileDescription", "Pixie Emulator"
-            VALUE "FileVersion", "1, 0, 0, 1"
+            VALUE "FileVersion", "1, 0, 0, 2"
             VALUE "InternalName", "pxemu"
-            VALUE "LegalCopyright", "Copyright 2013"
+            VALUE "LegalCopyright", "Copyright 2019"
             VALUE "OriginalFilename", "pxemu.exe"
             VALUE "ProductName", "Pixie Emulator"
-            VALUE "ProductVersion", "1, 0, 0, 1"
+            VALUE "ProductVersion", "1, 0, 0, 2"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
         VALUE "Translation", 0x409, 1200
     END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_ABOUTBOX AFX_DIALOG_LAYOUT
+BEGIN
+    0
 END
 
 

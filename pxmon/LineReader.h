@@ -2,7 +2,7 @@
 //
 // LINEREADER.H : Read lines from input stream
 //
-// Copyright (c) 2006-2013, Thomas A. Rieck
+// Copyright (c) 2006-2019, Thomas A. Rieck
 //
 
 #ifndef __LINEREADER_H__
@@ -17,12 +17,9 @@ public:
     {
     }
 
-    ~LineReader()
-    {
-    }
+    ~LineReader() = default;
 
     // Interface
-public:
     string readLine();
 
     // Implementation

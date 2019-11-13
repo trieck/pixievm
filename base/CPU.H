@@ -21,7 +21,6 @@
 class CPU : public Singleton<CPU>
 {
     // Construction / Destruction
-private:
     CPU();
     friend class Singleton<CPU>;
 

@@ -9,7 +9,6 @@
 #define __UTIL_H__
 
 /////////////////////////////////////////////////////////////////////////////
-stringvec split(const string& s, const char* del);
 stringvec tokenize(const string& s);
 string trim(const string& s);
 string basename(const string& file);

@@ -25,23 +25,24 @@ enum class SymbolType
 };
 
 class Symbol;
-using SymbolVec = vector<Symbol*>;
+typedef Symbol* LPSYMBOL;
+using SymbolPtr = std::shared_ptr<Symbol>;
+
+using SymbolVec = vector<LPSYMBOL>;
 
 /////////////////////////////////////////////////////////////////////////////
 // Symbol class
 class Symbol
 {
-    friend class SymbolTable;
-
+public:
     Symbol() : type(SymbolType::ST_UNDEF), sub(0), lineno(0), instr(nullptr), args(nullptr)
     {
     }
 
-public:
-    string name; // symbol name
-    SymbolType type; // symbol type
-    uint32_t sub; // sub-type
-    uint32_t lineno; // line number where first seen
+    string name;            // symbol name
+    SymbolType type;        // symbol type
+    uint32_t sub;           // sub-type
+    uint32_t lineno;        // line number where first seen
     union
     {
         const Instr* instr; // instruction
@@ -55,14 +56,12 @@ public:
     SymbolVec vsyms;        // list values
 };
 
-typedef Symbol* LPSYMBOL;
-
 /////////////////////////////////////////////////////////////////////////////
 class SymbolTable
 {
 public:
     SymbolTable();
-    ~SymbolTable();
+    ~SymbolTable() = default;
 
     // Interface
     LPSYMBOL install(const string& s); // undefined
@@ -83,7 +82,7 @@ private:
     void idinsert(const string& s, uint32_t id);
 
     static string opname(uint32_t opcode);
-    using symmap = StringKeyMap<LPSYMBOL>::Type;
+    using symmap = StringKeyMap<SymbolPtr>::Type;
     symmap table;
 };
 
