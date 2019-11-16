@@ -8,10 +8,9 @@
 #include "common.h"
 #include "memory.h"
 #include "PixieVM.h"
-#include "PixieIO.h"
 
 /////////////////////////////////////////////////////////////////////////////
-Memory::Memory()
+Memory::Memory() : io_(PixieIO::instance())
 {
     memory_ = std::make_unique<byte[]>(MEM_SIZE);
     reset();
@@ -27,7 +26,7 @@ void Memory::reset()
 byte Memory::fetch(word address)
 {
     if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
-        return PixieIO::instance().readRegister(address & 0x0F);
+        return io_.readRegister(address & 0x0F);
     }
 
     return memory_[address];
@@ -37,7 +36,7 @@ byte Memory::fetch(word address)
 void Memory::store(word address, byte b)
 {
     if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
-        PixieIO::instance().writeRegister(address & 0x0F, b);
+        io_.writeRegister(address & 0x0F, b);
         return;
     }
 

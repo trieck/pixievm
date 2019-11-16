@@ -9,6 +9,7 @@
 #define __MEMORY_H__
 
 #include "Singleton.h"
+#include "PixieIO.h"
 
 /////////////////////////////////////////////////////////////////////////////
 class Memory : public Singleton<Memory>
@@ -30,6 +31,7 @@ private:
     enum { MEM_SIZE = 0x10000 };
 
     std::unique_ptr<byte[]> memory_;
+    PixieIO& io_;
 };
 
 #endif // __MEMORY_H__
