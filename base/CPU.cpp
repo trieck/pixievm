@@ -7,10 +7,9 @@
 
 #include "common.h"
 #include "PixieVM.h"
-#include "memory.h"
 #include "interrupt.h"
 #include "Alarm.h"
-#include "CPU.h"
+#include "CPU.H"
 #include "Opcodes.h"
 
 #define IREG_A                      (0)
@@ -30,9 +29,6 @@
 #define REG_SP                      (regs[IREG_SP])
 #define REG_IP                      (regs[IREG_IP])
 #define REG_FL                      (regs[IREG_FL])
-
-#define RESET_VECTOR                0xFFFC
-#define IRQ_VECTOR                  0xFFFE
 
 #define GET_CARRY()                 (REG_FL & CARRY_FLAG)
 #define SET_CARRY(f) \
@@ -88,10 +84,10 @@
         SET_ZERO(!(val & 0xFFFF)); \
     } while (0)
 
-#define FETCH(a)                    (Memory::instance().fetch(a))
-#define FETCH_WORD(a)               ((FETCH(a) << 8) | FETCH(a+1))
+#define FETCH(a)                    (m_memory.fetch(a))
+#define FETCH_WORD(a)               ((FETCH(a) << 8) | FETCH((a)+1))
 
-#define STORE(a, b)                 (Memory::instance().store(a, b))
+#define STORE(a, b)                 (m_memory.store(a, b))
 #define STORE_WORD(a, w) \
     do { \
         STORE(a, HIBYTE(w)); \
@@ -2521,14 +2517,19 @@
     } while (0)
 
 /////////////////////////////////////////////////////////////////////////////
-CPU::CPU() : m_shutdown(false), m_exitCode(0)
+CPU::CPU() : m_shutdown(false), m_exitCode(0), m_memory(Memory::instance())
 {
-    REG_A = REG_B = REG_C = REG_D = REG_X = REG_SP = REG_IP = REG_FL = 0;
+    clear();
 }
 
 /////////////////////////////////////////////////////////////////////////////
 CPU::~CPU()
 {
+}
+
+void CPU::clear()
+{
+    REG_A = REG_B = REG_C = REG_D = REG_X = REG_SP = REG_IP = REG_FL = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////

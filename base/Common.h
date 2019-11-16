@@ -9,6 +9,7 @@
 #define __COMMON_H__
 
 #ifdef _MSC_VER
+#pragma warning(disable : 4302)  // disable truncation warnings
 #pragma warning(disable : 4996)  // disable deprecation warnings
 
 #define WIN32_LEAN_AND_MEAN

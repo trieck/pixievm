@@ -9,13 +9,17 @@
 #define __CPU_H__
 
 #include "Singleton.h"
+#include "memory.h"
 
-#define NEG_FLAG (0x80)
-#define OVERFLOW_FLAG (0x40)
-#define BRK_FLAG (0x08)
-#define INT_DISABLE_FLAG (0x04)
-#define ZERO_FLAG (0x02)
-#define CARRY_FLAG (0x01)
+#define RESET_VECTOR                0xFFFC
+#define IRQ_VECTOR                  0xFFFE
+
+#define NEG_FLAG                    (0x80)
+#define OVERFLOW_FLAG               (0x40)
+#define BRK_FLAG                    (0x08)
+#define INT_DISABLE_FLAG            (0x04)
+#define ZERO_FLAG                   (0x02)
+#define CARRY_FLAG                  (0x01)
 
 /////////////////////////////////////////////////////////////////////////////
 class CPU : public Singleton<CPU>
@@ -27,6 +31,7 @@ class CPU : public Singleton<CPU>
 public:
     ~CPU();
 
+    void clear();
     int run();
     void reset();
 
@@ -75,9 +80,10 @@ public:
 
     // Implementation
 private:
-    word regs[NREGS]; // registers
-    bool m_shutdown; // shut down flag
-    int m_exitCode; // exit code
+    Memory& m_memory;   // memory
+    word regs[NREGS];   // registers
+    bool m_shutdown;    // shut down flag
+    int m_exitCode;     // exit code
 };
 
 /////////////////////////////////////////////////////////////////////////////

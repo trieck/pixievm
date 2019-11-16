@@ -14,6 +14,12 @@
 Memory::Memory()
 {
     memory_ = std::make_unique<byte[]>(MEM_SIZE);
+    reset();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void Memory::reset()
+{
     memset(&memory_[0], 0, MEM_SIZE * sizeof(byte));
 }
 
@@ -30,17 +36,18 @@ byte Memory::fetch(word address)
 /////////////////////////////////////////////////////////////////////////////
 void Memory::store(word address, byte b)
 {
-    // writes to ROM have no effect
-    if ((address >= CHARGEN_BASE && address < CHARGEN_BASE + CHARGEN_SIZE) ||
-        (address >= KERNEL_BASE))
-        return;
-
     if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
         PixieIO::instance().writeRegister(address & 0x0F, b);
         return;
     }
 
     memory_[address] = b;
+}
+
+void Memory::storeWord(word address, word value)
+{
+    store(address, HIBYTE(value));
+    store(address+ 1, LOBYTE(value));
 }
 
 /////////////////////////////////////////////////////////////////////////////

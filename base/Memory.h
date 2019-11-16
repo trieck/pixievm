@@ -20,8 +20,10 @@ public:
     ~Memory() = default;
 
     // Interface
+    void reset();
     byte fetch(word address);
     void store(word address, byte b);
+    void storeWord(word address, word value);
     bool load(istream& is, word base, int size);
     bool save(ostream& os, word base, int size);
 private:

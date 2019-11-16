@@ -5,6 +5,7 @@ base/Modes.h
 base/Opcodes.h
 base/Opinfo.cpp
 base/Opinfo.h
+packages/
 pxasm/Parser.output
 pxasm/Parser.cpp
 pxasm/Parser.hpp
@@ -25,3 +26,7 @@ bin/
 *.db
 *.db-shm
 *.db-wal
+*.o
+.vs/
+.editorconfig
+
