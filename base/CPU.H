@@ -11,15 +11,8 @@
 #include "Singleton.h"
 #include "memory.h"
 
-#define RESET_VECTOR                0xFFFC
-#define IRQ_VECTOR                  0xFFFE
-
-#define NEG_FLAG                    (0x80)
-#define OVERFLOW_FLAG               (0x40)
-#define BRK_FLAG                    (0x08)
-#define INT_DISABLE_FLAG            (0x04)
-#define ZERO_FLAG                   (0x02)
-#define CARRY_FLAG                  (0x01)
+constexpr auto RESET_VECTOR = 0xFFFC;
+constexpr auto IRQ_VECTOR = 0xFFFE;
 
 /////////////////////////////////////////////////////////////////////////////
 class CPU : public Singleton<CPU>
@@ -43,6 +36,12 @@ public:
     word getSP() const;
     word getIP() const;
     word getFL() const;
+    bool getCarry() const;
+    bool getZero() const;
+    bool getIntDisable() const;
+    bool getBreak() const;
+    bool getOverflow() const;
+    bool getNeg() const;
 
     byte getAL() const;
     byte getAH() const;

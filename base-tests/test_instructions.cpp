@@ -8,6 +8,15 @@
 #include "Modes.h"
 #include "Instructions.h"
 
+#define ASSERT_CARRY_CLEAR(cpu) \
+    ASSERT_EQ((cpu).getCarry(), false)
+
+#define ASSERT_ZERO_CLEAR(cpu) \
+    ASSERT_EQ((cpu).getZero(), false)
+
+#define ASSERT_OVERFLOW_CLEAR(cpu) \
+    ASSERT_EQ((cpu).getOverflow(), false)
+
 struct InstructionTest: testing::Test, TrapHandler
 {
     enum { PROGRAM_START = 0x8000 };
@@ -58,16 +67,20 @@ TEST_F(InstructionTest, TEST_ADC_RR8)
     ASSERT_EQ(address_, PROGRAM_START);
     memory_.storeWord(RESET_VECTOR, PROGRAM_START);
 
-    // mov al, ah
+    // adc al, ah
     memory_.store(address_++, OPCODE(&INS_ADC, AM_RR8));
     memory_.store(address_++, MAKEREG(REG8_AL, REG8_AH));
 
     cpu_.setAL(0x00);
     cpu_.setAH(0xFE);
 
-    cpu_.run();
+    cpu_.run(); // go!
 
     ASSERT_EQ(startip_ + 2, cpu_.getIP());
     ASSERT_EQ(cpu_.getAL(), 0xFE);
     ASSERT_EQ(cpu_.getAH(), 0xFE);
+
+    ASSERT_CARRY_CLEAR(cpu_);
+    ASSERT_ZERO_CLEAR(cpu_);
+    ASSERT_OVERFLOW_CLEAR(cpu_);
 }

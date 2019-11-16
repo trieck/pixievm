@@ -30,6 +30,13 @@
 #define REG_IP                      (regs[IREG_IP])
 #define REG_FL                      (regs[IREG_FL])
 
+#define NEG_FLAG                    (0x80)
+#define OVERFLOW_FLAG               (0x40)
+#define BRK_FLAG                    (0x08)
+#define INT_DISABLE_FLAG            (0x04)
+#define ZERO_FLAG                   (0x02)
+#define CARRY_FLAG                  (0x01)
+
 #define GET_CARRY()                 (REG_FL & CARRY_FLAG)
 #define SET_CARRY(f) \
     do { \
@@ -2578,6 +2585,36 @@ word CPU::getIP() const
 word CPU::getFL() const
 {
     return REG_FL;
+}
+
+bool CPU::getCarry() const
+{
+    return (REG_FL & CARRY_FLAG) != 0;
+}
+
+bool CPU::getZero() const
+{
+    return (REG_FL & ZERO_FLAG) != 0;
+}
+
+bool CPU::getIntDisable() const
+{
+    return (REG_FL & INT_DISABLE_FLAG) != 0;
+}
+
+bool CPU::getBreak() const
+{
+    return (REG_FL & BRK_FLAG) != 0;
+}
+
+bool CPU::getOverflow() const
+{
+    return (REG_FL & OVERFLOW_FLAG) != 0;
+}
+
+bool CPU::getNeg() const
+{
+    return (REG_FL & NEG_FLAG) != 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////

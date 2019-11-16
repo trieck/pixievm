@@ -15,15 +15,14 @@ void RegistersCmd::exec(const stringvec& v)
     auto& cpu = CPU::instance();
 
     char sr[9]{};
-    const auto flags = cpu.getFL();
-    sr[0] = flags & NEG_FLAG ? '1' : '0';
-    sr[1] = flags & OVERFLOW_FLAG ? '1' : '0';
+    sr[0] = cpu.getNeg() ? '1' : '0';
+    sr[1] = cpu.getOverflow() ? '1' : '0';
     sr[2] = '0'; /* unused */
     sr[3] = '0'; /* unused */
-    sr[4] = flags & BRK_FLAG ? '1' : '0';
-    sr[5] = flags & INT_DISABLE_FLAG ? '1' : '0';
-    sr[6] = flags & ZERO_FLAG ? '1' : '0';
-    sr[7] = flags & CARRY_FLAG ? '1' : '0';
+    sr[4] = cpu.getBreak() ? '1' : '0';
+    sr[5] = cpu.getIntDisable() ? '1' : '0';
+    sr[6] = cpu.getZero() ? '1' : '0';
+    sr[7] = cpu.getCarry() ? '1' : '0';
     sr[8] = '\0';
 
     printf(" A: $%.4hX"
