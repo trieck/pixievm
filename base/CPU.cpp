@@ -2537,6 +2537,8 @@ CPU::~CPU()
 void CPU::clear()
 {
     REG_A = REG_B = REG_C = REG_D = REG_X = REG_SP = REG_IP = REG_FL = 0;
+    m_shutdown = false;
+    m_exitCode = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////

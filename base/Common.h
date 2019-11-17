@@ -44,11 +44,11 @@ using std::ostringstream;
 using std::string;
 using std::vector;
 
-typedef uint8_t byte;
-typedef uint16_t word;
-typedef uint32_t dword;
+using byte = uint8_t;
+using word = uint16_t;
+using dword = uint32_t;
 
-typedef vector<string> stringvec;
+using stringvec = vector<string>;
 
 template <typename Value>
 class StringKeyMap

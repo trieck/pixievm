@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "common.h"
-#include "memory.h"
+#include "Memory.h"
 #include <CPU.H>
 #include <interrupt.h>
 #include "PixieVM.h"
@@ -9,15 +9,24 @@
 #include "Instructions.h"
 
 #define ASSERT_CARRY_CLEAR(cpu) \
-    ASSERT_EQ((cpu).getCarry(), false)
+    ASSERT_FALSE((cpu).getCarry())
+
+#define ASSERT_CARRY_SET(cpu) \
+    ASSERT_TRUE((cpu).getCarry())
 
 #define ASSERT_ZERO_CLEAR(cpu) \
-    ASSERT_EQ((cpu).getZero(), false)
+    ASSERT_FALSE((cpu).getZero())
+
+#define ASSERT_ZERO_SET(cpu) \
+    ASSERT_TRUE((cpu).getZero())
 
 #define ASSERT_OVERFLOW_CLEAR(cpu) \
-    ASSERT_EQ((cpu).getOverflow(), false)
+    ASSERT_FALSE((cpu).getOverflow())
 
-struct InstructionTest: testing::Test, TrapHandler
+#define ASSERT_OVERFLOW_SET(cpu) \
+    ASSERT_TRUE((cpu).getOverflow())
+
+struct InstructionTest : testing::Test, TrapHandler
 {
     enum { PROGRAM_START = 0x8000 };
 
@@ -27,12 +36,16 @@ struct InstructionTest: testing::Test, TrapHandler
     word address_;  // current address for code generation
 
     InstructionTest() : cpu_(CPU::instance()),
-    memory_(Memory::instance()), startip_(PROGRAM_START), currentip_(PROGRAM_START), address_(PROGRAM_START)
-    {}
+                        memory_(Memory::instance()), startip_(PROGRAM_START), currentip_(PROGRAM_START),
+                        address_(PROGRAM_START)
+    {
+    }
 
     void SetUp() override
     {
         startip_ = currentip_ = address_ = PROGRAM_START;
+        memory_.storeWord(RESET_VECTOR, PROGRAM_START);
+
         cpu_.setIP(startip_);
         g_interrupt.setTrap(this, &currentip_);
     }
@@ -62,11 +75,8 @@ struct InstructionTest: testing::Test, TrapHandler
     }
 };
 
-TEST_F(InstructionTest, TEST_ADC_RR8)
+TEST_F(InstructionTest, TEST_ADC_RR8_0)
 {
-    ASSERT_EQ(address_, PROGRAM_START);
-    memory_.storeWord(RESET_VECTOR, PROGRAM_START);
-
     // adc al, ah
     memory_.store(address_++, OPCODE(&INS_ADC, AM_RR8));
     memory_.store(address_++, MAKEREG(REG8_AL, REG8_AH));
@@ -83,4 +93,45 @@ TEST_F(InstructionTest, TEST_ADC_RR8)
     ASSERT_CARRY_CLEAR(cpu_);
     ASSERT_ZERO_CLEAR(cpu_);
     ASSERT_OVERFLOW_CLEAR(cpu_);
+}
+
+TEST_F(InstructionTest, TEST_ADC_RR8_1)
+{
+    // adc al, ah -- set carry, zero
+
+    memory_.store(address_++, OPCODE(&INS_ADC, AM_RR8));
+    memory_.store(address_++, MAKEREG(REG8_AL, REG8_AH));
+
+    cpu_.setAL(0x02);
+    cpu_.setAH(0xFE);
+
+    cpu_.run(); // go!
+
+    ASSERT_EQ(startip_ + 2, cpu_.getIP());
+    ASSERT_EQ(cpu_.getAL(), 0x00);
+    ASSERT_EQ(cpu_.getAH(), 0xFE);
+
+    ASSERT_CARRY_SET(cpu_);
+    ASSERT_ZERO_SET(cpu_);
+    ASSERT_OVERFLOW_CLEAR(cpu_);
+}
+
+TEST_F(InstructionTest, TEST_ADC_RR8_2)
+{
+    // adc al, ah -- set overflow
+    memory_.store(address_++, OPCODE(&INS_ADC, AM_RR8));
+    memory_.store(address_++, MAKEREG(REG8_AL, REG8_AH));
+
+    cpu_.setAL(0x50);
+    cpu_.setAH(0x50);
+
+    cpu_.run(); // go!
+
+    ASSERT_EQ(startip_ + 2, cpu_.getIP());
+    ASSERT_EQ(cpu_.getAL(), 0xA0);
+    ASSERT_EQ(cpu_.getAH(), 0x50);
+
+    ASSERT_CARRY_CLEAR(cpu_);
+    ASSERT_ZERO_CLEAR(cpu_);
+    ASSERT_OVERFLOW_SET(cpu_);
 }
