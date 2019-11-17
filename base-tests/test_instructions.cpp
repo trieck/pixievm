@@ -135,3 +135,24 @@ TEST_F(InstructionTest, TEST_ADC_RR8_2)
     ASSERT_ZERO_CLEAR(cpu_);
     ASSERT_OVERFLOW_SET(cpu_);
 }
+
+TEST_F(InstructionTest, TEST_ADC_RI8_0)
+{
+    // adc al, $01
+
+    memory_.store(address_++, OPCODE(&INS_ADC, AM_RI8));
+    memory_.store(address_++, REG8_AL);
+    memory_.store(address_++, 0xFE);
+
+    cpu_.setAL(0x1);
+
+    cpu_.run(); // go!
+
+    ASSERT_EQ(startip_ + 3, cpu_.getIP());
+    ASSERT_EQ(cpu_.getAL(), 0xFF);
+    ASSERT_EQ(cpu_.getAH(), 0x00);
+
+    ASSERT_CARRY_CLEAR(cpu_);
+    ASSERT_ZERO_CLEAR(cpu_);
+    ASSERT_OVERFLOW_CLEAR(cpu_);
+}
