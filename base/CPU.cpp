@@ -98,16 +98,16 @@
 #define STORE_WORD(a, w) \
     do { \
         STORE(a, HIBYTE(w)); \
-        STORE(a+1, LOBYTE(w)); \
+        STORE((a)+1, LOBYTE(w)); \
     } while (0)
 
-#define R8PTR(n)    (((byte*)regs)+n)
+#define R8PTR(n)    (((byte*)regs)+(n))
 #define R8VAL(n)    (*(R8PTR(n)))
 #define R16PTR(n)   (&regs[n])
 #define R16VAL(n)   (regs[n])
 
 #define EFFADDRESS(n) \
-    (R16VAL(LOREG16(n)) + (REG_X >> ((~n&8) << 1)))
+    (R16VAL(LOREG16(n)) + (REG_X >> ((~(n) & 8) << 1)))
 
 #define DO_ADC_RR8() \
     do { \
