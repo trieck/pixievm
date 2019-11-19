@@ -278,3 +278,72 @@ TEST_F(InstructionTest, TEST_ADC_MR8_0)
     ASSERT_ZERO_CLEAR(cpu_);
     ASSERT_OVERFLOW_CLEAR(cpu_);
 }
+
+TEST_F(InstructionTest, TEST_ADC_MR8_1)
+{
+    // adc [d+x], ah -- set carry, zero
+    memory_.store(address_, OPCODE(&INS_ADC, AM_MR8));
+    memory_.store(address_ + 1, MAKEREG(REG16_D | 0x08, REG8_AH));  // encode offset bit in register
+
+    memory_.store(0x8101, 0x01);
+
+    cpu_.setD(0x8100);
+    cpu_.setX(0x0001);
+    cpu_.setAH(0xFF);
+
+    cpu_.run(); // go!
+
+    ASSERT_EQ(startip_ + 2, cpu_.getIP());
+
+    ASSERT_EQ(memory_.fetch(0x8101), 0x00);
+
+    ASSERT_CARRY_SET(cpu_);
+    ASSERT_ZERO_SET(cpu_);
+    ASSERT_OVERFLOW_CLEAR(cpu_);
+}
+
+TEST_F(InstructionTest, TEST_ADC_MR8_2)
+{
+    // adc [d+x], ah -- set overflow
+    memory_.store(address_, OPCODE(&INS_ADC, AM_MR8));
+    memory_.store(address_ + 1, MAKEREG(REG16_D | 0x08, REG8_AH));  // encode offset bit in register
+
+    memory_.store(0x8101, 0x50);
+
+    cpu_.setD(0x8100);
+    cpu_.setX(0x0001);
+    cpu_.setAH(0x50);
+
+    cpu_.run(); // go!
+
+    ASSERT_EQ(startip_ + 2, cpu_.getIP());
+
+    ASSERT_EQ(memory_.fetch(0x8101), 0xA0);
+
+    ASSERT_CARRY_CLEAR(cpu_);
+    ASSERT_ZERO_CLEAR(cpu_);
+    ASSERT_OVERFLOW_SET(cpu_);
+}
+
+TEST_F(InstructionTest, TEST_ADC_MR16_0)
+{
+    // adc [d+x], b
+    memory_.store(address_, OPCODE(&INS_ADC, AM_MR16));
+    memory_.store(address_ + 1, MAKEREG(REG16_D | 0x08, REG16_B));  // encode offset bit in register
+
+    memory_.storeWord(0x8101, 0x0001);
+
+    cpu_.setD(0x8100);
+    cpu_.setX(0x0001);
+    cpu_.setB(0x8000);
+
+    cpu_.run(); // go!
+
+    ASSERT_EQ(startip_ + 2, cpu_.getIP());
+
+    ASSERT_EQ(memory_.fetchWord(0x8101), 0x8001);
+
+    ASSERT_CARRY_CLEAR(cpu_);
+    ASSERT_ZERO_CLEAR(cpu_);
+    ASSERT_OVERFLOW_CLEAR(cpu_);
+}

@@ -6,7 +6,7 @@
 //
 
 #include "common.h"
-#include "memory.h"
+#include "Memory.h"
 #include "PixieVM.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ void Memory::reset()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-byte Memory::fetch(word address)
+byte Memory::fetch(word address) const
 {
     if (address >= IO_REGISTERS_START && address <= IO_REGISTERS_STOP) {
         return io_.readRegister(address & 0x0F);
@@ -47,6 +47,11 @@ void Memory::storeWord(word address, word value)
 {
     store(address, HIBYTE(value));
     store(address+ 1, LOBYTE(value));
+}
+
+word Memory::fetchWord(word address) const
+{
+    return (fetch(address) << 8) | fetch(address + 1);
 }
 
 /////////////////////////////////////////////////////////////////////////////

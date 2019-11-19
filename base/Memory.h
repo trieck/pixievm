@@ -22,9 +22,10 @@ public:
 
     // Interface
     void reset();
-    byte fetch(word address);
+    byte fetch(word address) const;
     void store(word address, byte b);
     void storeWord(word address, word value);
+    word fetchWord(word address) const;
     bool load(istream& is, word base, int size);
     bool save(ostream& os, word base, int size);
 private:
