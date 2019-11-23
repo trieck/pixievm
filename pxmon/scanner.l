@@ -4,6 +4,7 @@
 #include "SymbolTable.h"
 #include "Parser.hpp"
 #include "Util.h"
+#include "PixieVM.h"
 
 #include <boost/format.hpp>
 
@@ -53,8 +54,7 @@ newline         [\n]
         throw std::exception((format("unsupported symbol \"%s\".") % yytext).str().c_str());
     }
 
-    /* encode offset bit in register */
-    yylval.sym = table.installb(yytext, sym->type, sym->sub, sym->val8 | 0x08);
+    yylval.sym = table.installb(yytext, sym->type, sym->sub, EFFECTIVEREG(sym->val8));
     return RX16;
 }
 

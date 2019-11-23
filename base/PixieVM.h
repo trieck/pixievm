@@ -35,18 +35,20 @@
 #define CARRY_FLAG          (0x01)
 
 // register encoding
-#define MAKEREG(hi, lo)     (((hi) << 4) | (lo))
+#define MAKEREG(hi, lo)         (((hi) << 4) | (lo))
+#define MAKEOFFSETREG(hi, lo)   ((((hi)|0x08) << 4) | (lo))
+#define EFFECTIVEREG(r)         ((r)|0x08)
 
 // 8-bit register decoding
-#define HIREG8(n)           (LOREG8(((n) >> 4)))
-#define LOREG8(n)           ((n) & 7)
+#define HIREG8(n)               (LOREG8(((n) >> 4)))
+#define LOREG8(n)               ((n) & 7)
 
 // 16-bit register decoding
-#define HIREG16(n)          (LOREG16(((n) >> 4)))
-#define LOREG16(n)          ((n) & (((n)&5) | ((~(n)&4) >> 1)))
+#define HIREG16(n)              (LOREG16(((n) >> 4)))
+#define LOREG16(n)              ((n) & (((n)&5) | ((~(n)&4) >> 1)))
 
 // instruction opcode lookup by addressing mode
-#define OPCODE(i, m)        (*(*(i))[m])
+#define OPCODE(i, m)            (*(*(i))[m])
 
 #define VIDEORAM_BASE       (0xA000)
 #define VIDEORAM_SIZE       (0x1000)

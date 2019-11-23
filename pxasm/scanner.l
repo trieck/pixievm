@@ -6,6 +6,7 @@
 #include "Code.h"
 #include "Parser.hpp"
 #include "Util.h"
+#include "PixieVM.h"
 
 #define YY_NO_UNISTD_H (1)
 
@@ -100,8 +101,7 @@ here                \$\$
         return 0;
     }
 
-    // encode offset bit in register
-    yylval.sym = table.installw(sym->type, sym->sub, sym->val8 | 0x08);
+    yylval.sym = table.installw(sym->type, sym->sub, EFFECTIVEREG(sym->val8));
     return RX16;
 }
 {newline}.*     {
