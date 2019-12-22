@@ -21,6 +21,7 @@ BEGIN_MSG_MAP(Canvas)
     MESSAGE_HANDLER_WND(WM_CREATE, OnCreate)
     MESSAGE_HANDLER_EX2(WM_PAINT, OnPaint)
     MESSAGE_HANDLER_EX2(WM_DESTROY, OnDestroy)
+    MESSAGE_HANDLER_EX2(WM_SIZE, OnSize)
 END_MSG_MAP()
 
     // Interface
@@ -29,16 +30,20 @@ END_MSG_MAP()
 
     LPBYTE bits() const;
     LONG pitch() const;
-
-    void Refresh(CRect&& rc) const;
+    void refresh(CRect&& rc) const;
 
     // Message handlers
     LRESULT OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/);
     LRESULT OnPaint(WPARAM wParam, LPARAM lParam);
     LRESULT OnDestroy(WPARAM wParam, LPARAM lParam);
-    
+    LRESULT OnSize(WPARAM wParam, LPARAM lParam);
+
     // Implementation
 private:
+    void createDevice();
+    void prepare();
+    void reset();
+
     IDirect3DDevice9Ptr m_dev;
     IDirect3DSurface9Ptr m_surface;
     D3DPRESENT_PARAMETERS m_pp{};

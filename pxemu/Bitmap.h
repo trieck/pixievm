@@ -9,7 +9,7 @@ public:
     ~Bitmap() = default;
 
     // Interface
-    void render(CDC& dc, const CRect& rc) const;
+    void render(CDC& dc, CRect&& rc) const;
     LPBYTE bits() const;
     LONG pitch() const;
 

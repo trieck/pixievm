@@ -36,7 +36,7 @@ void Bitmap::create()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Bitmap::render(CDC& dc, const CRect& rc) const
+void Bitmap::render(CDC& dc, CRect&& rc) const
 {
     dc.SetDIBitsToDevice(
         rc.left,                // x-coordinate of upper left of dest. rectangle

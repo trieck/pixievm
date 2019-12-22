@@ -58,7 +58,7 @@ void RasterHandler::handle()
 
     if (m_offset == 0 && (m_scanLine > 0
         && ((m_scanLine % 8) == 0) || m_scanLine == CANVAS_CY_SIZE - 1)) {
-        m_pCanvas->Refresh({ 0, m_scanLine - 8, CANVAS_CX_SIZE, m_scanLine });
+        m_pCanvas->refresh({ 0, m_scanLine - 8, CANVAS_CX_SIZE, m_scanLine });
     }
 
     if (m_offset == 0) {
@@ -68,5 +68,6 @@ void RasterHandler::handle()
 
     if (m_scanLine == 0) {
         ui.handle(); // dispatch ui events
+        // TODO: we need vsync clock with sleep...
     }
 }
