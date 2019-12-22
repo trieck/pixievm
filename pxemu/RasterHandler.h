@@ -30,6 +30,8 @@ private:
     uint16_t m_offset = 0;
 
     Canvas* m_pCanvas;
+    LPBYTE m_pBits;
+    LONG m_pitch;
 };
 
 #endif // __RASTER_HANDLER_H__

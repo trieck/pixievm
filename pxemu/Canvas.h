@@ -27,7 +27,9 @@ END_MSG_MAP()
     static CSize GetDimensions();
     static CRect GetBoundingRect();
 
-    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
+    LPBYTE bits() const;
+    LONG pitch() const;
+
     void Refresh(CRect&& rc) const;
 
     // Message handlers

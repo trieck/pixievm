@@ -22,10 +22,22 @@ CRect Canvas::GetBoundingRect()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+LPBYTE Canvas::bits() const
+{
+    return m_bitmap.bits();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LONG Canvas::pitch() const
+{
+    return m_bitmap.pitch();
+}
+
+/////////////////////////////////////////////////////////////////////////////
 void Canvas::Refresh(CRect&& rc) const
 {
     CClientDC dc(m_hWnd);
-    m_bitmap.Render(dc, rc);
+    m_bitmap.render(dc, rc);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -44,7 +56,7 @@ LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/,
 LRESULT Canvas::OnPaint(WPARAM wParam, LPARAM lParam)
 {
     CPaintDC dc(m_hWnd);
-    m_bitmap.Render(dc, dc.m_ps.rcPaint);
+    m_bitmap.render(dc, dc.m_ps.rcPaint);
 
     return 0;
 }
@@ -56,10 +68,4 @@ LRESULT Canvas::OnDestroy(WPARAM wParam, LPARAM lParam)
     m_dev.Release();
 
     return 0;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void Canvas::SetPixel(uint16_t x, uint16_t y, uint8_t color) const
-{
-    m_bitmap.SetPixel(x, y, color);
 }

@@ -9,12 +9,13 @@ public:
     ~Bitmap() = default;
 
     // Interface
-    void Render(CDC& dc, const CRect& rc) const;
-    void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
+    void render(CDC& dc, const CRect& rc) const;
+    LPBYTE bits() const;
+    LONG pitch() const;
 
     // Implementation
 private:
-    void CreateBitmap();
+    void create();
     CBitmap m_bm;
     CDC m_dc;
     LPBYTE m_pBits;

@@ -8,6 +8,8 @@ constexpr auto IO_REG_BORDER_COLOR = (IO_REGISTER_BASE + 1);
 ////////////////////////////////////////////////////////////////////////////
 RasterHandler::RasterHandler(Canvas* canvas) : m_pCanvas(canvas)
 {
+    m_pBits = canvas->bits();
+    m_pitch = canvas->pitch();
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -25,7 +27,7 @@ void RasterHandler::handle()
             m_scanLine >= CANVAS_CY_SIZE - CANVAS_CY_BORDER ||
             m_offset < CANVAS_CX_BORDER ||
             m_offset >= CANVAS_CX_SIZE - CANVAS_CY_BORDER) {
-            m_pCanvas->SetPixel(m_offset, m_scanLine, borderColor);
+            m_pBits[m_scanLine * m_pitch + m_offset] = borderColor;
         } else {
             const uint16_t scanLine = m_scanLine - CANVAS_CY_BORDER;
             const uint16_t offset = m_offset - CANVAS_CX_BORDER;
@@ -45,9 +47,9 @@ void RasterHandler::handle()
 
             const uint8_t start = 7 - (offset % 8);
             if (ch & 1 << start) {
-                m_pCanvas->SetPixel(m_offset, m_scanLine, color);
+                m_pBits[m_scanLine * m_pitch + m_offset] = color;
             } else {
-                m_pCanvas->SetPixel(m_offset, m_scanLine, bkgndColor);
+                m_pBits[m_scanLine * m_pitch + m_offset] = bkgndColor;
             }
         }
 

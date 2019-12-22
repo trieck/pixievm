@@ -6,17 +6,11 @@
 /////////////////////////////////////////////////////////////////////////////
 Bitmap::Bitmap() : m_pBits(nullptr), m_bmi(nullptr)
 {
-    CreateBitmap();
+    create();
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Bitmap::SetPixel(uint16_t x, uint16_t y, uint8_t color) const
-{
-    m_pBits[y * m_bmi->bmiHeader.biWidth + x] = color;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void Bitmap::CreateBitmap()
+void Bitmap::create()
 {
     m_dc.CreateCompatibleDC(nullptr);
 
@@ -42,7 +36,7 @@ void Bitmap::CreateBitmap()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Bitmap::Render(CDC& dc, const CRect& rc) const
+void Bitmap::render(CDC& dc, const CRect& rc) const
 {
     dc.SetDIBitsToDevice(
         rc.left,                // x-coordinate of upper left of dest. rectangle
@@ -57,4 +51,14 @@ void Bitmap::Render(CDC& dc, const CRect& rc) const
         m_bmi.get(),            // pointer to BITMAPINFO structure
         DIB_RGB_COLORS
     );
+}
+
+LPBYTE Bitmap::bits() const
+{
+    return m_pBits;
+}
+
+LONG Bitmap::pitch() const
+{
+    return m_bmi->bmiHeader.biWidth;
 }
