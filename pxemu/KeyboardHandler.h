@@ -12,7 +12,6 @@
 #include "PixieIO.h"
 
 /////////////////////////////////////////////////////////////////////////////
-template <class T>
 class KeyboardHandler
 {
     // Construction / Destruction
@@ -22,13 +21,13 @@ public:
 
     // Interface
 BEGIN_MSG_MAP(KeyboardHandler)
-        MESSAGE_HANDLER(WM_KEYDOWN, OnKeyDown)
-        MESSAGE_HANDLER(WM_KEYUP, OnKeyUp)
-    END_MSG_MAP()
+    MESSAGE_HANDLER_EX2(WM_KEYDOWN, OnKeyDown)
+    MESSAGE_HANDLER_EX2(WM_KEYUP, OnKeyUp)
+END_MSG_MAP()
 
     // Implementation
 private:
-    LRESULT OnKeyDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnKeyDown(WPARAM wParam, LPARAM lParam)
     {
         const auto keyCode = KeyboardMatrix::translate(wParam, lParam);
         if (keyCode < 0 || keyCode >= 256)
@@ -39,7 +38,7 @@ private:
         return 0;
     }
 
-    LRESULT OnKeyUp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+    LRESULT OnKeyUp(WPARAM wParam, LPARAM lParam)
     {
         const auto key_code = KeyboardMatrix::translate(wParam, lParam);
         if (key_code < 0 || key_code >= 256)

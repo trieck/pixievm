@@ -1,15 +1,14 @@
 #include "StdAfx.h"
 #include "PxEmu.h"
+#include "PxEmuApp.h"
 #include "MainFrm.h"
 #include "CPU.H"
-#include "Alarm.h"
-#include "RasterHandler.h"
 #include "PixieVM.h"
 #include <sys/stat.h>
-#include "memory.h"
+#include "Memory.h"
 #include <boost/format.hpp>
 
-CAppModule _Module;
+extern PxEmuApp _Module;
 
 /////////////////////////////////////////////////////////////////////////////
 void PxEmulator::init()

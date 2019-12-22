@@ -2,3 +2,5 @@
 // such as names of functions and macros.
 // For more information see https://go.microsoft.com/fwlink/?linkid=865984
 #define MESSAGE_HANDLER_WND(msg, func) if(uMsg == msg) { bHandled = TRUE; lResult = func(hWnd, uMsg, wParam, lParam, bHandled); if(bHandled) return TRUE; }
+#define MESSAGE_HANDLER_WND(msg, func) if (uMsg == (msg)) { bHandled = TRUE; lResult = func(hWnd, uMsg, wParam, lParam, bHandled); if (bHandled) return TRUE; }
+#define MESSAGE_HANDLER_WND(msg, func) if (uMsg == (msg)) { bHandled = TRUE; lResult = func(hWnd, uMsg, wParam, lParam, bHandled); if (bHandled) return TRUE; }

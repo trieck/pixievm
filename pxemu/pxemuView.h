@@ -10,13 +10,8 @@
 #include "Canvas.h"
 #include "KeyboardHandler.h"
 
-class CPxEmuView : public CWindowImpl<CPxEmuView>,
-    public KeyboardHandler<CPxEmuView>,
-    public Canvas<CPxEmuView>
+class CPxEmuView : public CWindowImpl<CPxEmuView>
 {
-    using KeyboardHandlerBase = KeyboardHandler<CPxEmuView>;
-    using CanvasBase = Canvas<CPxEmuView>;
-
 public:
     DECLARE_WND_CLASS(NULL)
 
@@ -26,12 +21,11 @@ public:
     }
 
 BEGIN_MSG_MAP(CPxemuView)
-        MSG_WM_DESTROY(OnDestroy)
-        CHAIN_MSG_MAP(KeyboardHandlerBase)
-        CHAIN_MSG_MAP(CanvasBase)
-    END_MSG_MAP()
+    CHAIN_MSG_MAP_MEMBER(m_keyHandler)
+    CHAIN_MSG_MAP_MEMBER(m_canvas)
+END_MSG_MAP()
 
-    void OnDestroy()
-    {
-    }
+private:
+    Canvas m_canvas;
+    KeyboardHandler m_keyHandler;
 };

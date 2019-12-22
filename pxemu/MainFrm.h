@@ -11,12 +11,14 @@
 #include "PxEmuView.h"
 #include "aboutdlg.h"
 
+extern PxEmuApp _Module;
+
 typedef CWinTraits<WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU |
                    WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_MINIMIZEBOX, WS_EX_APPWINDOW |
                    WS_EX_WINDOWEDGE> CMainFrameTraits;
 
 class CMainFrame;
-typedef CFrameWindowImpl<CMainFrame, CWindow, CMainFrameTraits> CMainFrameImpl;
+using  CMainFrameImpl = CFrameWindowImpl<CMainFrame, CWindow, CMainFrameTraits>;
 
 class CMainFrame :
     public CMainFrameImpl,
@@ -24,7 +26,7 @@ class CMainFrame :
     public CMessageFilter, public CIdleHandler
 {
 public:
-    DECLARE_FRAME_WND_CLASS(NULL, IDR_MAINFRAME)
+    DECLARE_FRAME_WND_CLASS(nullptr, IDR_MAINFRAME)
 
     CPxEmuView m_view;
 
@@ -44,21 +46,21 @@ public:
         return FALSE;
     }
 
-    BEGIN_UPDATE_UI_MAP(CMainFrame)
-            UPDATE_ELEMENT(ID_VIEW_TOOLBAR, UPDUI_MENUPOPUP)
-            UPDATE_ELEMENT(ID_VIEW_STATUS_BAR, UPDUI_MENUPOPUP)
-    END_UPDATE_UI_MAP()
+BEGIN_UPDATE_UI_MAP(CMainFrame)
+    UPDATE_ELEMENT(ID_VIEW_TOOLBAR, UPDUI_MENUPOPUP)
+    UPDATE_ELEMENT(ID_VIEW_STATUS_BAR, UPDUI_MENUPOPUP)
+END_UPDATE_UI_MAP()
 
 BEGIN_MSG_MAP(CMainFrame)
-        MESSAGE_HANDLER(WM_CREATE, OnCreate)
-        MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-        COMMAND_ID_HANDLER(ID_APP_EXIT, OnFileExit)
-        COMMAND_ID_HANDLER(ID_VIEW_TOOLBAR, OnViewToolBar)
-        COMMAND_ID_HANDLER(ID_VIEW_STATUS_BAR, OnViewStatusBar)
-        COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAppAbout)
-        CHAIN_MSG_MAP(CUpdateUI<CMainFrame>)
-        CHAIN_MSG_MAP(CMainFrameImpl)
-    END_MSG_MAP()
+    MESSAGE_HANDLER(WM_CREATE, OnCreate)
+    MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
+    COMMAND_ID_HANDLER(ID_APP_EXIT, OnFileExit)
+    COMMAND_ID_HANDLER(ID_VIEW_TOOLBAR, OnViewToolBar)
+    COMMAND_ID_HANDLER(ID_VIEW_STATUS_BAR, OnViewStatusBar)
+    COMMAND_ID_HANDLER(ID_APP_ABOUT, OnAppAbout)
+    CHAIN_MSG_MAP(CUpdateUI<CMainFrame>)
+    CHAIN_MSG_MAP(CMainFrameImpl)
+END_MSG_MAP()
 
     // Handler prototypes (uncomment arguments if needed):
     //	LRESULT MessageHandler(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& /*bHandled*/)
@@ -158,7 +160,7 @@ BEGIN_MSG_MAP(CMainFrame)
 
     void ResizeFrame()
     {
-        auto rc = Canvas<CPxEmuView>::GetBoundingRect();
+        auto rc = Canvas::GetBoundingRect();
 
         // make room for the status bar
         CRect rcStatus;

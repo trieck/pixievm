@@ -9,7 +9,7 @@ public:
     ~Bitmap() = default;
 
     // Interface
-    void Render(CPaintDC& dc) const;
+    void Render(CDC& dc, const CRect& rc) const;
     void SetPixel(uint16_t x, uint16_t y, uint8_t color) const;
 
     // Implementation

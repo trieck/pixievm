@@ -42,10 +42,8 @@ void Bitmap::CreateBitmap()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Bitmap::Render(CPaintDC& dc) const
+void Bitmap::Render(CDC& dc, const CRect& rc) const
 {
-    const CRect rc(dc.m_ps.rcPaint);
-
     dc.SetDIBitsToDevice(
         rc.left,                // x-coordinate of upper left of dest. rectangle
         rc.top,                 // y-coordinate of upper left of dest. rectangle
