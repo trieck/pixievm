@@ -160,7 +160,7 @@ END_MSG_MAP()
 
     void ResizeFrame()
     {
-        auto rc = Canvas::GetBoundingRect();
+        auto rc = Canvas::boundingRect();
 
         // make room for the status bar
         CRect rcStatus;

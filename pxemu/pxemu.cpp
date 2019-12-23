@@ -73,7 +73,7 @@ int PxEmulator::run()
 
     CMainFrame wndMain;
     if (wndMain.CreateEx() == nullptr)
-        throw std::exception("Main window creation failed!");
+        throw std::exception("main window creation failed.");
 
     STARTUPINFO info;
     GetStartupInfo(&info);

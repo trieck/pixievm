@@ -12,8 +12,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         ret = emulator.run();
     } catch (const std::exception& /*e*/) {
         return 1;
-    } catch (const CAtlException& /*e*/) {
-        return 1;
+    } catch (...) {
+        return 2;
     }
 
     return ret;

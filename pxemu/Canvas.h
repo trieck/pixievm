@@ -1,7 +1,6 @@
 #pragma once
 
 #include "StdAfx.h"
-#include "Bitmap.h"
 
 constexpr auto CANVAS_CX_BORDER = 20;
 constexpr auto CANVAS_CY_BORDER = 20;
@@ -25,12 +24,9 @@ BEGIN_MSG_MAP(Canvas)
 END_MSG_MAP()
 
     // Interface
-    static CSize GetDimensions();
-    static CRect GetBoundingRect();
-
-    LPBYTE bits() const;
-    LONG pitch() const;
-    void refresh(CRect&& rc) const;
+    static CSize dims();
+    static CRect boundingRect();
+    void render(CRect&& rc);
 
     // Message handlers
     LRESULT OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/);
@@ -47,6 +43,5 @@ private:
     IDirect3DDevice9Ptr m_dev;
     IDirect3DSurface9Ptr m_surface;
     D3DPRESENT_PARAMETERS m_pp{};
-    Bitmap m_bitmap;
     HWND m_hWnd = nullptr;
 };

@@ -1,12 +1,6 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//  are changed infrequently
-//
-
 #pragma once
 
 #include "common.h"
-
 #include <atlbase.h>
 #include <atltypes.h>
 #include <atlapp.h>
@@ -33,7 +27,11 @@ USING_COMPTR(IDirect3D9);
 USING_COMPTR(IDirect3DDevice9);
 USING_COMPTR(IDirect3DSurface9);
 
-#define ATL_CHECK_HR(hr)    \
-    if (FAILED((hr))) {     \
-        AtlThrow(hr);       \
-    }
+#define ATL_CHECK_HR(hr) \
+    do { \
+        if (FAILED((hr))) { \
+            ATLTRACE(atlTraceException, 0, _T("ATL_CHECK_HR: hr = 0x%x\n"), hr); \
+            ATLASSERT(FALSE); \
+        } \
+    } while(0)
+

@@ -7,45 +7,63 @@
 extern PxEmuApp _Module;
 
 /////////////////////////////////////////////////////////////////////////////
-CSize Canvas::GetDimensions()
+CSize Canvas::dims()
 {
     return { CANVAS_CX_SIZE, CANVAS_CY_SIZE };
 }
 
 /////////////////////////////////////////////////////////////////////////////
-CRect Canvas::GetBoundingRect()
+CRect Canvas::boundingRect()
 {
-    CRect rc;
-
-    const auto sz = GetDimensions();
-    rc.right = sz.cx;
-    rc.bottom = sz.cy;
-
-    return rc;
+    const auto sz = dims();
+    return { 0, 0, sz.cx, sz.cy };
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LPBYTE Canvas::bits() const
+void Canvas::render(CRect&& rc)
 {
-    return m_bitmap.bits();
+    prepare();
+
+    D3DRECT rc3d;
+    rc3d.x1 = rc.left;
+    rc3d.y1 = rc.top;
+    rc3d.x2 = rc.right;
+    rc3d.y2 = rc.bottom;
+
+    auto hr = m_dev->Clear(1, &rc3d, D3DCLEAR_TARGET, 0, 0, 0);
+    ATL_CHECK_HR(hr);
+
+    hr = m_dev->BeginScene();
+    ATL_CHECK_HR(hr);
+
+    IDirect3DSurface9Ptr buffer;
+    hr = m_dev->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &buffer);
+    ATL_CHECK_HR(hr);
+
+    D3DLOCKED_RECT rcLocked;
+    hr = m_surface->LockRect(&rcLocked, rc, 0);
+    ATL_CHECK_HR(hr);
+
+    // TODO:: render here rcLocked.pBits, rcLocked.Pitch;
+
+    hr = m_surface->UnlockRect();
+    ATL_CHECK_HR(hr);
+
+    hr = m_dev->StretchRect(m_surface, &rc, buffer, nullptr, D3DTEXF_NONE);
+    ATL_CHECK_HR(hr);
+
+    buffer.Release();
+
+    hr = m_dev->EndScene();
+    ATL_CHECK_HR(hr);
+
+    hr = m_dev->Present(nullptr, nullptr, nullptr, nullptr);
+    ATL_CHECK_HR(hr);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LONG Canvas::pitch() const
-{
-    return m_bitmap.pitch();
-}
-
-/////////////////////////////////////////////////////////////////////////////
-void Canvas::refresh(CRect&& rc) const
-{
-    CClientDC dc(m_hWnd);
-    m_bitmap.render(dc, std::forward<CRect>(rc));
-}
-
-/////////////////////////////////////////////////////////////////////////////
-LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/, 
-    LPARAM /*lParam*/)
+LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/,
+                         LPARAM /*lParam*/)
 {
     ASSERT(IsWindow(hWnd));
     m_hWnd = hWnd;
@@ -56,16 +74,19 @@ LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/,
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LRESULT Canvas::OnPaint(WPARAM wParam, LPARAM lParam)
+LRESULT Canvas::OnPaint(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
-    CPaintDC dc(m_hWnd);
-    m_bitmap.render(dc, dc.m_ps.rcPaint);
+    const CPaintDC dc(m_hWnd);
+
+    if (m_surface) {
+        render(dc.m_ps.rcPaint);
+    }
 
     return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
-LRESULT Canvas::OnDestroy(WPARAM wParam, LPARAM lParam)
+LRESULT Canvas::OnDestroy(WPARAM /*wParam*/, LPARAM /*lParam*/)
 {
     m_surface.Release();
     m_dev.Release();
@@ -101,14 +122,15 @@ void Canvas::createDevice()
 
     auto d3d = _Module.direct3d();
     const auto hr = d3d->CreateDevice(D3DADAPTER_DEFAULT,
-        D3DDEVTYPE_HAL,
-        m_hWnd,
-        D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-        &m_pp,
-        &m_dev);
-    ATL_CHECK_HR(hr)
+                                      D3DDEVTYPE_HAL,
+                                      m_hWnd,
+                                      D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+                                      &m_pp,
+                                      &m_dev);
 
-   reset();
+    ATL_CHECK_HR(hr);
+
+    reset();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -129,11 +151,10 @@ void Canvas::reset()
     m_surface.Release();
 
     auto hr = m_dev->Reset(&m_pp);
-    ATL_CHECK_HR(hr)
+    ATL_CHECK_HR(hr);
 
-    hr = m_dev->CreateOffscreenPlainSurface(rc.Width(), rc.Height(), 
-        D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT, 
-        &m_surface, nullptr);
-    ATL_CHECK_HR(hr)
+    hr = m_dev->CreateOffscreenPlainSurface(rc.Width(), rc.Height(),
+                                            D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,
+                                            &m_surface, nullptr);
+    ATL_CHECK_HR(hr);
 }
-
