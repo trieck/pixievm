@@ -18,14 +18,17 @@ void RasterHandler::handle()
     const auto bkgndColor = memory.fetch(IO_REG_BKGND_COLOR);
     const auto borderColor = memory.fetch(IO_REG_BORDER_COLOR);
 
+    const auto currow = m_scanLine % 8;
+
     // handle 4-pixels at a time
     for (auto i = 0; i < 4; ++i) {
+        
         // are we on a border?
         if (m_scanLine < CANVAS_CY_BORDER ||
             m_scanLine >= CANVAS_CY_SIZE - CANVAS_CY_BORDER ||
             m_offset < CANVAS_CX_BORDER ||
             m_offset >= CANVAS_CX_SIZE - CANVAS_CY_BORDER) {
-            // m_pBits[m_scanLine * m_pitch + m_offset] = borderColor;
+            m_bits[currow * CANVAS_CX_SIZE + m_offset] = borderColor;
         } else {
             const uint16_t scanLine = m_scanLine - CANVAS_CY_BORDER;
             const uint16_t offset = m_offset - CANVAS_CX_BORDER;
@@ -44,10 +47,11 @@ void RasterHandler::handle()
             const auto color = memory.fetch(color_ptr);
 
             const uint8_t start = 7 - (offset % 8);
+
             if (ch & 1 << start) {
-                // m_pBits[m_scanLine * m_pitch + m_offset] = color;
+                m_bits[currow * CANVAS_CX_SIZE + m_offset] = color;
             } else {
-                // m_pBits[m_scanLine * m_pitch + m_offset] = bkgndColor;
+                m_bits[currow * CANVAS_CX_SIZE + m_offset] = bkgndColor;
             }
         }
 
@@ -56,7 +60,8 @@ void RasterHandler::handle()
 
     if (m_offset == 0 && (m_scanLine > 0
         && ((m_scanLine % 8) == 0) || m_scanLine == CANVAS_CY_SIZE - 1)) {
-        // m_pCanvas->render({ 0, m_scanLine - 8, CANVAS_CX_SIZE, m_scanLine });
+        // Render 8 scan lines at a time
+        m_pCanvas->render({ 0, m_scanLine - 8, CANVAS_CX_SIZE, m_scanLine }, m_bits);
     }
 
     if (m_offset == 0) {

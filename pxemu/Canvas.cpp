@@ -6,6 +6,17 @@
 
 extern PxEmuApp _Module;
 
+#define XRGB(r,g,b) \
+    ((COLORREF)(((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16)))
+
+/////////////////////////////////////////////////////////////////////////////
+COLORREF Canvas::xrgbColor(UINT index)
+{
+    const auto color = Palette::Color(index);
+
+    return XRGB(color.rgbRed, color.rgbGreen, color.rgbBlue);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 CSize Canvas::dims()
 {
@@ -20,7 +31,7 @@ CRect Canvas::boundingRect()
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Canvas::render(CRect&& rc)
+void Canvas::render(CRect&& rc, const byte* bits)
 {
     prepare();
 
@@ -44,7 +55,7 @@ void Canvas::render(CRect&& rc)
     hr = m_surface->LockRect(&rcLocked, rc, 0);
     ATL_CHECK_HR(hr);
 
-    // TODO:: render here rcLocked.pBits, rcLocked.Pitch;
+    bitBlt(rcLocked, bits, rc);
 
     hr = m_surface->UnlockRect();
     ATL_CHECK_HR(hr);
@@ -62,6 +73,21 @@ void Canvas::render(CRect&& rc)
 }
 
 /////////////////////////////////////////////////////////////////////////////
+void Canvas::bitBlt(D3DLOCKED_RECT& dest, const byte* src, const CRect& rc)
+{
+    auto* pdest = static_cast<DWORD*>(dest.pBits);
+    const auto pitch = dest.Pitch / sizeof(DWORD);
+    const auto cx = rc.Width();
+    const auto cy = rc.Height();
+
+    for (auto y = 0; y < cy; ++y) {
+        for (auto x = 0; x < cx; ++x) {
+            pdest[y * pitch + x] = xrgbColor(*src++);
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////
 LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/,
                          LPARAM /*lParam*/)
 {
@@ -69,18 +95,6 @@ LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/,
     m_hWnd = hWnd;
 
     Alarms::instance().addAlarm<RasterHandler>(this);
-
-    return 0;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-LRESULT Canvas::OnPaint(WPARAM /*wParam*/, LPARAM /*lParam*/)
-{
-    const CPaintDC dc(m_hWnd);
-
-    if (m_surface) {
-        render(dc.m_ps.rcPaint);
-    }
 
     return 0;
 }
@@ -109,8 +123,7 @@ LRESULT Canvas::OnSize(WPARAM wParam, LPARAM lParam)
 /////////////////////////////////////////////////////////////////////////////
 void Canvas::createDevice()
 {
-    CRect rc;
-    GetClientRect(m_hWnd, &rc);
+    const auto rc = boundingRect();
 
     m_pp.BackBufferFormat = D3DFMT_X8R8G8B8;
     m_pp.BackBufferCount = 1;
@@ -145,13 +158,12 @@ void Canvas::prepare()
 /////////////////////////////////////////////////////////////////////////////
 void Canvas::reset()
 {
-    CRect rc;
-    GetClientRect(m_hWnd, &rc);
-
     m_surface.Release();
 
     auto hr = m_dev->Reset(&m_pp);
     ATL_CHECK_HR(hr);
+
+    const auto rc = boundingRect();
 
     hr = m_dev->CreateOffscreenPlainSurface(rc.Width(), rc.Height(),
                                             D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,

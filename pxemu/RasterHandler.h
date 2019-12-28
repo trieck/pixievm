@@ -29,6 +29,7 @@ private:
     uint16_t m_scanLine = 0;
     uint16_t m_offset = 0;
     Canvas* m_pCanvas;
+    byte m_bits[CANVAS_CX_SIZE * 8]{};
 };
 
 #endif // __RASTER_HANDLER_H__
