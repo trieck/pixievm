@@ -10,7 +10,6 @@
 
 #include "Handler.h"
 #include "UIEventHandler.h"
-#include "Memory.h"
 #include "Canvas.h"
 
 ////////////////////////////////////////////////////////////////////////////
@@ -27,9 +26,8 @@ public:
 private:
     UIEventHandler ui;
     uint16_t m_scanLine = 0;
-    uint16_t m_offset = 0;
     Canvas* m_pCanvas;
-    byte m_bits[CANVAS_CX_SIZE * 8]{};
+    BytePtr m_drawBuffer;
 };
 
 #endif // __RASTER_HANDLER_H__

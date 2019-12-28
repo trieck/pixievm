@@ -6,8 +6,9 @@
 
 extern PxEmuApp _Module;
 
-#define XRGB(r,g,b) \
-    ((COLORREF)(((BYTE)(b)|((WORD)((BYTE)(g))<<8))|(((DWORD)(BYTE)(r))<<16)))
+#define XRGB(r, g, b)                                   \
+  ((COLORREF)(((BYTE)(b) | ((WORD)((BYTE)(g)) << 8)) |  \
+              (((DWORD)(BYTE)(r)) << 16)))
 
 /////////////////////////////////////////////////////////////////////////////
 COLORREF Canvas::xrgbColor(UINT index)
@@ -28,6 +29,24 @@ CRect Canvas::boundingRect()
 {
     const auto sz = dims();
     return { 0, 0, sz.cx, sz.cy };
+}
+
+/////////////////////////////////////////////////////////////////////////////
+LRESULT Canvas::OnPaint(WPARAM /*wParam*/, LPARAM /*lParam*/)
+{
+    const CPaintDC dc(m_hWnd);
+
+    if (m_surface) {
+        render(dc.m_ps.rcPaint);
+    }
+
+    return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void Canvas::render(const CRect& rc)
+{
+    // TODO: 
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -60,7 +79,7 @@ void Canvas::render(CRect&& rc, const byte* bits)
     hr = m_surface->UnlockRect();
     ATL_CHECK_HR(hr);
 
-    hr = m_dev->StretchRect(m_surface, &rc, buffer, nullptr, D3DTEXF_NONE);
+    hr = m_dev->StretchRect(m_surface, &rc, buffer, &rc, D3DTEXF_NONE);
     ATL_CHECK_HR(hr);
 
     buffer.Release();
@@ -89,7 +108,7 @@ void Canvas::bitBlt(D3DLOCKED_RECT& dest, const byte* src, const CRect& rc)
 
 /////////////////////////////////////////////////////////////////////////////
 LRESULT Canvas::OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/,
-                         LPARAM /*lParam*/)
+    LPARAM /*lParam*/)
 {
     ASSERT(IsWindow(hWnd));
     m_hWnd = hWnd;
@@ -135,11 +154,11 @@ void Canvas::createDevice()
 
     auto d3d = _Module.direct3d();
     const auto hr = d3d->CreateDevice(D3DADAPTER_DEFAULT,
-                                      D3DDEVTYPE_HAL,
-                                      m_hWnd,
-                                      D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-                                      &m_pp,
-                                      &m_dev);
+        D3DDEVTYPE_HAL,
+        m_hWnd,
+        D3DCREATE_SOFTWARE_VERTEXPROCESSING,
+        &m_pp,
+        &m_dev);
 
     ATL_CHECK_HR(hr);
 
@@ -166,7 +185,7 @@ void Canvas::reset()
     const auto rc = boundingRect();
 
     hr = m_dev->CreateOffscreenPlainSurface(rc.Width(), rc.Height(),
-                                            D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,
-                                            &m_surface, nullptr);
+        D3DFMT_X8R8G8B8, D3DPOOL_DEFAULT,
+        &m_surface, nullptr);
     ATL_CHECK_HR(hr);
 }

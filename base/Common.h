@@ -49,6 +49,9 @@ using word = uint16_t;
 using dword = uint32_t;
 
 using stringvec = vector<string>;
+using BytePtr = std::unique_ptr<byte[]>;
+
+#define make_byte_ptr(b) BytePtr(new byte[(b)])
 
 template <typename Value>
 class StringKeyMap
@@ -86,11 +89,8 @@ using StringStringMap = StringKeyMap<string>::Type;
 #define LOBYTE(w) (w & 0xFF)
 #endif  // LOBYTE
 
-#define HINYBBLE(b) ((b & 0xF0) >> 4)
-#define LONYBBLE(b) (b & 0x0F)
-
-#define max(a, b) (((a) > (b)) ? (a) : (b))
-#define min(a, b) (((a) < (b)) ? (a) : (b))
+#define HINYBBLE(b) (((b) & 0xF0) >> 4)
+#define LONYBBLE(b) ((b) & 0x0F)
 
 #define ANON_BEGIN namespace {
 #define ANON_END }

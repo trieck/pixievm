@@ -20,6 +20,7 @@ public:
 BEGIN_MSG_MAP(Canvas)
     MESSAGE_HANDLER_WND(WM_CREATE, OnCreate)
     MESSAGE_HANDLER_EX2(WM_DESTROY, OnDestroy)
+    MESSAGE_HANDLER_EX2(WM_PAINT, OnPaint)
     MESSAGE_HANDLER_EX2(WM_SIZE, OnSize)
 END_MSG_MAP()
 
@@ -31,16 +32,18 @@ END_MSG_MAP()
     // Message handlers
     LRESULT OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/);
     LRESULT OnDestroy(WPARAM wParam, LPARAM lParam);
+    LRESULT OnPaint(WPARAM wParam, LPARAM lParam);
     LRESULT OnSize(WPARAM wParam, LPARAM lParam);
-
+    
     // Implementation
 private:
     static void bitBlt(D3DLOCKED_RECT& dest, const byte* src, const CRect& rc);
-    static COLORREF Canvas::xrgbColor(UINT index);
+    static COLORREF xrgbColor(UINT index);
 
     void createDevice();
     void prepare();
     void reset();
+    void render(const CRect &rc);
 
     IDirect3DDevice9Ptr m_dev;
     IDirect3DSurface9Ptr m_surface;
