@@ -90,6 +90,5 @@
     <None Include="res\pxemu.ico">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
