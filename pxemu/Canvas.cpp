@@ -50,7 +50,7 @@ void Canvas::render(const CRect& rc)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void Canvas::render(CRect&& rc, const byte* bits)
+void Canvas::render(const CRect& rc, const byte* bits)
 {
     prepare();
 

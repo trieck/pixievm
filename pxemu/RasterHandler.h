@@ -24,10 +24,15 @@ public:
 
     // Implementation
 private:
+    void update(int x, int y, byte color);
+
     UIEventHandler ui;
     uint16_t m_scanLine = 0;
+    uint16_t m_offset = 0;
     Canvas* m_pCanvas;
     BytePtr m_drawBuffer;
+    CRect m_update;
+    bool m_empty = true;
 };
 
 #endif // __RASTER_HANDLER_H__

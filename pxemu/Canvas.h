@@ -27,7 +27,7 @@ END_MSG_MAP()
     // Interface
     static CSize dims();
     static CRect boundingRect();
-    void render(CRect&& rc, const byte* bits);
+    void render(const CRect& rc, const byte* bits);
 
     // Message handlers
     LRESULT OnCreate(HWND hWnd, UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/);
