@@ -28,10 +28,9 @@ public:
     word fetchWord(word address) const;
     bool load(istream& is, word base, int size);
     bool save(ostream& os, word base, int size);
+    const byte* ptr() const;
 private:
-    enum { MEM_SIZE = 0x10000 };
-
-    std::unique_ptr<byte[]> memory_;
+    BytePtr memory_;
     PixieIO& io_;
 };
 

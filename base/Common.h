@@ -51,7 +51,10 @@ using dword = uint32_t;
 using stringvec = vector<string>;
 using BytePtr = std::unique_ptr<byte[]>;
 
-#define make_byte_ptr(b) BytePtr(new byte[(b)])
+inline BytePtr make_byte_ptr(size_t size)
+{
+    return BytePtr(new byte[size]);
+}
 
 template <typename Value>
 class StringKeyMap

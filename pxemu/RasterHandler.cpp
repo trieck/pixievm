@@ -10,6 +10,7 @@ constexpr auto IO_REG_BORDER_COLOR = (IO_REGISTER_BASE + 1);
 RasterHandler::RasterHandler(Canvas* canvas)
     : m_pCanvas(canvas)
 {
+    m_memory = Memory::instance().ptr();
     m_drawBuffer = make_byte_ptr(CANVAS_CX_SIZE * CANVAS_CY_SIZE);
     memset(m_drawBuffer.get(), 0, CANVAS_CX_SIZE * CANVAS_CY_SIZE);
 }
@@ -17,10 +18,8 @@ RasterHandler::RasterHandler(Canvas* canvas)
 ////////////////////////////////////////////////////////////////////////////
 void RasterHandler::handle()
 {
-    auto& memory = Memory::instance();
-
-    const auto bkgndColor = memory.fetch(IO_REG_BKGND_COLOR);
-    const auto borderColor = memory.fetch(IO_REG_BORDER_COLOR);
+    const auto bkgndColor = m_memory[IO_REG_BKGND_COLOR];
+    const auto borderColor = m_memory[IO_REG_BORDER_COLOR];
 
     // handle 4-pixels at a time
     for (auto i = 0; i < 4; ++i) {
@@ -34,19 +33,20 @@ void RasterHandler::handle()
         } else {
             const uint16_t scanLine = m_scanLine - CANVAS_CY_BORDER;
             const uint16_t offset = m_offset - CANVAS_CX_BORDER;
-            const uint16_t row = scanLine / 8;
-            const uint16_t vidp = VIDEORAM_BASE + (row * 80) + (offset / 8);
-            const uint16_t colorp = COLORRAM_BASE + (row * 80) + (offset / 8);
+            const uint16_t offsetp = offset / 8;
+            const uint16_t row = (scanLine / 8) * 80;
+            const uint16_t vidp = VIDEORAM_BASE + row + offsetp;
+            const uint16_t colorp = COLORRAM_BASE + row + offsetp;
 
             // fetch the character pointer from video ram
-            const auto chp = memory.fetch(vidp);
+            const auto chp = m_memory[vidp] * 8;
             const uint8_t chrow = scanLine % 8;
 
             // fetch the character row from character generator rom
-            const auto ch = memory.fetch(CHARGEN_BASE + (chp * 8) + chrow);
+            const auto ch = m_memory[CHARGEN_BASE + chp + chrow];
 
             // fetch the color from color ram
-            const auto color = memory.fetch(colorp);
+            const auto color = m_memory[colorp];
 
             const uint8_t start = 7 - (offset % 8);
 

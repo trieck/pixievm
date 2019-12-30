@@ -9,10 +9,12 @@
 #include "Memory.h"
 #include "PixieVM.h"
 
+static constexpr auto MEM_SIZE = 0x10000;
+
 /////////////////////////////////////////////////////////////////////////////
 Memory::Memory() : io_(PixieIO::instance())
 {
-    memory_ = std::make_unique<byte[]>(MEM_SIZE);
+    memory_ = make_byte_ptr(MEM_SIZE);
     reset();
 }
 
@@ -66,4 +68,10 @@ bool Memory::save(ostream& os, word base, int size)
 {
     os.write(reinterpret_cast<const char *>(&memory_[base]), size);
     return os.good();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+const byte* Memory::ptr() const
+{
+    return memory_.get();
 }
