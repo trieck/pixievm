@@ -10,6 +10,7 @@
 
 #include "Singleton.h"
 #include "memory.h"
+#include "Alarm.h"
 
 constexpr auto RESET_VECTOR = 0xFFFC;
 constexpr auto IRQ_VECTOR = 0xFFFE;
@@ -80,6 +81,7 @@ public:
     // Implementation
 private:
     Memory& m_memory;   // memory
+    Alarms& m_alarms;   // alarms
     word regs[NREGS];   // registers
     bool m_shutdown;    // shut down flag
     int m_exitCode;     // exit code

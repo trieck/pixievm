@@ -8,7 +8,6 @@
 #include "common.h"
 #include "PixieVM.h"
 #include "interrupt.h"
-#include "Alarm.h"
 #include "CPU.H"
 #include "Opcodes.h"
 
@@ -2524,7 +2523,8 @@
     } while (0)
 
 /////////////////////////////////////////////////////////////////////////////
-CPU::CPU() : m_shutdown(false), m_exitCode(0), m_memory(Memory::instance())
+CPU::CPU() : m_shutdown(false), m_exitCode(0),
+    m_memory(Memory::instance()), m_alarms(Alarms::instance())
 {
     clear();
 }
@@ -2771,7 +2771,7 @@ void CPU::setShutdown(bool fShutdown, int exitCode)
 
 #define PROCESS_ALARMS() \
     do { \
-        Alarms::instance().process(); \
+        m_alarms.process(); \
     } while (0)
 
 #define PROCESS_IRQ() \
